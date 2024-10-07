@@ -19,7 +19,7 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body
-        className={`${josefinSlab.className}`}
+        className={`${josefinSlab.className} bg-zinc-950 text-white`}
       >
         {children}
       </body>
