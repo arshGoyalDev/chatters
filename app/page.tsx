@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "@/components/animations";
 
 const HomePage = () => {
   return (
@@ -15,12 +15,12 @@ const HomePage = () => {
         </p>
       </div>
 
-      <Link
+      <TransitionLink
         href={"/sign-up"}
         className="py-3 px-6 text-xl font-semibold bg-zinc-900 hover:bg-zinc-800 transition-all rounded-lg"
       >
         Get Started
-      </Link>
+      </TransitionLink>
     </main>
   );
 };

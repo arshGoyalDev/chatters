@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
+import { TransitionLink } from "@/components/animations";
 
 import { Input, PasswordInput } from "@/components/inputs";
 
@@ -24,12 +24,12 @@ const SignUpPage = () => {
           </h1>
           <p className="text-gray-600 dark:text-zinc-400">
             Don&apos;t have an account?{" "}
-            <Link
+            <TransitionLink
               href="/sign-up"
               className="text-primaryLight dark:text-primaryDark font-bold"
             >
               Sign Up
-            </Link>
+            </TransitionLink>
           </p>
         </div>
 
