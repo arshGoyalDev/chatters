@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 
@@ -33,7 +33,8 @@ const SignUpPage = () => {
           </p>
         </div>
 
-        <form className="mt-12 w-full max-w-[460px]"
+        <form
+          className="mt-12 w-full max-w-[460px]"
           onSubmit={(e) => {
             e.preventDefault();
           }}

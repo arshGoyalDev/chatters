@@ -3,8 +3,17 @@
 import { useRouter, usePathname } from "next/navigation";
 
 import { animatePageOut } from "@/utils/animations";
+import { ReactNode } from "react";
 
-const TransitionLink = ({ children, href, className }) => {
+const TransitionLink = ({
+  children,
+  href,
+  className,
+}: {
+  children: ReactNode;
+  href: string;
+  className: string;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
 

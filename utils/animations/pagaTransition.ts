@@ -1,5 +1,7 @@
 import gsap from "gsap";
 
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
 const animatePageIn = () => {
   const bannerOne = document.querySelector(".banner-1");
   const bannerTwo = document.querySelector(".banner-2");
@@ -21,7 +23,7 @@ const animatePageIn = () => {
   }
 };
 
-const animatePageOut = (href, router) => {
+const animatePageOut = (href: string, router: AppRouterInstance) => {
   const bannerOne = document.querySelector(".banner-1");
   const bannerTwo = document.querySelector(".banner-2");
   const bannerThree = document.querySelector(".banner-3");
