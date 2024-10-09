@@ -6,12 +6,38 @@ import { TransitionLink } from "@/components/animations";
 
 import { Input, PasswordInput } from "@/components/inputs";
 
+import { LOGIN_ROUTE } from "@/utils/constants";
+import { apiClient } from "@/lib/api-client";
+
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+
+  const checkErrors = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    email === "" ? setErrorEmail("Email is required") : setErrorEmail("");
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    password === ""
+      ? setErrorPassword("Password is Required")
+      : setErrorPassword("");
+
+    if (email === "" || password === "") {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleLogin = async () => {
+    if (checkErrors()) {
+      const response = await apiClient.post(LOGIN_ROUTE, { email, password }, {withCredentials: true});
+      console.log({ response });
+    }
+  };
 
   return (
     <main className="min-h-screen xl:p-8 grid place-content-center xl:place-content-stretch xl:grid-cols-2 gap-8">
@@ -37,6 +63,7 @@ const SignUpPage = () => {
           className="mt-12 w-full max-w-[460px]"
           onSubmit={(e) => {
             e.preventDefault();
+            handleLogin();
           }}
         >
           <div className="flex flex-col gap-5 items-start">
