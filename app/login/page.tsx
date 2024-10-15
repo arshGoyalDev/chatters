@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { TransitionLink } from "@/components/animations";
 
 import { Input, PasswordInput } from "@/components/inputs";
@@ -9,32 +11,31 @@ import { Input, PasswordInput } from "@/components/inputs";
 import { LOGIN_ROUTE } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
 
+import { authErrors } from "@/utils/errors";
+
 const SignUpPage = () => {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
-  const checkErrors = () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    email === "" ? setErrorEmail("Email is required") : setErrorEmail("");
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    password === ""
-      ? setErrorPassword("Password is Required")
-      : setErrorPassword("");
-
-    if (email === "" || password === "") {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
   const handleLogin = async () => {
-    if (checkErrors()) {
-      const response = await apiClient.post(LOGIN_ROUTE, { email, password }, {withCredentials: true});
+    if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
+      const response = await apiClient.post(
+        LOGIN_ROUTE,
+        { email, password },
+        { withCredentials: true }
+      );
+      if (response.data.user.id) {
+        if (response.data.user.profileSetup) {
+          router.push("/app");
+        } else {
+          router.push("/profile");
+        }
+      }
       console.log({ response });
     }
   };
