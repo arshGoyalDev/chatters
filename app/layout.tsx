@@ -9,7 +9,10 @@ const metadata: Metadata = {
   description: "Chaters - A Powerful online chat application",
 };
 
-const josefinSlab = Josefin_Slab({ subsets: ["latin"] });
+const josefinSlab = Josefin_Slab({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
+});
 
 const RootLayout = ({
   children,
@@ -18,9 +21,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body
-        className={`${josefinSlab.className} bg-zinc-950 text-white`}
-      >
+      <body className={`${josefinSlab.className} bg-zinc-950 text-white`}>
         {children}
       </body>
     </html>

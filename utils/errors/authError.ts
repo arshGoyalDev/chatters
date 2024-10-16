@@ -1,5 +1,11 @@
+import { Dispatch, SetStateAction } from "react";
 
-const authErrors = (email, password, setErrorEmail, setErrorPassword) => {
+const authErrors = (
+  email: string,
+  password: string,
+  setErrorEmail: Dispatch<SetStateAction<string>>,
+  setErrorPassword: Dispatch<SetStateAction<string>>
+) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   email === "" ? setErrorEmail("Email is required") : setErrorEmail("");
 
@@ -15,4 +21,4 @@ const authErrors = (email, password, setErrorEmail, setErrorPassword) => {
   }
 };
 
-export {authErrors};
+export { authErrors };

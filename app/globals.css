@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*******************/
+/* resets */
+/*******************/
+
+input:focus,
+input:active {
+  @apply outline-none border-zinc-500;
+  
+}

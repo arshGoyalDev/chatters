@@ -29,6 +29,7 @@ const SignUpPage = () => {
         { email, password },
         { withCredentials: true }
       );
+
       if (response.data.user.id) {
         if (response.data.user.profileSetup) {
           router.push("/app");
@@ -36,6 +37,7 @@ const SignUpPage = () => {
           router.push("/profile");
         }
       }
+      
       console.log({ response });
     }
   };

@@ -31,6 +31,7 @@ const SignUpPage = () => {
         { email, password },
         { withCredentials: true }
       );
+      
       if (response.status === 201) {
         router.push("/profile");
       }

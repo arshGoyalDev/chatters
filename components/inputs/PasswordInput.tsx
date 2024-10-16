@@ -22,6 +22,7 @@ const PasswordInput = ({
         name="password"
         id="password"
         value={password}
+        autoComplete="off"
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         className={` w-full py-3 px-5 bg-gray-50 dark:bg-zinc-900 border-2 rounded-lg placeholder:dark:text-zinc-600 ${

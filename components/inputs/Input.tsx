@@ -18,6 +18,8 @@ const Input = ({
         name={type}
         id={type}
         value={value}
+        autoComplete="off"
+        autoFocus={true}
         onChange={(e) => setValue(e.target.value)}
         placeholder={type[0].toUpperCase() + type.slice(1)}
         className={` w-full py-3 px-5 bg-gray-50 dark:bg-zinc-900 border-2 rounded-lg placeholder:dark:text-zinc-600 ${
