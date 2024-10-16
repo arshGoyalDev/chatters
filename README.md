@@ -6,15 +6,16 @@ A Chat App for power users
 
 ### Frontend
 
-- React
-- Next.js
-- Tailwind CSS
-- GSAP
+- React - JavaScript Framework
+- Next.js - React Framework
+- Tailwind CSS - CSS Utility Framework
+- GSAP - Animations
+- Zustand - React State Management Library
 
 ### Backend
 
-- Node.js
-- Express.js
+- Node.js - Runtime for JavaScript
+- Express.js - Framework of Node.js
 - Sockets.io
 - MongoDB
 
