@@ -28,6 +28,9 @@ const signup = async (request, response, next) => {
       user: {
         id: user.id,
         email: user.email,
+        firstName: "",
+        lastName: "",
+        profilePic: "",
         profileSetup: user.profileSetup,
       },
     });
