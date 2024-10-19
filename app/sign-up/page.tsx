@@ -14,8 +14,11 @@ import { SIGN_UP_ROUTE } from "@/utils/constants";
 
 import { authErrors } from "@/utils/errors";
 
+import useAppStore from "@/store";
+
 const SignUpPage = () => {
   const router = useRouter();
+  const { setUserInfo } = useAppStore();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,15 +28,25 @@ const SignUpPage = () => {
   const [errorPassword, setErrorPassword] = useState("");
 
   const handleSignUp = async () => {
-    if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
-      const response = await apiClient.post(
-        SIGN_UP_ROUTE,
-        { email, password },
-        { withCredentials: true }
-      );
-      
-      if (response.status === 201) {
-        router.push("/profile");
+    try {
+      if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
+        const response = await apiClient.post(
+          SIGN_UP_ROUTE,
+          { email, password },
+          { withCredentials: true }
+        );
+
+        if (response.status === 201) {
+          setUserInfo(response.data.user);
+          console.log(response);
+          router.push("/profile");
+        }
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.status === 500) {
+        setErrorEmail("Internal Server Error");
       }
     }
   };

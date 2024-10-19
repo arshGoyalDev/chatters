@@ -13,8 +13,11 @@ import { apiClient } from "@/lib/api-client";
 
 import { authErrors } from "@/utils/errors";
 
+import useAppStore from "@/store";
+
 const SignUpPage = () => {
   const router = useRouter();
+  const { setUserInfo } = useAppStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,21 +27,34 @@ const SignUpPage = () => {
 
   const handleLogin = async () => {
     if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
-      const response = await apiClient.post(
-        LOGIN_ROUTE,
-        { email, password },
-        { withCredentials: true }
-      );
+      try {
+        const response = await apiClient.post(
+          LOGIN_ROUTE,
+          { email, password },
+          { withCredentials: true }
+        );
 
-      if (response.data.user.id) {
-        if (response.data.user.profileSetup) {
-          router.push("/app");
-        } else {
-          router.push("/profile");
+        if (response.data.user.id) {
+          setUserInfo(response.data.user);
+          
+          if (response.data.user.profileSetup) {
+            router.push("/app");
+          } else {
+            router.push("/profile");
+          }
         }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.status === 400 && error.response.data.includes("password")) {
+          setErrorPassword("Password is incorrect");
+        } else if (error.status === 404) {
+          setErrorEmail("No user found with this email");
+        } else {
+          setErrorEmail("Internal Server Error");
+        }
+        console.log(error);
       }
-      
-      console.log({ response });
     }
   };
 
