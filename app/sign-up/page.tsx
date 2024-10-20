@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -18,21 +18,41 @@ import useAppStore from "@/store";
 
 const SignUpPage = () => {
   const router = useRouter();
-  const { setUserInfo } = useAppStore();
+  const { userInfo, setUserInfo } = useAppStore();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errorName, setErrorName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
+  useEffect(() => {
+    if (!!userInfo.email) {
+      router.push("/chat");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSignUp = async () => {
     try {
-      if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
+      if (
+        authErrors(
+          email,
+          password,
+          setErrorEmail,
+          setErrorPassword,
+          name,
+          setErrorName,
+        )
+      ) {
+        const firstName = name.split(" ")[0];
+        const lastName = name.split(" ")[1];
+
         const response = await apiClient.post(
           SIGN_UP_ROUTE,
-          { email, password },
+          { firstName, lastName, email, password },
           { withCredentials: true }
         );
 
@@ -79,7 +99,12 @@ const SignUpPage = () => {
           }}
         >
           <div className="flex flex-col gap-5 items-start">
-            <Input value={name} setValue={setName} error={""} type="name" />
+            <Input
+              value={name}
+              setValue={setName}
+              error={errorName}
+              type="name"
+            />
             <Input
               value={email}
               setValue={setEmail}

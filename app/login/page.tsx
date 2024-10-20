@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -17,13 +17,20 @@ import useAppStore from "@/store";
 
 const SignUpPage = () => {
   const router = useRouter();
-  const { setUserInfo } = useAppStore();
+  const { userInfo, setUserInfo } = useAppStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+
+  useEffect(() => {
+    if (!!userInfo.email) {
+      router.push("/chat");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogin = async () => {
     if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
