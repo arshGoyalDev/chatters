@@ -59,7 +59,7 @@ const login = async (request, response, next) => {
     const auth = await compare(password, user.password);
 
     if (!auth) {
-      return response.status(400).send("Password is incorrect");
+      return response.status(401).send("Password is incorrect");
     }
 
     response.cookie("jwt", createToken(email, user.id), {
@@ -89,7 +89,7 @@ const getUserInfo = async (request, response, next) => {
     const userData = await User.findById(request.userId);
 
     if (!userData) {
-      return response.status(404).send("User with the given id not found")
+      return response.status(404).send("User with the given id not found");
     }
 
     return response.status(200).json({
@@ -108,4 +108,39 @@ const getUserInfo = async (request, response, next) => {
   }
 };
 
-export { signup, login, getUserInfo };
+const updateProfile = async (request, response, next) => {
+  try {
+    const { userId } = request;
+    const { firstName, lastName } = request.body;
+
+    if (!firstName || !lastName) {
+      return response.status(404).send("First Name or Last Name required");
+    }
+
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        firstName,
+        lastName,
+        profileSetup: true,
+      },
+      { new: true, runValidators: true }
+    );
+
+    return response.status(200).json({
+      user: {
+        id: userData.id,
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        profilePic: userData.profilePic,
+        profileSetup: userData.profileSetup,
+      },
+    });
+  } catch (error) {
+    console.log({ error });
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
+export { signup, login, getUserInfo, updateProfile };
