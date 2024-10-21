@@ -9,9 +9,7 @@ import { TransitionLink } from "@/components/animations";
 import { Input, PasswordInput } from "@/components/inputs";
 
 import { apiClient } from "@/lib/api-client";
-
 import { SIGN_UP_ROUTE } from "@/utils/constants";
-
 import { authErrors } from "@/utils/errors";
 
 import useAppStore from "@/store";
@@ -30,10 +28,12 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (!!userInfo.email) {
-      router.push("/chat");
+      if (userInfo.profileSetup) {
+        router.push("/chat");
+      } else router.push("/profile");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userInfo]);
 
   const handleSignUp = async () => {
     try {
@@ -44,7 +44,7 @@ const SignUpPage = () => {
           setErrorEmail,
           setErrorPassword,
           name,
-          setErrorName,
+          setErrorName
         )
       ) {
         const firstName = name.split(" ")[0];

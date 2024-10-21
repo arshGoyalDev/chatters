@@ -27,10 +27,12 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (!!userInfo.email) {
-      router.push("/chat");
+      if (userInfo.profileSetup) {
+        router.push("/chat");
+      } else router.push("/profile");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userInfo]);
 
   const handleLogin = async () => {
     if (authErrors(email, password, setErrorEmail, setErrorPassword)) {
@@ -43,7 +45,7 @@ const SignUpPage = () => {
 
         if (response.data.user.id) {
           setUserInfo(response.data.user);
-          
+
           if (response.data.user.profileSetup) {
             router.push("/app");
           } else {
@@ -53,7 +55,7 @@ const SignUpPage = () => {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        if (error.status === 400 && error.response.data.includes("password")) {
+        if (error.status === 401) {
           setErrorPassword("Password is incorrect");
         } else if (error.status === 404) {
           setErrorEmail("No user found with this email");
@@ -67,8 +69,6 @@ const SignUpPage = () => {
 
   return (
     <main className="min-h-screen xl:p-8 grid place-content-center xl:place-content-stretch xl:grid-cols-2 gap-8">
-      <section className="hidden xl:block min-h-full rounded-xl bg-gray-200 dark:bg-zinc-800"></section>
-
       <section className="min-h-screen px-8 xl:px-0 xl:min-h-full flex flex-col items-center w-screen xl:w-full justify-center">
         <div className="grid gap-4 w-full max-w-[460px]">
           <h1 className="text-3xl font-semibold xl:text-5xl 2xl:text-5xl">
@@ -112,6 +112,8 @@ const SignUpPage = () => {
           </div>
         </form>
       </section>
+
+      <section className="hidden xl:block min-h-full rounded-xl bg-gray-200 dark:bg-zinc-800"></section>
     </main>
   );
 };
