@@ -5,13 +5,49 @@ import { useEffect, useState } from "react";
 import useAppStore from "@/store";
 
 import { Input } from "@/components/inputs";
+import { apiClient } from "@/lib/api-client";
+import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
+import { useRouter } from "next/navigation";
 
 const ProfilePage = () => {
+  const router = useRouter();
   const { userInfo, setUserInfo } = useAppStore();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  // const [profilePic, setProfilePic] = useState("");
+  const [error, setError] = useState("");
+
+  const checkForErrors = () => {
+    if (!firstName || !lastName) {
+      setError("Either of firstName or lastName is required");
+      return false;
+    } else {
+      setError("");
+      return true;
+    }
+  };
+
+  const updateProfile = async () => {
+    if (checkForErrors()) {
+      try {
+        const response = await apiClient.post(
+          UPDATE_PROFILE_ROUTE,
+          { firstName, lastName },
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          setUserInfo(response.data.user);
+          router.push("/chat");
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setError(error.message);
+      }
+    }
+  };
 
   useEffect(() => {
     if (userInfo.email) {
@@ -52,9 +88,17 @@ const ProfilePage = () => {
         </div>
         <div className="flex flex-col gap-4 w-[80vw] max-w-[400px]">
           <Input value={firstName} setValue={setFirstName} type="first-name" />
-          <Input value={lastName} setValue={setLastName} type="last-name" />
+          <Input
+            value={lastName}
+            setValue={setLastName}
+            type="last-name"
+            error={error}
+          />
 
-          <button className="font-bold mt-3 w-full py-[14px] text-black bg-primary rounded-xl hover:text-white hover:bg-zinc-800 hover:bg-opacity-10 transition-all duration-300">
+          <button
+            onClick={updateProfile}
+            className="font-bold mt-3 w-full py-[14px] text-black bg-primary rounded-xl hover:text-white hover:bg-zinc-800 hover:bg-opacity-10 transition-all duration-300"
+          >
             Save Changes
           </button>
         </div>
