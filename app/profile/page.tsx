@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -15,8 +15,12 @@ const ProfilePage = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [profilePic, setProfilePic] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [error, setError] = useState("");
+
+  const [buttonHovered, setButtonHovered] = useState(false);
+
+  const fileUploadRef = useRef(null);
 
   const checkForErrors = () => {
     if (!firstName || !lastName) {
@@ -40,6 +44,7 @@ const ProfilePage = () => {
         if (response.status === 200) {
           setUserInfo(response.data.user);
           router.push("/chat");
+          console.log(response.data.user);
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,32 +63,83 @@ const ProfilePage = () => {
     }
   }, [userInfo]);
 
+  const handleImageChange = async (event) => {
+    console.log(event);
+  };
+
+  const handleFileInputClick = () => {
+    fileUploadRef.current.click();
+  }
+
   return (
     <main className="min-h-screen xl:p-8 grid place-content-center">
       <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
         <div>
-          <div className="w-[80vw] h-[80vw] max-w-[360px] max-h-[360px] grid place-content-center bg-zinc-900 border-2 border-zinc-700 rounded-2xl">
-            <span className="fill-zinc-700">
-              <svg
-                width="150"
-                height="150"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
+          <div className="relative bg-zinc-900 border-2 border-zinc-700 rounded-2xl overflow-hidden">
+            <button
+              onMouseEnter={() => setButtonHovered(true)}
+              onMouseLeave={() => setButtonHovered(false)}
+              onClick={handleFileInputClick}
+              className="relative w-[80vw] h-[80vw] max-w-[360px] max-h-[360px] hover:bg-zinc-950 hover:bg-opacity-90 transition-all duration-300 grid place-content-center"
+            >
+              {buttonHovered && (
+                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-white">
+                  <svg
+                    width="100"
+                    height="100"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 12H18"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 18V6"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              )}
+              {profilePic ? (
+                ""
+              ) : (
+                <span className="fill-zinc-700">
+                  <svg
+                    width="150"
+                    height="150"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              )}
+            </button>
+            <input
+              type="file"
+              ref={fileUploadRef}
+              onChange={handleImageChange}
+              name="profile-image"
+              accept=".png, .jgp, .svg, .jpeg, .webp"
+              className="absolute hidden top-0 left-0 w-full h-full"
+            />
           </div>
         </div>
         <div className="flex flex-col gap-4 w-[80vw] max-w-[400px]">
