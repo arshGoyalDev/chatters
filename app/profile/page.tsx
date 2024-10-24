@@ -5,8 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import useAppStore from "@/store";
 
 import { Input } from "@/components/inputs";
+
 import { apiClient } from "@/lib/api-client";
-import { UPDATE_PROFILE_ROUTE } from "@/utils/constants";
+import {
+  ADD_PROFILE_PIC_ROUTE,
+  HOST,
+  UPDATE_PROFILE_ROUTE,
+} from "@/utils/constants";
+
 import { useRouter } from "next/navigation";
 
 const ProfilePage = () => {
@@ -20,7 +26,7 @@ const ProfilePage = () => {
 
   const [buttonHovered, setButtonHovered] = useState(false);
 
-  const fileUploadRef = useRef(null);
+  const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const checkForErrors = () => {
     if (!firstName || !lastName) {
@@ -61,15 +67,52 @@ const ProfilePage = () => {
         setLastName(userInfo.lastName);
       }
     }
+
+    if (userInfo.profilePic) {
+      setProfilePic(`${HOST}/${userInfo.profilePic}`);
+    }
   }, [userInfo]);
 
-  const handleImageChange = async (event) => {
-    console.log(event);
+  const handleFileInputClick = () => {
+    fileUploadRef.current!.click();
   };
 
-  const handleFileInputClick = () => {
-    fileUploadRef.current.click();
-  }
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files![0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("profile-image", file);
+
+      try {
+        const response = await apiClient.post(ADD_PROFILE_PIC_ROUTE, formData, {
+          withCredentials: true,
+        });
+
+        if (response.status === 200) {
+          setUserInfo(response.data.user);
+          setProfilePic(response.data.user.profilePic);
+        }
+
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        //   setProfilePic(reader.result);
+        // }
+
+        // reader.readAsDataURL(file);
+        //
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  // const handleDeleteImage = async () => {
+
+  // }
 
   return (
     <main className="min-h-screen xl:p-8 grid place-content-center">
@@ -80,34 +123,41 @@ const ProfilePage = () => {
               onMouseEnter={() => setButtonHovered(true)}
               onMouseLeave={() => setButtonHovered(false)}
               onClick={handleFileInputClick}
-              className="relative w-[80vw] h-[80vw] max-w-[360px] max-h-[360px] hover:bg-zinc-950 hover:bg-opacity-90 transition-all duration-300 grid place-content-center"
+              className="relative w-[80vw] h-[80vw] max-w-[360px] max-h-[360px] grid place-content-center"
             >
               {buttonHovered && (
-                <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 stroke-white">
-                  <svg
-                    width="100"
-                    height="100"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M6 12H18"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12 18V6"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
+                <div className="grid place-content-center absolute z-20 top-0 left-0 w-full h-full bg-zinc-950 bg-opacity-90 transition-all duration-300">
+                  <span className="stroke-white">
+                    <svg
+                      width="100"
+                      height="100"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 12H18"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M12 18V6"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
               )}
               {profilePic ? (
-                ""
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={profilePic}
+                  alt={firstName}
+                  className="w-full h-full"
+                />
               ) : (
                 <span className="fill-zinc-700">
                   <svg
