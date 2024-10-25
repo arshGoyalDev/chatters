@@ -117,7 +117,7 @@ const getUserInfo = async (request, response, next) => {
 const updateProfile = async (request, response, next) => {
   try {
     const { userId } = request;
-    const { firstName, lastName } = request.body;
+    const { firstName, lastName, status } = request.body;
 
     if (!firstName || !lastName) {
       return response.status(404).send("First Name or Last Name required");
@@ -128,6 +128,7 @@ const updateProfile = async (request, response, next) => {
       {
         firstName,
         lastName,
+        status,
         profileSetup: true,
       },
       { new: true, runValidators: true }
