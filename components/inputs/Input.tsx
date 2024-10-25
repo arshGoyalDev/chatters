@@ -23,12 +23,12 @@ const Input = ({
         onChange={(e) => setValue(e.target.value)}
         placeholder={type[0].toUpperCase() + type.slice(1)}
         className={` w-full py-3 px-5 bg-zinc-900 border-2 rounded-lg placeholder:text-zinc-600 ${
-          error
-            ? "border-red-500"
-            : "w-full border-zinc-700"
+          error ? "border-red-500" : "w-full border-zinc-700"
         }`}
       />
-      {error !== "" && <p className="text-red-500 mt-3">{error}</p>}
+      {error && (
+        <>{error !== "" && <p className="text-red-500 mt-3">{error}</p>}</>
+      )}
     </div>
   );
 };

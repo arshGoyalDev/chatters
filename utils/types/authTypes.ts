@@ -4,6 +4,7 @@ interface UserInfo {
   profileSetup: boolean;
   firstName: string;
   lastName: string;
+  status: string,
   profilePic: string;
 }
 

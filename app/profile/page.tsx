@@ -22,6 +22,8 @@ const ProfilePage = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [status, setStatus] = useState("Hey, there I am using Chaters!");
+
   const [profilePic, setProfilePic] = useState("");
   const [error, setError] = useState("");
 
@@ -51,7 +53,6 @@ const ProfilePage = () => {
         if (response.status === 200) {
           setUserInfo(response.data.user);
           router.push("/chat");
-          console.log(response.data.user);
         }
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,9 +65,13 @@ const ProfilePage = () => {
   useEffect(() => {
     if (userInfo.email) {
       setFirstName(userInfo.firstName);
-      if (userInfo.lastName) {
-        setLastName(userInfo.lastName);
-      }
+    }
+    if (userInfo.lastName) {
+      setLastName(userInfo.lastName);
+    }
+
+    if (userInfo.status) {
+      setStatus(userInfo.status);
     }
 
     if (userInfo.profilePic) {
@@ -98,7 +103,6 @@ const ProfilePage = () => {
           setUserInfo(response.data.user);
           setProfilePic(response.data.user.profilePic);
         }
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -235,14 +239,29 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4 w-[80vw] max-w-[400px]">
-          <Input value={firstName} setValue={setFirstName} type="first-name" />
-          <Input
-            value={lastName}
-            setValue={setLastName}
-            type="last-name"
-            error={error}
-          />
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-bold">Name</h2>
+            <div className="flex flex-col gap-4">
+            <Input
+              value={firstName}
+              setValue={setFirstName}
+              type="first-name"
+            />
 
+            <Input
+              value={lastName}
+              setValue={setLastName}
+              type="last-name"
+              error={error}
+            />
+
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-bold">Status</h2>
+            <Input value={status} setValue={setStatus} type="status" />
+          </div>
           <button
             onClick={updateProfile}
             className="font-bold mt-3 w-full py-[14px] text-black bg-primary rounded-xl hover:text-white hover:bg-zinc-800 hover:bg-opacity-10 transition-all duration-300"

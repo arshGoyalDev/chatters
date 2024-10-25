@@ -14,6 +14,7 @@ const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
     firstName: "",
     lastName: "",
     profilePic: "",
+    status: "",
     profileSetup: false,
   },
 
