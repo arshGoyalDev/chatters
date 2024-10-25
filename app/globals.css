@@ -8,6 +8,10 @@
 
 input:focus,
 input:active {
-  @apply outline-none border-zinc-500;
-  
+  @apply outline-none border-zinc-500;  
+}
+
+button:focus,
+button:active {
+  @apply outline-none;
 }

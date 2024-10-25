@@ -46,7 +46,7 @@ const ProfilePage = () => {
       try {
         const response = await apiClient.post(
           UPDATE_PROFILE_ROUTE,
-          { firstName, lastName },
+          { firstName, lastName, status },
           { withCredentials: true }
         );
 

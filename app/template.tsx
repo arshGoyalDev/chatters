@@ -8,16 +8,17 @@ import { PageTransition } from "@/components/animations";
 
 import { getUserInfo } from "@/lib/auth-functions";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import useAppStore from "@/store";
 
 const Template = ({ children }: { children: ReactElement }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { setUserInfo } = useAppStore();
 
   useEffect(() => {
-    getUserInfo(router, setUserInfo);
+    getUserInfo(router, setUserInfo, pathname);
     animatePageIn();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

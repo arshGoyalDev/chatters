@@ -58,7 +58,6 @@ const SignUpPage = () => {
 
         if (response.status === 201) {
           setUserInfo(response.data.user);
-          console.log(response);
           router.push("/profile");
         }
       }
