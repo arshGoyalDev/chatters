@@ -1,9 +1,9 @@
-import { Chat, ChatList } from "@/components/chat";
+import { Chat, SideMenu } from "@/components/chat";
 
 const ChatPage = () => {
   return (
     <main className="flex h-screen overflow-hidden">
-      <ChatList />
+      <SideMenu />
       <Chat />
     </main>
   );

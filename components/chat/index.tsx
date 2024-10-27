@@ -1,4 +1,4 @@
 import Chat from './Chat';
-import ChatList from './ChatList';
+import SideMenu from './SideMenu';
 
-export {Chat, ChatList};
+export {Chat, SideMenu};

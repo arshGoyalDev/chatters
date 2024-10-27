@@ -92,7 +92,7 @@ const UserMenu = () => {
           </span>
         </button>
         {menuVisible && (
-          <div className="absolute top-12 right-0 w-48 font-bold flex flex-col rounded-lg bg-zinc-800 overflow-hidden">
+          <div className="absolute top-16 right-0 w-48 font-bold flex flex-col rounded-lg bg-zinc-800 overflow-hidden">
             <Link
               href="/profile"
               className="w-full flex items-center justify-between py-3 pl-5 pr-4 border-b-2 border-zinc-700 hover:bg-zinc-700 hover:bg-opacity-30"
