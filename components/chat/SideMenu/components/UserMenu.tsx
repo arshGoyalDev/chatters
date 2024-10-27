@@ -4,11 +4,16 @@ import { useEffect, useState } from "react";
 
 import useAppStore from "@/store";
 
-import { HOST } from "@/utils/constants";
+import { HOST, LOGOUT_ROUTE } from "@/utils/constants";
+import { apiClient } from "@/lib/api-client";
+
 import Link from "next/link";
 
+import { useRouter } from "next/navigation";
+
 const UserMenu = () => {
-  const { userInfo } = useAppStore();
+  const router = useRouter();
+  const { userInfo, setUserInfo } = useAppStore();
 
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -16,9 +21,33 @@ const UserMenu = () => {
     console.log(userInfo);
   }, [userInfo]);
 
-  const logout = () => {
-    
-  }
+  const logout = async () => {
+    try {
+      const response = await apiClient.post(
+        LOGOUT_ROUTE,
+        {},
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        router.push("/");
+
+        setUserInfo({
+          email: "",
+          password: "",
+          profileSetup: false,
+          firstName: "",
+          lastName: "",
+          status: "",
+          profilePic: "",
+        });
+      } else {
+        throw new Error("Internal Server Error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex py-6 justify-between items-center px-4">
@@ -127,7 +156,10 @@ const UserMenu = () => {
                 </svg>
               </span>
             </Link>
-            <button onClick={logout} className="w-full flex items-center justify-between py-3 pl-5 pr-4 hover:bg-zinc-700 hover:bg-opacity-30">
+            <button
+              onClick={logout}
+              className="w-full flex items-center justify-between py-3 pl-5 pr-4 hover:bg-zinc-700 hover:bg-opacity-30"
+            >
               Logout
               <span className="stroke-white">
                 <svg

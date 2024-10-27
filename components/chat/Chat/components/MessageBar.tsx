@@ -6,7 +6,7 @@ const MessageBar = () => {
   const [message, setMessage] = useState("");
 
   return (
-    <div className="flex items-center gap-4 absolute bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] bg-zinc-900 px-2 rounded-xl">
+    <div className="flex items-center absolute bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] bg-zinc-900 px-2 rounded-xl">
       <input
         type="text"
         name="message-input"
@@ -16,7 +16,7 @@ const MessageBar = () => {
         autoFocus={true}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type Something..."
-        className="w-full py-4 px-4 bg-transparent"
+        className="w-full py-4 pl-4 pr-2 placeholder:text-zinc-500 bg-transparent"
       />
 
       <div className="flex items-center gap-2">
