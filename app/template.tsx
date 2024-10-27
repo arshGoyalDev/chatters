@@ -18,9 +18,11 @@ const Template = ({ children }: { children: ReactElement }) => {
   const { setUserInfo } = useAppStore();
 
   useEffect(() => {
-    getUserInfo(router, setUserInfo, pathname);
-    animatePageIn();
+    if (pathname !== "/") {
+      getUserInfo(router, setUserInfo, pathname);
+    }
 
+    animatePageIn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -16,10 +16,6 @@ const UserMenu = () => {
   const { userInfo, setUserInfo } = useAppStore();
 
   const [menuVisible, setMenuVisible] = useState(false);
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
 
   const logout = async () => {
     try {
