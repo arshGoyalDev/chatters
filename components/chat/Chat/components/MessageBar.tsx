@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 
-import { HOST } from "@/utils/constants";
-import useAppStore from "@/store";
-
 const MessageBar = () => {
-  const { userInfo } = useAppStore();
   const [message, setMessage] = useState("");
 
   return (
