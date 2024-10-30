@@ -233,7 +233,7 @@ const ProfilePage = () => {
               ref={fileUploadRef}
               onChange={handleImageChange}
               name="profile-image"
-              accept=".png, .jgp, .svg, .jpeg, .webp"
+              accept=".png, .jpg, .svg, .jpeg, .webp"
               className="absolute hidden top-0 left-0 w-full h-full"
             />
           </div>
