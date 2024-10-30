@@ -1,3 +1,4 @@
 import UserMenu from "./UserMenu";
+import NewChatModal from "./NewChatModal";
 
-export { UserMenu };
+export { UserMenu, NewChatModal };
