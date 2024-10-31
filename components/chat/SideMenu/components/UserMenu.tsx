@@ -83,7 +83,7 @@ const UserMenu = () => {
             </svg>
           </span>
         </button>
-        {menuVisible && <SettingsMenu />}
+        {menuVisible && <SettingsMenu setMenuVisible={setMenuVisible} />}
       </div>
     </div>
   );

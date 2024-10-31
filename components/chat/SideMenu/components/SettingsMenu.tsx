@@ -1,17 +1,20 @@
-"use client"
+"use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { apiClient } from "@/lib/api-client";
 import { LOGOUT_ROUTE } from "@/utils/constants";
 
 import useAppStore from "@/store";
+import { Dispatch, SetStateAction } from "react";
 
-const SettingsMenu = () => {
+const SettingsMenu = ({
+  setMenuVisible,
+}: {
+  setMenuVisible: Dispatch<SetStateAction<boolean>>;
+}) => {
   const router = useRouter();
-  const {setUserInfo} = useAppStore();
-
+  const { setUserInfo } = useAppStore();
 
   const logout = async () => {
     try {
@@ -41,10 +44,15 @@ const SettingsMenu = () => {
     }
   };
 
+  const handleLink = (link: string) => {
+    router.push(link);
+    setMenuVisible(false);
+  };
+
   return (
     <div className="absolute top-16 right-0 w-48 font-bold flex flex-col rounded-lg bg-zinc-800 overflow-hidden">
-      <Link
-        href="/chat?new-chat=true"
+      <button
+        onClick={() => handleLink("/chat?new-chat=true")}
         className="w-full flex items-center justify-between py-3 pl-5 pr-4 border-b-2 border-zinc-700 hover:bg-zinc-700 hover:bg-opacity-30"
       >
         New Chat
@@ -82,9 +90,9 @@ const SettingsMenu = () => {
             />
           </svg>
         </span>
-      </Link>
-      <Link
-        href="/chat?new-group-chat=true"
+      </button>
+      <button
+        onClick={() => handleLink("/chat?new-group=true")}
         className="w-full flex items-center justify-between py-3 pl-5 pr-4 border-b-2 border-zinc-700 hover:bg-zinc-700 hover:bg-opacity-30"
       >
         New Group Chat
@@ -134,9 +142,9 @@ const SettingsMenu = () => {
             />
           </svg>
         </span>
-      </Link>
-      <Link
-        href="/profile"
+      </button>
+      <button
+        onClick={() => handleLink("/profile")}
         className="w-full flex items-center justify-between py-3 pl-5 pr-4 border-b-2 border-zinc-700 hover:bg-zinc-700 hover:bg-opacity-30"
       >
         Profile
@@ -168,7 +176,7 @@ const SettingsMenu = () => {
             />
           </svg>
         </span>
-      </Link>
+      </button>
       <button
         onClick={logout}
         className="w-full flex items-center justify-between py-3 pl-5 pr-4 hover:bg-zinc-700 hover:bg-opacity-30"

@@ -1,3 +1,3 @@
 import NewChatModal from "./NewChatModal";
 
-export {NewChatModal}
+export { NewChatModal };
