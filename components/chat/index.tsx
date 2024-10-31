@@ -1,4 +1,5 @@
-import Chat from './Chat';
-import SideMenu from './SideMenu';
+import Chat from "./Chat";
+import SideMenu from "./SideMenu";
+import ModalContainer from "./ModalContainer";
 
-export {Chat, SideMenu};
+export { Chat, SideMenu, ModalContainer };
