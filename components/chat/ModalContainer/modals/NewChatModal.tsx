@@ -3,10 +3,32 @@
 import { useState } from "react";
 
 import { ModalHeader } from "../components";
+import { apiClient } from "@/lib/api-client";
+import { SEARCH_CONTACT_ROUTE } from "@/utils/constants";
 
 const NewChatModal = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [searchedContacts, setSearchedContacts] = useState<[] | null>(null);
+
+  const searchContacts = async () => {
+    try {
+      if (searchValue !== "") {
+        const response = await apiClient.post(
+          SEARCH_CONTACT_ROUTE,
+          { searchTerm: searchValue },
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          if (response.data.contacts[0])
+            setSearchedContacts(response.data.contacts);
+          else setSearchedContacts(null);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] rounded-xl bg-zinc-900 shadow-2xl">
@@ -20,12 +42,21 @@ const NewChatModal = () => {
             value={searchValue}
             autoComplete="off"
             autoFocus={true}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+              if (e.target.value === "") setSearchedContacts(null);
+              else searchContacts();
+            }}
+            onKeyUp={(e) => {
+              if (e.keyCode === 13) {
+                searchContacts();
+              }
+            }}
             placeholder="Search for people..."
             className="w-full py-3 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
           />
 
-          <button className="p-1">
+          <button className="p-1" onClick={searchContacts}>
             <span className="stroke-white">
               <svg
                 width="22"
@@ -51,8 +82,8 @@ const NewChatModal = () => {
           </button>
         </div>
 
-        {searchedUsers.length !== 0 ? (
-          <div></div>
+        {searchedContacts ? (
+          <div>Hello</div>
         ) : (
           <div className="grid place-content-center text-lg pt-28 text-center">
             Nothing to see here, <br />
