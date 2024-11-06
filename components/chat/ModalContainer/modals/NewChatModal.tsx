@@ -1,10 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
 
 import { ModalHeader } from "../components";
 import { apiClient } from "@/lib/api-client";
-import { SEARCH_CONTACT_ROUTE } from "@/utils/constants";
+import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
+import { UserInfo } from "@/utils/types";
 
 const NewChatModal = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -18,6 +20,8 @@ const NewChatModal = () => {
           { searchTerm: searchValue },
           { withCredentials: true }
         );
+
+        console.log(response.data.contacts);
 
         if (response.status === 200) {
           if (response.data.contacts[0])
@@ -47,7 +51,7 @@ const NewChatModal = () => {
               if (e.target.value === "") setSearchedContacts(null);
               else searchContacts();
             }}
-            onKeyUp={(e) => {
+            onKeyDown={(e) => {
               if (e.keyCode === 13) {
                 searchContacts();
               }
@@ -83,7 +87,21 @@ const NewChatModal = () => {
         </div>
 
         {searchedContacts ? (
-          <div>Hello</div>
+          <div className="mt-4 h-[240px] overflow-auto">
+            {searchedContacts.map((contact: UserInfo) => 
+              (
+                <div key={contact.email} className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden">
+                    <img src={`${HOST}/${contact.profilePic}`} alt={contact.firstName + contact.lastName} />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
+                    <p>{contact.status}</p>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
         ) : (
           <div className="grid place-content-center text-lg pt-28 text-center">
             Nothing to see here, <br />
