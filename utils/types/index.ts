@@ -1,3 +1,4 @@
 import { UserInfo } from "./authTypes";
+import { ChatData } from "./chatTypes";
 
-export type { UserInfo };
+export type { UserInfo, ChatData };

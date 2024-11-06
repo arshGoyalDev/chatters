@@ -1,11 +1,12 @@
+import { ChatData} from "@/utils/types";
 import { StateCreator } from "zustand";
 
 interface ChatSlice {
   chatType: string | null;
   setChatType: (chatType: string | null) => void;
 
-  chatData: string | null;
-  setChatData: (chatData: string | null) => void;
+  chatData: ChatData | null;
+  setChatData: (chatData: ChatData | null) => void;
 
   messages: [] | null;
   setMessages: (messages: [] | null) => void
