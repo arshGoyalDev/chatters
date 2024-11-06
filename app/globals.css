@@ -15,3 +15,23 @@ button:focus,
 button:active {
   @apply outline-none;
 }
+
+/* scrollbar */
+
+/* firebox based browsers */
+
+@supports not selector(::-webkit-scrollbar) {
+  html * {
+    scrollbar-color: #3f3f46 transparent;
+  }
+}
+
+/* chromium based browsers */
+
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  @apply bg-zinc-800 rounded-lg;
+}
