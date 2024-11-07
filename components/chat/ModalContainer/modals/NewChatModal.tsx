@@ -4,11 +4,20 @@
 import { useState } from "react";
 
 import { ModalHeader } from "../components";
+
 import { apiClient } from "@/lib/api-client";
 import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
+
+import useAppStore from "@/store";
+
 import { UserInfo } from "@/utils/types";
 
+import { useRouter } from "next/navigation";
+
 const NewChatModal = () => {
+  const router = useRouter();
+  const { setChatData, setChatType } = useAppStore();
+
   const [searchValue, setSearchValue] = useState("");
   const [searchedContacts, setSearchedContacts] = useState<[] | null>(null);
 
@@ -21,8 +30,6 @@ const NewChatModal = () => {
           { withCredentials: true }
         );
 
-        console.log(response.data.contacts);
-
         if (response.status === 200) {
           if (response.data.contacts[0])
             setSearchedContacts(response.data.contacts);
@@ -32,6 +39,18 @@ const NewChatModal = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const selectContact = (contact: UserInfo) => {
+    router.push("/chat");
+
+    setChatType("personal");
+    setChatData({
+      chatName: `${contact.firstName} ${contact.lastName}`,
+      chatPic: contact.profilePic,
+      chatStatus: contact.status,
+      chatMembers: [contact],
+    });
   };
 
   return (
@@ -88,19 +107,24 @@ const NewChatModal = () => {
 
         {searchedContacts ? (
           <div className="mt-4 h-[240px] overflow-auto">
-            {searchedContacts.map((contact: UserInfo) => 
-              (
-                <div key={contact.email} className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden">
-                    <img src={`${HOST}/${contact.profilePic}`} alt={contact.firstName + contact.lastName} />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
-                    <p>{contact.status}</p>
-                  </div>
+            {searchedContacts.map((contact: UserInfo) => (
+              <div
+                onClick={() => selectContact(contact)}
+                key={contact.email}
+                className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
+              >
+                <div className="w-16 h-16 rounded-lg overflow-hidden">
+                  <img
+                    src={`${HOST}/${contact.profilePic}`}
+                    alt={contact.firstName + contact.lastName}
+                  />
                 </div>
-              )
-            )}
+                <div className="flex flex-col gap-0.5">
+                  <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
+                  <p>{contact.status}</p>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid place-content-center text-lg pt-28 text-center">
