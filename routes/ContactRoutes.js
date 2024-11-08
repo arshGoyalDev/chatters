@@ -5,6 +5,6 @@ import { searchContacts } from "../controllers/ContactController.js";
 
 const contactRoutes = Router();
 
-contactRoutes.post("/search-contact", verifyToken , searchContacts);
+contactRoutes.post("/search-contact", verifyToken, searchContacts);
 
-export default contactRoutes
+export default contactRoutes;

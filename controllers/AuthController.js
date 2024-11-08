@@ -195,11 +195,11 @@ const removeProfileImage = async (request, response, next) => {
       return response.status(404).send("User Not found");
     }
 
-    if (user.image) {
-      unlinkSync(user.image);
+    if (user.profilePic) {
+      unlinkSync(user.profilePic);
     }
 
-    user.image = "";
+    user.profilePic = "";
     await user.save();
 
     return response.status(200).send("Profile Pic deleted successfully");
