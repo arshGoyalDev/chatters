@@ -42,7 +42,7 @@ const ChatInfo = ({
           </button>
         </div>
       </div>
-      <div className="flex flex-col gap-6 w-full px-20 2xl:px-12">
+      <div className="flex flex-col gap-6 w-full px-12">
         <div className="flex items-center flex-col gap-6">
           <div className="w-52 h-52 rounded-xl overflow-hidden">
             <img

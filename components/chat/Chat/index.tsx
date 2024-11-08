@@ -21,13 +21,14 @@ const Chat = () => {
           <div className="flex">
             <div
               className={`${
-                chatInfoVisible ? "hidden lg:block" : "block"
+                chatInfoVisible ? "hidden xl:block" : "block"
               } relative w-full h-screen`}
             >
               <ChatHeader
                 chatInfoVisible={chatInfoVisible}
                 setChatInfoVisible={setChatInfoVisible}
               />
+
               <MessageBar />
             </div>
             {chatInfoVisible && (
