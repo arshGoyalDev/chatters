@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+
 import { compare } from "bcrypt";
 
 import User from "../models/UserModel.js";
