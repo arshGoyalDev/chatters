@@ -6,7 +6,7 @@ const MessageBar = () => {
   const [message, setMessage] = useState("");
 
   return (
-    <div className="flex items-center absolute bottom-8 left-1/2 -translate-x-1/2 w-[80%] max-w-[800px] bg-zinc-900 px-2 rounded-xl">
+    <div className="flex items-center absolute bottom-7 xl:bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-[900px] bg-zinc-900 px-2 rounded-xl">
       <input
         type="text"
         name="message-input"

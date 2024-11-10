@@ -12,12 +12,18 @@ const ChatHeader = ({
   chatInfoVisible: boolean;
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatData, setChatType } = useAppStore();
+  const { chatData, setChatType, setChatData } = useAppStore();
 
   return (
     <header className="flex items-center gap-4 justify-between py-5 px-5 border-b-2 border-zinc-900">
       <div className="flex items-center gap-2">
-        <button onClick={() => setChatType(null)} className="md:hidden">
+        <button
+          onClick={() => {
+            setChatType(null);
+            setChatData(null);
+          }}
+          className="md:hidden"
+        >
           <span className="stroke-white">
             <svg
               width="32"
