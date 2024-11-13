@@ -1,8 +1,12 @@
+import { ReactElement } from "react";
+
 import { Josefin_Slab } from "next/font/google";
 
 import type { Metadata } from "next";
 
 import "./globals.css";
+
+import ContextContainer from "@/context";
 
 const metadata: Metadata = {
   title: "Chaters",
@@ -17,12 +21,12 @@ const josefinSlab = Josefin_Slab({
 const RootLayout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactElement;
 }>) => {
   return (
     <html lang="en">
       <body className={`${josefinSlab.className} bg-zinc-950 text-white`}>
-        {children}
+        <ContextContainer>{children}</ContextContainer>
       </body>
     </html>
   );
