@@ -1,12 +1,7 @@
-interface ServerToClientEvents {
-  connect: () => void;
-  disconnect: () => void;
+import { Socket } from "socket.io-client";
+
+interface SocketContextType {
+  socket: Socket | null;
 }
 
-interface ClientToServerEvents {
-  hello: string;
-}
-
-interface SocketType extends ServerToClientEvents, ClientToServerEvents {}
-
-export type { SocketType };
+export type { SocketContextType };
