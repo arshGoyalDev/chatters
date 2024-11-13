@@ -32,7 +32,7 @@ const signup = async (request, response, next) => {
 
     return response.status(201).json({
       user: {
-        id: user.id,
+        userId: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -75,7 +75,7 @@ const login = async (request, response, next) => {
 
     return response.status(200).json({
       user: {
-        id: user.id,
+        userId: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -100,7 +100,7 @@ const getUserInfo = async (request, response, next) => {
 
     return response.status(200).json({
       user: {
-        id: userData.id,
+        userId: userData.id,
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
@@ -137,7 +137,7 @@ const updateProfile = async (request, response, next) => {
 
     return response.status(200).json({
       user: {
-        id: userData.id,
+        userId: userData.id,
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
@@ -172,7 +172,7 @@ const addProfileImage = async (request, response, next) => {
 
     return response.status(200).json({
       user: {
-        id: userData.id,
+        userId: userData.id,
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
