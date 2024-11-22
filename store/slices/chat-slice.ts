@@ -1,4 +1,4 @@
-import { ChatData} from "@/utils/types";
+import { ChatData, Message } from "@/utils/types";
 import { StateCreator } from "zustand";
 
 interface ChatSlice {
@@ -8,23 +8,38 @@ interface ChatSlice {
   chatData: ChatData | null;
   setChatData: (chatData: ChatData | null) => void;
 
-  messages: [] | null;
-  setMessages: (messages: [] | null) => void
+  messages: [Message] | [];
+  setMessages: (messages: [Message] | []) => void;
+
+  addMessage: (message: Message) => void;
 
   closeChat: () => void;
 }
 
-const createChatSlice: StateCreator<ChatSlice> = (set) => ({
+const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
   chatType: null,
-  setChatType: (chatType) => set({chatType}),
+  setChatType: (chatType) => set({ chatType }),
 
   chatData: null,
-  setChatData: (chatData) => set({chatData}),
+  setChatData: (chatData) => set({ chatData }),
 
-  messages: null,
-  setMessages: (messages) => set({messages}),
+  messages: [],
+  setMessages: (messages) => set({ messages }),
 
-  closeChat: () => set({chatData: null, chatType: null, messages: null}),
+  addMessage: (message) => {
+    const chatMessages = get().messages;
+
+    set({
+      messages: [
+        ...chatMessages,
+        {
+          ...message
+        },
+      ],
+    });
+  },
+
+  closeChat: () => set({ chatData: null, chatType: null, messages: [] }),
 });
 
 export default createChatSlice;

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createAuthSlice, createChatSlice } from "./slices";
 
-import { ChatData, UserInfo } from "@/utils/types";
+import { ChatData, Message, UserInfo } from "@/utils/types";
 
 interface AppStore {
   userInfo: UserInfo;
@@ -13,8 +13,10 @@ interface AppStore {
   chatData: ChatData | null;
   setChatData: (chatData: ChatData | null) => void;
 
-  messages: [] | null;
-  setMessages: (messages: [] | null) => void
+  messages: [Message] | [];
+  setMessages: (messages: [Message] | []) => void
+
+  addMessage: (message: Message) => void;
 
   closeChat: () => void;
 }
