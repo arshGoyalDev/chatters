@@ -4,7 +4,17 @@ interface ChatData {
   chatName: string;
   chatPic: string;
   chatStatus: string;
-  chatMembers: UserInfo[],
+  chatMembers: UserInfo[];
 }
 
-export type {ChatData};
+interface Message {
+  content: string;
+  fileUrl: string;
+  messageType: string;
+  recipient: UserInfo;
+  sender: UserInfo;
+  timeStamp: string;
+  messageId: string;
+}
+
+export type { ChatData, Message };

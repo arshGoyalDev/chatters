@@ -2,8 +2,27 @@
 
 import { useState } from "react";
 
+import useAppStore from "@/store";
+
+import { useSocket } from "@/context";
+
 const MessageBar = () => {
+  const socket = useSocket();
+  const {chatType, chatData, userInfo} = useAppStore();
   const [message, setMessage] = useState("");
+
+  const sendMessage = async  () => {
+    if (chatType === "personal") {
+      socket?.socket?.emit("sendMessage", {
+        sender: userInfo._id,
+        content: message,
+        recipient: chatData?.chatMembers[0]._id,
+        fileUrl: null,
+        messageType: "text",
+      })
+    }
+
+  }
 
   return (
     <div className="flex items-center absolute bottom-7 xl:bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-[900px] bg-zinc-900 px-2 rounded-xl">
@@ -38,7 +57,7 @@ const MessageBar = () => {
             </svg>
           </span>
         </button>
-        <button className="p-1 border-2 border-transparent focus:border-zinc-800 rounded-lg">
+        <button onClick={sendMessage} className="p-1 border-2 border-transparent focus:border-zinc-800 rounded-lg">
           <span>
             <svg
               width="28"

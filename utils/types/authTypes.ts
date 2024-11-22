@@ -1,5 +1,5 @@
 interface UserInfo {
-  userId: string;
+  _id: string;
   email: string;
   password: string;
   profileSetup: boolean;
