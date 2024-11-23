@@ -12,7 +12,7 @@ const MessageBar = () => {
   const [message, setMessage] = useState("");
 
   const sendMessage = async  () => {
-    if (chatType === "personal") {
+    if (chatType === "personal" && message !== "") {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
         content: message,
@@ -22,6 +22,7 @@ const MessageBar = () => {
       })
     }
 
+    setMessage("");
   }
 
   return (

@@ -35,3 +35,7 @@ button:active {
 html *::-webkit-scrollbar-thumb {
   @apply bg-zinc-800 rounded-lg;
 }
+
+.scrollbar-invisible::-webkit-scrollbar-thumb {
+  @apply bg-transparent
+}

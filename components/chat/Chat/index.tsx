@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { EmptyChat, MessageBar, ChatHeader, ChatInfo } from "./components";
+import { EmptyChat, MessageBar, ChatHeader, ChatInfo, MessagesContainer } from "./components";
 
 import useAppStore from "@/store";
 
@@ -28,6 +28,8 @@ const Chat = () => {
                 chatInfoVisible={chatInfoVisible}
                 setChatInfoVisible={setChatInfoVisible}
               />
+
+                <MessagesContainer chatInfoVisible={chatInfoVisible} />
 
               <MessageBar />
             </div>
