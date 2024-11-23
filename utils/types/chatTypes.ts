@@ -14,7 +14,7 @@ interface Message {
   recipient: UserInfo;
   sender: UserInfo;
   timeStamp: string;
-  messageId: string;
+  _id: string;
 }
 
 export type { ChatData, Message };
