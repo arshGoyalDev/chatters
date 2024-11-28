@@ -19,7 +19,7 @@ const ChatHeader = ({
   }, [userInfo])
 
   return (
-    <header className="flex items-center gap-4 justify-between py-5 px-5 border-b-2 border-zinc-900">
+    <header className="flex items-center gap-4 justify-between py-6 px-5 border-b-2 border-zinc-900">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {

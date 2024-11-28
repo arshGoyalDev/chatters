@@ -18,10 +18,10 @@ interface ChatSlice {
 
 const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
   chatType: null,
-  setChatType: (chatType) => set({ chatType }),
+  setChatType: (chatType) => set({ chatType, messages: [] }),
 
   chatData: null,
-  setChatData: (chatData) => set({ chatData }),
+  setChatData: (chatData) => set({ chatData, messages: [] }),
 
   messages: [],
   setMessages: (messages) => set({ messages }),
