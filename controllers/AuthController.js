@@ -120,7 +120,7 @@ const updateProfile = async (request, response, next) => {
     const { userId } = request;
     const { firstName, lastName, status } = request.body;
 
-    if (!firstName || !lastName) {
+    if (!firstName && !lastName) {
       return response.status(404).send("First Name or Last Name required");
     }
 
