@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const checkForErrors = () => {
-    if (!firstName || !lastName) {
+    if (!firstName && !lastName) {
       setError("Either of firstName or lastName is required");
       return false;
     } else {
