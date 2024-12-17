@@ -1,18 +1,69 @@
 "use client";
 
 import useAppStore from "@/store";
-import { useEffect } from "react";
+
+import { useEffect, useRef, useState } from "react";
+
+import Message from "./Message";
+
+import moment from "moment";
 
 const MessagesContainer = ({
   chatInfoVisible,
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, userInfo } = useAppStore();
+  const { messages, userInfo, chatType } = useAppStore();
+  const scrollRef = useRef();
 
   useEffect(() => {
     console.log(messages);
+
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
+
+
+  const renderMessages = () => {
+    let lastDate: string = "";
+
+    return (
+      <div
+        ref={scrollRef}
+        id="messages"
+        className={`scrollbar-invisible h-[84vh] overflow-y-auto flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
+          chatInfoVisible ? "lg:px-10" : "px-0"
+        } 2xl:px-0`}
+      >
+        {messages.map((message, index) => {
+          const messageDate = moment(message.timeStamp).format("YYYY-MM-DD");
+          const showDate = messageDate !== lastDate;
+          lastDate = messageDate;
+
+          return (
+            <div key={index}>
+              {showDate && (
+                <div className="font-semibold text-base w-fit my-4 mx-auto text-center">
+                  {moment(message.timeStamp).format("LL")}
+                </div>
+              )}
+
+              {chatType === "personal" && renderPersonalMessages()}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderPersonalMessages = () => {
+    return messages.map((message) => {
+      return (
+        <Message key={message._id} message={message} userInfo={userInfo} />
+      );
+    });
+  };
 
   return (
     <div
@@ -22,42 +73,13 @@ const MessagesContainer = ({
       <>
         {messages.length !== 0 ? (
           <div
+            ref={scrollRef}
             id="messages"
-            className={`scrollbar-invisible bg-red-900 h-[84vh] overflow-y-auto flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
+            className={`scrollbar-invisible h-[84vh] overflow-y-auto flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
               chatInfoVisible ? "lg:px-10" : "px-0"
             } 2xl:px-0`}
           >
-            {messages.map((message) => {
-              return (
-                <div
-                  key={message._id}
-                  className={`flex flex-col gap-2 ${
-                    userInfo._id === message.sender._id
-                      ? "items-end"
-                      : "items-start"
-                  }`}
-                >
-                  <div
-                    className={`relative max-w-[60%] leading-6 ${
-                      userInfo._id !== message.sender._id
-                        ? "bg-primary text-black pl-16"
-                        : "bg-zinc-900 text-white pr-16"
-                    } pt-3 pb-4 px-4 font-bold text-lg rounded-lg`}
-                  >
-                    {message.content}
-                    <div
-                      className={`absolute ${
-                        userInfo._id === message.sender._id
-                          ? "right-2"
-                          : "left-2"
-                      } bottom-2`}
-                    >
-                      <div className="text-sm px-1">{"4 secs"}</div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {renderMessages()}
           </div>
         ) : (
           <div className="text-4xl font-bold">
