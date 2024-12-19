@@ -9,7 +9,7 @@ interface AuthSlice {
 
 const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
   userInfo: {
-    userId: "",
+    _id: "",
     email: "",
     password: "",
     firstName: "",

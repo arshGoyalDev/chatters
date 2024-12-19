@@ -28,12 +28,16 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
 
   addMessage: (message) => {
     const chatMessages = get().messages;
+    const chatType = get().chatType;
 
     set({
       messages: [
         ...chatMessages,
         {
-          ...message
+          ...message,
+          recipient:
+            chatType === "personal" ? message.recipient._id : message.recipient,
+          sender: chatType === "personal" ? message.sender._id : message.sender,
         },
       ],
     });
