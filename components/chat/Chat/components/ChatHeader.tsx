@@ -16,7 +16,7 @@ const ChatHeader = ({
 
   useEffect(() => {
     console.log(userInfo);
-  }, [userInfo])
+  }, [userInfo]);
 
   return (
     <header className="flex items-center gap-4 justify-between py-6 px-5 border-b-2 border-zinc-900">
@@ -48,10 +48,36 @@ const ChatHeader = ({
         </button>
         <div className="flex items-center gap-4 md:gap-6">
           <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden">
-            <img
-              src={`${HOST}/${chatData?.chatPic}`}
-              alt={chatData?.chatName}
-            />
+            {chatData?.chatPic ? (
+              <img
+                src={`${HOST}/${chatData?.chatPic}`}
+                alt={chatData?.chatName}
+              />
+            ) : (
+              <div className="grid place-content-center bg-zinc-900 h-full">
+                <span className="fill-zinc-700">
+                  <svg
+                    width="60"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </div>
+            )}
           </div>
 
           <div>
