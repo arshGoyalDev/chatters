@@ -1,4 +1,4 @@
-import { ChatData, Message } from "@/utils/types";
+import { ChatData, Message, PersonalContact } from "@/utils/types";
 import { StateCreator } from "zustand";
 
 interface ChatSlice {
@@ -12,6 +12,9 @@ interface ChatSlice {
   setMessages: (messages: [Message] | []) => void;
 
   addMessage: (message: Message) => void;
+
+  personalContacts: [PersonalContact] | [];
+  setPersonalContacts: (personalContacts: [PersonalContact] | []) => void
 
   closeChat: () => void;
 }
@@ -42,6 +45,9 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
       ],
     });
   },
+
+  personalContacts: [],
+  setPersonalContacts: (personalContacts) => set({personalContacts}),
 
   closeChat: () => set({ chatData: null, chatType: null, messages: [] }),
 });

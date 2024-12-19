@@ -4,7 +4,18 @@ interface ChatData {
   chatName: string;
   chatPic: string;
   chatStatus: string;
-  chatMembers: UserInfo[];
+  chatMembers: [
+    {
+      _id: string;
+      email: string;
+      password?: string;
+      profileSetup?: boolean;
+      firstName: string;
+      lastName: string;
+      status: string;
+      profilePic: string;
+    }
+  ];
 }
 
 interface Message {
@@ -17,4 +28,15 @@ interface Message {
   _id: string;
 }
 
-export type { ChatData, Message };
+interface PersonalContact {
+  _id: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profilePic: string;
+  status: string;
+}
+
+export type { ChatData, Message, PersonalContact };
