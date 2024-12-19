@@ -22,11 +22,11 @@ const Message = ({
       }`}
     >
       <div
-        className={`relative max-w-[60%] leading-6 border-[1px] ${
+        className={`relative max-w-[60%] leading-6 ${
           userInfo._id !== message.sender
             ? "bg-primary text-black"
-            : "bg-zinc-900 text-white border-primary border-opacity-20"
-        } py-3 px-6 font-bold text-xl rounded-lg`}
+            : "bg-zinc-900 text-white border-[1px] border-zinc-800"
+        } py-3 px-6 font-semibold text-xl rounded-lg break-words`}
       >
         {message.content}
         <div
@@ -36,7 +36,7 @@ const Message = ({
         >
         </div>
       </div>
-          <div className="text-base px-1">{moment(message.timeStamp).format("LT")}, {moment(message.timeStamp).format("LL")}</div>
+          <div className="text-base px-1">{moment(message.timeStamp).format("lll")}</div>
     </div>
   );
 };

@@ -28,6 +28,7 @@ const SettingsMenu = ({
         router.push("/");
 
         setUserInfo({
+          _id: "",
           email: "",
           password: "",
           profileSetup: false,
