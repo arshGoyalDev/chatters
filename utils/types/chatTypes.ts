@@ -11,8 +11,8 @@ interface Message {
   content: string;
   fileUrl: string;
   messageType: string;
-  recipient: UserInfo;
-  sender: UserInfo;
+  recipient: UserInfo | string;
+  sender: UserInfo | string;
   timeStamp: string;
   _id: string;
 }

@@ -12,6 +12,9 @@ const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 const CONTACT_ROUTES = "api/contact";
 const SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTES}/search-contact`;
 
+const MESSAGE_ROUTES = "api/messages";
+const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/get-messages`;
+
 export {
   HOST,
   AUTH_ROUTES,
@@ -23,5 +26,6 @@ export {
   ADD_PROFILE_PIC_ROUTE,
   DELETE_PROFILE_PIC_ROUTE,
   CONTACT_ROUTES,
-  SEARCH_CONTACT_ROUTE
+  SEARCH_CONTACT_ROUTE,
+  GET_MESSAGES_ROUTE
 };
