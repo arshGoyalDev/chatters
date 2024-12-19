@@ -2,91 +2,47 @@
 
 import useAppStore from "@/store";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import Message from "./Message";
-
-import moment from "moment";
 
 const MessagesContainer = ({
   chatInfoVisible,
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, userInfo, chatType } = useAppStore();
-  const scrollRef = useRef();
+  const { messages, userInfo } = useAppStore();
+  const scrollRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     console.log(messages);
+    console.log(userInfo);
 
     if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      scrollRef.current.scrollIntoView();
     }
-  }, [messages]);
-
-
-  const renderMessages = () => {
-    let lastDate: string = "";
-
-    return (
-      <div
-        ref={scrollRef}
-        id="messages"
-        className={`scrollbar-invisible h-[84vh] overflow-y-auto flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
-          chatInfoVisible ? "lg:px-10" : "px-0"
-        } 2xl:px-0`}
-      >
-        {messages.map((message, index) => {
-          const messageDate = moment(message.timeStamp).format("YYYY-MM-DD");
-          const showDate = messageDate !== lastDate;
-          lastDate = messageDate;
-
-          return (
-            <div key={index}>
-              {showDate && (
-                <div className="font-semibold text-base w-fit my-4 mx-auto text-center">
-                  {moment(message.timeStamp).format("LL")}
-                </div>
-              )}
-
-              {chatType === "personal" && renderPersonalMessages()}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const renderPersonalMessages = () => {
-    return messages.map((message) => {
-      return (
-        <Message key={message._id} message={message} userInfo={userInfo} />
-      );
-    });
-  };
+  }, [messages, userInfo]);
 
   return (
     <div
       id="messages-container"
-      className={`scrollbar-invisible flex-1 flex justify-center items-center overflow-y-auto`}
+      className={`scrollbar-invisible flex-1 overflow-y-auto`}
     >
-      <>
-        {messages.length !== 0 ? (
-          <div
-            ref={scrollRef}
-            id="messages"
-            className={`scrollbar-invisible h-[84vh] overflow-y-auto flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
-              chatInfoVisible ? "lg:px-10" : "px-0"
-            } 2xl:px-0`}
-          >
-            {renderMessages()}
-          </div>
-        ) : (
-          <div className="text-4xl font-bold">
-            {"No Messages".toLocaleUpperCase()}
-          </div>
-        )}
-      </>
+      <div
+        id="messages"
+        className={`flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
+          chatInfoVisible ? "lg:px-10" : "px-0"
+        } 2xl:px-0`}
+      >
+        {messages.map((message) => {
+          return (
+            <Message key={message._id} message={message} userInfo={userInfo} />
+          );
+        })}
+      </div>
+
+      {/* {renderMessages()} */}
+      <div ref={scrollRef} />
     </div>
   );
 };
