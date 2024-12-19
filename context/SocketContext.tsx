@@ -39,12 +39,17 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       const handleReceiveMessage = (message: Message) => {
         const { chatData, chatType } = useAppStore.getState();
         if (
-          chatType === "personal" &&
-          (chatData?.chatMembers[0]._id === message.sender._id ||
-            chatData?.chatMembers[0]._id === message.recipient._id)
+          typeof message.sender !== "string" &&
+          typeof message.recipient !== "string"
         ) {
-          console.log(message);
-          addMessage(message);
+          if (
+            chatType === "personal" &&
+            (chatData?.chatMembers[0]._id === message.sender._id ||
+              chatData?.chatMembers[0]._id === message.recipient._id)
+          ) {
+            console.log(message);
+            addMessage(message);
+          }
         }
       };
 
