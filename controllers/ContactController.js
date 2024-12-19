@@ -1,4 +1,7 @@
+import mongoose from "mongoose";
+
 import User from "../models/UserModel.js";
+import Message from "../models/MessagesModel.js";
 
 const searchContacts = async (request, response, next) => {
   try {
@@ -29,4 +32,67 @@ const searchContacts = async (request, response, next) => {
   }
 };
 
-export { searchContacts };
+const getPersonalContacts = async (request, response, next) => {
+  try {
+    let { userId } = request;
+
+    userId = new mongoose.Types.ObjectId(userId);
+
+    const contacts = await Message.aggregate([
+      {
+        $match: {
+          $or: [{ sender: userId }, { recipient: userId }],
+        },
+      },
+      {
+        $sort: { timeStamp: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            $cond: {
+              if: { $eq: ["$sender", userId] },
+              then: "$recipient",
+              else: "$sender",
+            },
+          },
+          lastMessage: {$first: "$content"},
+          lastMessageTime: { $first: "$timeStamp" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "contactInfo",
+        },
+      },
+      {
+        $unwind: "$contactInfo",
+      },
+      {
+        $project: {
+          _id: 1,
+          lastMessage: 1,
+          lastMessageTime: 1,
+          email: "$contactInfo.email",
+          firstName: "$contactInfo.firstName",
+          lastName: "$contactInfo.lastName",
+          profilePic: "$contactInfo.profilePic",
+          status: "$contactInfo.status",
+        },
+      },
+      {
+        $sort: { lastMessageTime: -1 },
+      },
+    ]);
+
+    return response.status(200).json({ contacts });
+  } catch (error) {
+    console.log({ error });
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
+export { searchContacts, getPersonalContacts };
