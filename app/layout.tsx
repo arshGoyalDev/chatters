@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-import { Josefin_Slab } from "next/font/google";
+import { Quicksand } from "next/font/google";
 
 import type { Metadata } from "next";
 
@@ -13,9 +13,9 @@ const metadata: Metadata = {
   description: "Chaters - A Powerful online chat application",
 };
 
-const josefinSlab = Josefin_Slab({
+const quicksand = Quicksand({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const RootLayout = ({
@@ -25,7 +25,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`${josefinSlab.className} bg-zinc-950 text-white`}>
+      <body className={`${quicksand.className} bg-zinc-950 text-white`}>
         <ContextContainer>{children}</ContextContainer>
       </body>
     </html>
