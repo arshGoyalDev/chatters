@@ -9,25 +9,28 @@ import SelectFileMenu from "./SelectFileMenu";
 
 const MessageBar = () => {
   const socket = useSocket();
-  const { chatType, chatData, userInfo } = useAppStore();
+  const { chatType, chatData, userInfo, messages } = useAppStore();
 
   const [message, setMessage] = useState("");
   const [fileMenu, setFileMenu] = useState(false);
   const [filePath, setFilePath] = useState("");
 
+  useEffect(() => {
+    setFilePath("");
+    setFileMenu(false);
+  }, [messages])
+
   const sendMessage = async () => {
-    if (chatType === "personal" && message !== "") {
+    if (chatType === "personal" && (filePath !== "" || message !== "")) {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
-        content: message,
+        content: message ? message : undefined,
         recipient: chatData?.chatMembers[0]._id,
         fileUrl: filePath !== "" ? filePath : null,
         messageType: "text",
       });
     }
 
-    setFilePath("");
-    setFileMenu(false);
     setMessage("");
   };
 

@@ -1,6 +1,7 @@
 import type { Message, UserInfo } from "@/utils/types";
 import moment from "moment";
 import { useEffect } from "react";
+import FileDisplay from "./FileDisplay";
 
 const Message = ({
   message,
@@ -9,11 +10,10 @@ const Message = ({
   message: Message;
   userInfo: UserInfo;
 }) => {
-
   useEffect(() => {
+    console.log(message.fileUrl);
     // console.log(userInfo._id, message.sender._id);
-  }
-  , [])
+  }, []);
 
   return (
     <div
@@ -21,22 +21,29 @@ const Message = ({
         userInfo._id === message.sender ? "items-end" : "items-start"
       }`}
     >
-      <div
-        className={`relative max-w-[60%] leading-6 ${
-          userInfo._id !== message.sender
-            ? "bg-primary text-black"
-            : "bg-zinc-900 text-white border-[1px] border-zinc-800"
-        } py-3 px-6 font-semibold text-xl rounded-lg break-words`}
-      >
-        {message.content}
+      {message.fileUrl && (
         <div
-        //   className={` ${
-        //     userInfo._id == = message.sender._id ? "right-2" : "left-2"
-        //   } bottom-2`}
+          className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 ${
+            userInfo._id === message.sender ? "bg-zinc-900" : "bg-primary"
+          }`}
         >
+          <FileDisplay filePath={message.fileUrl} />
         </div>
+      )}
+      {message.content && (
+        <div
+          className={`relative max-w-[60%] leading-6 ${
+            userInfo._id !== message.sender
+              ? "bg-primary text-black"
+              : "bg-zinc-900 text-white border-[1px] border-zinc-800"
+          } py-3 px-6 font-semibold text-xl rounded-lg break-words`}
+        >
+          {message.content}
+        </div>
+      )}
+      <div className="text-base px-1">
+        {moment(message.timeStamp).format("lll")}
       </div>
-          <div className="text-base px-1">{moment(message.timeStamp).format("lll")}</div>
     </div>
   );
 };
