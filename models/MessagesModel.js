@@ -11,7 +11,6 @@ const messageSchema = new mongoose.Schema({
     ref: "Users",
     required: false,
   },
-
   messageType: {
     type: String,
     enum: ["text", "file"],
@@ -19,15 +18,11 @@ const messageSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: function () {
-      return this.messageType === "text";
-    },
+    required: false,
   },
   fileUrl: {
     type: String,
-    required: function () {
-      return this.messageType === "file";
-    },
+    required: false,
   },
   timeStamp: {
     type: Date,

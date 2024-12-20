@@ -56,6 +56,7 @@ const getPersonalContacts = async (request, response, next) => {
               else: "$sender",
             },
           },
+          lastFile: {$first: "$fileUrl"},
           lastMessage: {$first: "$content"},
           lastMessageTime: { $first: "$timeStamp" },
         },
@@ -74,6 +75,7 @@ const getPersonalContacts = async (request, response, next) => {
       {
         $project: {
           _id: 1,
+          lastFile: 1,
           lastMessage: 1,
           lastMessageTime: 1,
           email: "$contactInfo.email",
