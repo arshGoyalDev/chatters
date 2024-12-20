@@ -1,7 +1,7 @@
 import useAppStore from "@/store";
 
 import { apiClient } from "@/lib/api-client";
-import { GET_PERSONAL_CONTACTS, HOST } from "@/utils/constants";
+import { GET_PERSONAL_CONTACTS_ROUTE, HOST } from "@/utils/constants";
 
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ const PersonalContacts = () => {
   useEffect(() => {
     const getContacts = async () => {
       try {
-        const response = await apiClient.get(GET_PERSONAL_CONTACTS, {
+        const response = await apiClient.get(GET_PERSONAL_CONTACTS_ROUTE, {
           withCredentials: true,
         });
 
