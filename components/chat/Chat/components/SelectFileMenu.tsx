@@ -1,10 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 import { apiClient } from "@/lib/api-client";
-import { HOST, UPLOAD_FILE_ROUTE } from "@/utils/constants";
+import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
+
+import FileDisplay from "./FileDisplay";
 
 const SelectFileMenu = ({
   setFileMenu,
@@ -16,7 +17,6 @@ const SelectFileMenu = ({
   setFilePath: Dispatch<SetStateAction<string>>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [fileType, setFileType] = useState("");
 
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
@@ -24,52 +24,28 @@ const SelectFileMenu = ({
     }
   };
 
-  useEffect(() => {
-    setFileType("file");
-    checkForImage();
-    checkForVideo();
-    checkForAudio();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filePath]);
+  useEffect(() => {console.log(filePath)}, [filePath])
 
-  const handleAttachmentChange = async (event) => {
+  const handleAttachmentChange = async (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     try {
-      const file = event.target.files[0];
+      if (event.target.files) {
+        const file = event.target.files[0];
 
-      if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
+        if (file) {
+          const formData = new FormData();
+          formData.append("file", file);
 
-        const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, {
-          withCredentials: true,
-        });
+          const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, {
+            withCredentials: true,
+          });
 
-        setFilePath(response.data.filePath);
+          setFilePath(response.data.filePath);
+        }
       }
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const checkForImage = () => {
-    const imageRegex =
-      /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
-    if (imageRegex.test(filePath)) {
-      setFileType("image");
-    }
-  };
-
-  const checkForVideo = () => {
-    const videoRegex = /\.(mp4|ogg|webm)$/i;
-    if (videoRegex.test(filePath)) {
-      setFileType("video");
-    }
-  };
-
-  const checkForAudio = () => {
-    const audioRegex = /\.(mp3|wav|ogg)$/i;
-    if (audioRegex.test(filePath)) {
-      setFileType("audio");
     }
   };
 
@@ -103,17 +79,11 @@ const SelectFileMenu = ({
           </svg>
         </button>
       </div>
-      <div className="px-4 pb-4 grid place-content-center">
+      <div className="px-4 pb-4 flex items-center justify-center">
         <div className="relative w-60 h-60 md:w-[400px] md:h-[400px] grid place-content-center bg-zinc-800 rounded-lg overflow-hidden">
           {filePath !== "" ? (
-            <div>
-              {fileType === "image" && (
-                <img
-                  src={`${HOST}/${filePath}`}
-                  alt={filePath}
-                  className="w-full h-full"
-                />
-              )}
+            <div className="z-20 w-[60] md:w-[400px] px-3">
+              <FileDisplay filePath={filePath} />
 
               <button
                 onClick={() => setFilePath("")}
@@ -146,7 +116,6 @@ const SelectFileMenu = ({
               </button>
             </div>
           ) : (
-            // <div className="grid place-content-center absolute z-20 top-0 left-0 w-full h-full bg-zinc-950 bg-opacity-90 transition-all duration-300 cursor-pointer">
             <span className="stroke-zinc-600 fill-zinc-600">
               <svg
                 width="50"
@@ -157,7 +126,7 @@ const SelectFileMenu = ({
               >
                 <path
                   d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
-                  strokeW-dth="1.5"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -169,7 +138,6 @@ const SelectFileMenu = ({
                 />
               </svg>
             </span>
-            // </div>
           )}
           <button
             onClick={handleAttachmentClick}
