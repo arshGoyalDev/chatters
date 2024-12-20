@@ -30,7 +30,8 @@ interface Message {
 
 interface PersonalContact {
   _id: string;
-  lastMessage: string;
+  lastFile: string | null;
+  lastMessage: string | null;
   lastMessageTime: string;
   email: string;
   firstName: string;

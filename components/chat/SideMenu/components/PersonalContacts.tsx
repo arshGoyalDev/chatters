@@ -8,10 +8,15 @@ import { useEffect } from "react";
 import moment from "moment";
 import { PersonalContact } from "@/utils/types";
 
-
-
 const PersonalContacts = () => {
-  const { personalContacts, setPersonalContacts, messages, setChatData, setChatType, chatData } = useAppStore();
+  const {
+    personalContacts,
+    setPersonalContacts,
+    messages,
+    setChatData,
+    setChatType,
+    chatData,
+  } = useAppStore();
 
   useEffect(() => {
     const getContacts = async () => {
@@ -43,19 +48,24 @@ const PersonalContacts = () => {
       chatStatus: contact.status,
       chatMembers: [contact],
     });
-  }
+  };
 
   return (
     <div className="px-2 py-2">
       <h2 className="text-xl font-bold px-2">Personal Chats</h2>
 
-      <div className="flex flex-col gap-0.5 mt-5">
+      <div className="flex flex-col gap-1 mt-5">
         {personalContacts.length !== 0 ? (
           personalContacts.map((contact) => {
             return (
-              <div key={contact._id}
-              onClick={() => viewPersonalChat(contact)}
-               className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${chatData?.chatMembers[0]._id === contact._id && "bg-zinc-800 bg-opacity-40"}`}>
+              <div
+                key={contact._id}
+                onClick={() => viewPersonalChat(contact)}
+                className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
+                  chatData?.chatMembers[0]._id === contact._id &&
+                  "bg-zinc-800 bg-opacity-40"
+                }`}
+              >
                 <div className="flex gap-4 items-center">
                   <div className="grid place-content-center w-[54px] h-[54px] rounded-lg bg-zinc-800 overflow-hidden">
                     {contact.profilePic ? (
@@ -92,9 +102,52 @@ const PersonalContacts = () => {
                     <h2 className="font-bold text-xl">
                       {contact.firstName} {contact.lastName}
                     </h2>
-                    <p className="flex gap-1 items-center">
-                      {contact.lastMessage}
-                    </p>
+                    {contact.lastFile ? (
+                      <div className="flex items-center gap-2">
+                        <span className="stroke-white">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                        <p>
+                          {contact.lastFile.split("/")[
+                            contact.lastFile.split("/").length - 1
+                          ].length > 15
+                            ? `${contact.lastFile
+                                .split("/")
+                                [
+                                  contact.lastFile.split("/").length - 1
+                                ].substring(0, 15)}...`
+                            : contact.lastFile.split("/")[
+                                contact.lastFile.split("/").length - 1
+                              ]}
+                        </p>
+                      </div>
+                    ) : (
+                      <p>
+                        {contact.lastMessage &&
+                          (contact.lastMessage?.length > 20
+                            ? `${contact.lastMessage?.substring(0, 20)}...`
+                            : contact.lastMessage)}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="pt-1">

@@ -116,7 +116,7 @@ const SelectFileMenu = ({
               </button>
             </div>
           ) : (
-            <span className="stroke-zinc-600 fill-zinc-600">
+            <span className="stroke-zinc-600">
               <svg
                 width="50"
                 height="50"
