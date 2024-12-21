@@ -16,6 +16,7 @@ const PersonalContacts = () => {
     setChatData,
     setChatType,
     chatData,
+    userInfo,
   } = useAppStore();
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const PersonalContacts = () => {
                 onClick={() => viewPersonalChat(contact)}
                 className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
                   chatData?.chatMembers[0]._id === contact._id &&
-                  "bg-zinc-800 bg-opacity-40"
+                  "bg-zinc-800 bg-opacity-40 cursor-default select-none"
                 }`}
               >
                 <div className="flex gap-4 items-center">
@@ -102,52 +103,53 @@ const PersonalContacts = () => {
                     <h2 className="font-bold text-xl">
                       {contact.firstName} {contact.lastName}
                     </h2>
-                    {contact.lastFile ? (
-                      <div className="flex items-center gap-2">
-                        <span className="stroke-white">
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                        <p>
-                          {contact.lastFile.split("/")[
-                            contact.lastFile.split("/").length - 1
-                          ].length > 15
-                            ? `${contact.lastFile
-                                .split("/")
-                                [
+                    <div className="flex items-center gap-2">
+                      <span>{contact.lastMessageSender !== userInfo._id ? `${contact.firstName}:` : "You:"}</span>
+                      {contact.lastFile ? (
+                        <>
+                          <span className="stroke-white">
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                          <p>
+                            {contact.lastFile.split("/")[
+                              contact.lastFile.split("/").length - 1
+                            ].length > 15
+                              ? `${contact.lastFile
+                                  .split("/")
+                                  [
+                                    contact.lastFile.split("/").length - 1
+                                  ].substring(0, 15)}...`
+                              : contact.lastFile.split("/")[
                                   contact.lastFile.split("/").length - 1
-                                ].substring(0, 15)}...`
-                            : contact.lastFile.split("/")[
-                                contact.lastFile.split("/").length - 1
-                              ]}
-                        </p>
-                      </div>
-                    ) : (
-                      <p>
-                        {contact.lastMessage &&
-                          (contact.lastMessage?.length > 20
-                            ? `${contact.lastMessage?.substring(0, 20)}...`
-                            : contact.lastMessage)}
-                      </p>
-                    )}
+                                ]}
+                          </p>
+                        </>
+                      ) : (
+                        contact.lastMessage &&
+                        (contact.lastMessage?.length > 20
+                          ? `${contact.lastMessage?.substring(0, 20)}...`
+                          : contact.lastMessage)
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="pt-1">
