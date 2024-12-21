@@ -6,6 +6,7 @@ import { GET_PERSONAL_CONTACTS_ROUTE, HOST } from "@/utils/constants";
 import { useEffect } from "react";
 
 import moment from "moment";
+
 import { PersonalContact } from "@/utils/types";
 
 const PersonalContacts = () => {
@@ -35,6 +36,8 @@ const PersonalContacts = () => {
     };
 
     getContacts();
+
+    
   }, [messages, setPersonalContacts]);
 
   useEffect(() => {

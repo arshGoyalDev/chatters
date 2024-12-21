@@ -23,7 +23,7 @@ const MessagesContainer = ({
   return (
     <div
       id="messages-container"
-      className={`scrollbar-invisible flex-1 overflow-y-auto`}
+      className={`flex-1 overflow-y-auto`}
     >
       <div
         id="messages"

@@ -24,7 +24,12 @@ const Message = ({
       const link = document.createElement("a");
 
       link.href = urlBlob;
-      link.setAttribute("download", message.fileUrl ? message.fileUrl.split("/")[message.fileUrl.split("/").length - 1] : "");
+      link.setAttribute(
+        "download",
+        message.fileUrl
+          ? message.fileUrl.split("/")[message.fileUrl.split("/").length - 1]
+          : ""
+      );
 
       document.body.appendChild(link);
 
@@ -57,7 +62,7 @@ const Message = ({
           </div>
           <button
             onClick={downloadFile}
-            className={`p-2 rounded-lg ${
+            className={`p-0.5 rounded-lg ${
               userInfo._id === message.sender ? "bg-zinc-900" : "bg-primary"
             }`}
           >
@@ -69,30 +74,27 @@ const Message = ({
               }`}
             >
               <svg
-                width="24"
-                height="24"
+                width="36"
+                height="36"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M9.31995 11.6799L11.8799 14.2399L14.4399 11.6799"
+                  d="M9 11.51L12 14.51L15 11.51"
                   strokeWidth="1.5"
-                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
                 <path
-                  d="M11.88 4V14.17"
+                  d="M12 14.51V6.51001"
                   strokeWidth="1.5"
-                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
                 <path
-                  d="M20 12.1799C20 16.5999 17 20.1799 12 20.1799C7 20.1799 4 16.5999 4 12.1799"
+                  d="M6 16.51C9.89 17.81 14.11 17.81 18 16.51"
                   strokeWidth="1.5"
-                  strokeMiterlimit="10"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -103,7 +105,7 @@ const Message = ({
       )}
       {message.content && (
         <div
-          className={`relative max-w-[60%] leading-6 ${
+          className={`relative max-w-[80%] lg:max-w-[60%] leading-6 ${
             userInfo._id !== message.sender
               ? "bg-primary text-black"
               : "bg-zinc-900 text-white"
