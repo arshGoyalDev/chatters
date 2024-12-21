@@ -12,16 +12,13 @@ const MessagesContainer = ({
   chatInfoVisible: boolean;
 }) => {
   const { messages, userInfo } = useAppStore();
-  const scrollRef = useRef<null | HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     console.log(messages);
-    console.log(userInfo);
 
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView();
-    }
-  }, [messages, userInfo]);
+      scrollRef.current?.scrollIntoView();
+  }, [messages]);
 
   return (
     <div

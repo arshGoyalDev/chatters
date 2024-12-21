@@ -47,7 +47,7 @@ const Chat = () => {
     <main
       className={`fixed ${
         chatType && "z-[1000] md:z-0"
-      } bg-zinc-950 top-0 left-0 md:relative w-full h-screen md:w-[62vw] lg:w-[70vw] xl:w-[75vw] 2xl:w-[80vw]`}
+      } bg-zinc-950 top-0 left-0 md:relative w-full h-screen md:w-[62vw] lg:w-[70vw] xl:w-[75vw] 2xl:w-[80vw] select-none`}
     >
       {chatType ? (
         <>

@@ -1,6 +1,7 @@
 import type { Message, UserInfo } from "@/utils/types";
+
 import moment from "moment";
-import { useEffect } from "react";
+
 import FileDisplay from "./FileDisplay";
 
 const Message = ({
@@ -10,11 +11,6 @@ const Message = ({
   message: Message;
   userInfo: UserInfo;
 }) => {
-  useEffect(() => {
-    console.log(message.fileUrl);
-    // console.log(userInfo._id, message.sender._id);
-  }, []);
-
   return (
     <div
       className={`flex flex-col gap-2 ${
