@@ -145,8 +145,8 @@ const PersonalContacts = () => {
                         </>
                       ) : (
                         contact.lastMessage &&
-                        (contact.lastMessage?.length > 20
-                          ? `${contact.lastMessage?.substring(0, 20)}...`
+                        (contact.lastMessage?.length > 15
+                          ? `${contact.lastMessage?.substring(0, 15)}...`
                           : contact.lastMessage)
                       )}
                     </div>

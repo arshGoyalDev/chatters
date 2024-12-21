@@ -19,8 +19,8 @@ interface ChatData {
 }
 
 interface Message {
-  content: string;
-  fileUrl: string;
+  content: string | null;
+  fileUrl: string | null;
   messageType: string;
   recipient: UserInfo | string;
   sender: UserInfo | string;

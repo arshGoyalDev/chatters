@@ -24,7 +24,7 @@ const MessageBar = () => {
     if (chatType === "personal" && (filePath !== "" || message !== "")) {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
-        content: message ? message : undefined,
+        content: message ? message : null,
         recipient: chatData?.chatMembers[0]._id,
         fileUrl: filePath !== "" ? filePath : null,
         messageType: "text",
