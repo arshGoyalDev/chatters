@@ -35,8 +35,6 @@ const uploadFile = async (request, response, next) => {
     let fileDir = `uploads/files/${date}`;
     let fileName = `${fileDir}/${request.file.originalname}`;
 
-    console.log(request.file)
-
     mkdirSync(fileDir, {recursive: true});
 
     renameSync(request.file.path, fileName);

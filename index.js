@@ -8,7 +8,12 @@ import mongoose from "mongoose";
 
 import setupSocket from "./socket.js";
 
-import { authRoutes, contactRoutes, messageRoutes } from "./routes/index.js";
+import {
+  authRoutes,
+  contactRoutes,
+  messageRoutes,
+  groupRoutes,
+} from "./routes/index.js";
 
 dotenv.config();
 
@@ -27,6 +32,7 @@ app.use(
 
 app.use("/uploads/profile", express.static("uploads/profile"));
 app.use("/uploads/files", express.static("uploads/files"));
+app.use("/uploads/group", express.static("uploads/group"));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -34,6 +40,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/group", groupRoutes);
 
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
