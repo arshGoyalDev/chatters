@@ -19,7 +19,7 @@ const NewChatModal = () => {
   const { setChatData, setChatType } = useAppStore();
 
   const [searchValue, setSearchValue] = useState("");
-  const [searchedContacts, setSearchedContacts] = useState<[] | null>(null);
+  const [searchedContacts, setSearchedContacts] = useState<[UserInfo] | null>(null);
 
   const searchContacts = async () => {
     try {

@@ -36,6 +36,7 @@ const SettingsMenu = ({
           lastName: "",
           status: "",
           profilePic: "",
+          userOnline: false,
         });
       } else {
         throw new Error("Internal Server Error");
@@ -93,7 +94,7 @@ const SettingsMenu = ({
         </span>
       </button>
       <button
-        onClick={() => handleLink("/chat?new-group=true")}
+        onClick={() => handleLink("/chat?new-group-chat=true")}
         className="w-full flex items-center justify-between py-3 pl-5 pr-4 border-b-2 border-zinc-700 hover:bg-zinc-700 hover:bg-opacity-30"
       >
         New Group Chat

@@ -18,6 +18,10 @@ const MESSAGE_ROUTES = "api/messages";
 const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/get-messages`;
 const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/upload-file`;
 
+const GROUP_ROUTES = "api/group";
+const ADD_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/add-group-pic`;
+const REMOVE_GROUP_PIC = `${GROUP_ROUTES}/remove-group-pic`;
+
 export {
   HOST,
   AUTH_ROUTES,
@@ -34,4 +38,6 @@ export {
   GET_ALL_CONTACTS,
   GET_MESSAGES_ROUTE,
   UPLOAD_FILE_ROUTE,
+  ADD_GROUP_PIC_ROUTE,
+  REMOVE_GROUP_PIC,
 };
