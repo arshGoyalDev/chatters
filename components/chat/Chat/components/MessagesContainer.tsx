@@ -15,16 +15,11 @@ const MessagesContainer = ({
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log(messages);
-
-      scrollRef.current?.scrollIntoView();
+    scrollRef.current?.scrollIntoView();
   }, [messages]);
 
   return (
-    <div
-      id="messages-container"
-      className={`flex-1 overflow-y-auto`}
-    >
+    <div id="messages-container" className={`flex-1 overflow-y-auto`}>
       <div
         id="messages"
         className={`flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${

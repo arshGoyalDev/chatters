@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
 
 import { apiClient } from "@/lib/api-client";
 import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
@@ -23,8 +23,6 @@ const SelectFileMenu = ({
       fileInputRef.current.click();
     }
   };
-
-  useEffect(() => {console.log(filePath)}, [filePath])
 
   const handleAttachmentChange = async (
     event: ChangeEvent<HTMLInputElement>

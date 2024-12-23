@@ -32,7 +32,6 @@ const Chat = () => {
         if (response.data.messages.length !== 0) {
           setMessages(response.data.messages);
         }
-        // console.log(response.data);
       } catch (error) {
         console.log({ error });
       }

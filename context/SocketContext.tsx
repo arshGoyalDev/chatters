@@ -47,7 +47,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
             (chatData?.chatMembers[0]._id === message.sender._id ||
               chatData?.chatMembers[0]._id === message.recipient._id)
           ) {
-            console.log(message);
             addMessage(message);
           }
         }

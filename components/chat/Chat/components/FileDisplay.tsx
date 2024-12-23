@@ -15,7 +15,6 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
     checkForImage();
     checkForVideo();
     checkForAudio();
-    console.log(filePath);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filePath]);
 

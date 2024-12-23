@@ -3,7 +3,7 @@ import useAppStore from "@/store";
 
 import { HOST } from "@/utils/constants";
 
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 const ChatHeader = ({
   chatInfoVisible,
@@ -12,12 +12,7 @@ const ChatHeader = ({
   chatInfoVisible: boolean;
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatType, chatData, setChatType, setChatData, userInfo } =
-    useAppStore();
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+  const { chatType, chatData, setChatType, setChatData } = useAppStore();
 
   return (
     <header className="flex items-center gap-4 justify-between py-6 px-5 border-b-2 border-zinc-900">

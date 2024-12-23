@@ -46,7 +46,6 @@ const SelectMultiContact = ({
       let contactFound = false;
 
       for (const selectedContact of selectedContacts) {
-        // console.log(selectedContact, contact);
         if (selectedContact._id === contact._id) {
           contactFound = true;
           break;

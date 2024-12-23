@@ -38,10 +38,6 @@ const PersonalContacts = () => {
     getContacts();
   }, [messages, setPersonalContacts]);
 
-  useEffect(() => {
-    console.log(personalContacts);
-  }, [personalContacts]);
-
   const viewPersonalChat = (contact: PersonalContact) => {
     setChatType("personal");
     setChatData({
