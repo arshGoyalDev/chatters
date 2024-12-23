@@ -61,17 +61,19 @@ const PersonalContacts = () => {
                 key={contact._id}
                 onClick={() => viewPersonalChat(contact)}
                 className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
-                  chatType === "personal" && chatData?.chatMembers[0]._id === contact._id &&
+                  chatType === "personal" &&
+                  chatData?.chatMembers[0]._id === contact._id &&
                   "bg-zinc-800 bg-opacity-40 cursor-default select-none"
                 }`}
               >
                 <div className="flex gap-4 items-center">
-                  <div className="grid place-content-center w-[54px] h-[54px] rounded-lg bg-zinc-800 overflow-hidden">
+                  <div className="relative grid place-content-center w-[54px] h-[54px] rounded-lg bg-zinc-800">
                     {contact.userInfo.profilePic ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={`${HOST}/${contact.userInfo.profilePic}`}
                         alt={contact.userInfo.firstName}
+                        className="rounded-lg"
                       />
                     ) : (
                       <span className="fill-zinc-700">
@@ -96,13 +98,20 @@ const PersonalContacts = () => {
                         </svg>
                       </span>
                     )}
+                    {contact.userInfo.userOnline && (
+                      <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-primary rounded-full"></div>
+                    )}
                   </div>
                   <div className="flex-col gap-2">
                     <h2 className="font-bold text-xl">
                       {contact.userInfo.firstName} {contact.userInfo.lastName}
                     </h2>
                     <div className="flex items-center gap-2">
-                      <span>{contact.lastMessageSender !== userInfo._id ? `${contact.userInfo.firstName}:` : "You:"}</span>
+                      <span>
+                        {contact.lastMessageSender !== userInfo._id
+                          ? `${contact.userInfo.firstName}:`
+                          : "You:"}
+                      </span>
                       {contact.lastFile ? (
                         <>
                           <span className="stroke-white">
