@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import multer from "multer";
 
-import { addGroupPic, removeGroupPic } from "../controllers/GroupController.js";
+import { addGroupPic, createGroup, removeGroupPic } from "../controllers/GroupController.js";
 
 import { verifyToken } from "../middlewares/AuthMiddleware.js";
 
@@ -15,7 +15,8 @@ groupRoutes.post(
   upload.single("group-pic"),
   addGroupPic
 );
+groupRoutes.delete("/remove-group-pic", verifyToken, removeGroupPic);
 
-groupRoutes.post("/remove-group-pic", verifyToken, removeGroupPic);
+groupRoutes.post("/create-group", verifyToken, createGroup);
 
 export default groupRoutes;
