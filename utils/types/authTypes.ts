@@ -6,6 +6,7 @@ interface UserInfo {
   firstName: string;
   lastName: string;
   status: string,
+  userOnline: boolean,
   profilePic: string;
 }
 

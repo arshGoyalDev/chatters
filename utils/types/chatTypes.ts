@@ -13,6 +13,7 @@ interface ChatData {
       firstName: string;
       lastName: string;
       status: string;
+      userOnline: boolean;
       profilePic: string;
     }
   ];
@@ -34,11 +35,7 @@ interface PersonalContact {
   lastFile: string | null;
   lastMessage: string | null;
   lastMessageTime: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  profilePic: string;
-  status: string;
+  userInfo: UserInfo;
 }
 
 export type { ChatData, Message, PersonalContact };
