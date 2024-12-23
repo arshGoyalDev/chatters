@@ -4,19 +4,10 @@ interface ChatData {
   chatName: string;
   chatPic: string;
   chatStatus: string;
-  chatMembers: [
-    {
-      _id: string;
-      email: string;
-      password?: string;
-      profileSetup?: boolean;
-      firstName: string;
-      lastName: string;
-      status: string;
-      userOnline: boolean;
-      profilePic: string;
-    }
-  ];
+  chatMembers: UserInfo[];
+  chatAdmin?: UserInfo;
+  chatCreatedAt?: Date;
+  chatUpdatedAt?: Date;
 }
 
 interface Message {
@@ -38,4 +29,16 @@ interface PersonalContact {
   userInfo: UserInfo;
 }
 
-export type { ChatData, Message, PersonalContact };
+interface Group {
+  _id: string;
+  groupName: string;
+  groupStatus: string;
+  groupPic: string;
+  updatedAt: Date;
+  createdAt: Date;
+  messages: [];
+  groupAdmin: UserInfo;
+  groupMembers: UserInfo[];
+}
+
+export type { ChatData, Message, PersonalContact, Group };

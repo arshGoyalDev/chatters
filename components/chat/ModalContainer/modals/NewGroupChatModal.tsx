@@ -4,11 +4,21 @@ import { useRef, useState } from "react";
 import { ModalHeader, SelectMultiContact } from "../components";
 
 import { UserInfo } from "@/utils/types";
-import { ADD_GROUP_PIC_ROUTE, HOST, REMOVE_GROUP_PIC } from "@/utils/constants";
+import {
+  ADD_GROUP_PIC_ROUTE,
+  CREATE_GROUP_ROUTE,
+  HOST,
+  REMOVE_GROUP_PIC_ROUTE,
+} from "@/utils/constants";
 
 import { apiClient } from "@/lib/api-client";
+import { useRouter } from "next/navigation";
+import useAppStore from "@/store";
 
 const NewGroupChatModal = () => {
+  const router = useRouter();
+  const { setChatType, setChatData } = useAppStore();
+
   const [selectedContacts, setSelectedContacts] = useState<UserInfo[] | null>(
     null
   );
@@ -51,7 +61,7 @@ const NewGroupChatModal = () => {
 
   const deleteGroupPic = async () => {
     try {
-      const response = await apiClient.delete(REMOVE_GROUP_PIC, {
+      const response = await apiClient.delete(REMOVE_GROUP_PIC_ROUTE, {
         withCredentials: true,
       });
 
@@ -60,6 +70,43 @@ const NewGroupChatModal = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const createGroup = async () => {
+    try {
+      const response = await apiClient.post(
+        CREATE_GROUP_ROUTE,
+        {
+          groupName,
+          groupStatus,
+          groupPic,
+          groupMembers: selectedContacts,
+        },
+        { withCredentials: true }
+      );
+
+      const { group } = response.data;
+
+      if (response.status === 201) {
+        const newChatData = {
+          chatName: group.groupName,
+          chatPic: group.groupPic,
+          chatStatus: group.groupStatus,
+          chatMembers: group.groupMembers,
+          chatAdmin: group.groupAdmin,
+          chatCreatedAt: group.createdAt,
+          chatUpdatedAt: group.updatedAt,
+        };
+
+        setChatData(newChatData);
+        setChatType("group");
+        router.push("/chat");
+      }
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -103,20 +150,20 @@ const NewGroupChatModal = () => {
           </div>
 
           <div>
-            <h2 className="font-bold text-lg mb-4">Group Pic</h2>
-            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-700 rounded-2xl overflow-hidden">
+            <h2 className="font-bold text-lg mb-3">Group Pic</h2>
+            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-700 rounded-xl overflow-hidden">
               <div
                 onMouseEnter={() => setButtonHovered(true)}
                 onMouseLeave={() => setButtonHovered(false)}
                 onClick={handleFileInputClick}
-                className="relative w-[240px] h-[240px] grid place-content-center"
+                className="relative w-[160px] h-[160px] grid place-content-center"
               >
                 {buttonHovered && !groupPic && (
                   <div className="grid place-content-center absolute z-20 top-0 left-0 w-full h-full bg-zinc-950 bg-opacity-90 transition-all duration-300 cursor-pointer">
                     <span className="stroke-white">
                       <svg
-                        width="100"
-                        height="100"
+                        width="60"
+                        height="60"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -180,8 +227,8 @@ const NewGroupChatModal = () => {
                 ) : (
                   <span className="fill-zinc-700">
                     <svg
-                      width="150"
-                      height="150"
+                      width="80"
+                      height="80"
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -219,7 +266,10 @@ const NewGroupChatModal = () => {
         />
       </div>
       <div className="flex justify-end border-t-2 border-zinc-800 px-6 py-5">
-        <button className="px-6 py-2 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300">
+        <button
+          onClick={createGroup}
+          className="px-6 py-2 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300"
+        >
           Create Group
         </button>
       </div>

@@ -20,7 +20,9 @@ const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/upload-file`;
 
 const GROUP_ROUTES = "api/group";
 const ADD_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/add-group-pic`;
-const REMOVE_GROUP_PIC = `${GROUP_ROUTES}/remove-group-pic`;
+const REMOVE_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/remove-group-pic`;
+const CREATE_GROUP_ROUTE = `${GROUP_ROUTES}/create-group`;
+const GET_USER_GROUPS_ROUTE = `${GROUP_ROUTES}/get-user-groups`;
 
 export {
   HOST,
@@ -39,5 +41,7 @@ export {
   GET_MESSAGES_ROUTE,
   UPLOAD_FILE_ROUTE,
   ADD_GROUP_PIC_ROUTE,
-  REMOVE_GROUP_PIC,
+  REMOVE_GROUP_PIC_ROUTE,
+  CREATE_GROUP_ROUTE,
+  GET_USER_GROUPS_ROUTE,
 };

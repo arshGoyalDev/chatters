@@ -15,6 +15,7 @@ const PersonalContacts = () => {
     setPersonalContacts,
     messages,
     setChatData,
+    chatType,
     setChatType,
     chatData,
     userInfo,
@@ -60,7 +61,7 @@ const PersonalContacts = () => {
                 key={contact._id}
                 onClick={() => viewPersonalChat(contact)}
                 className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
-                  chatData?.chatMembers[0]._id === contact._id &&
+                  chatType === "personal" && chatData?.chatMembers[0]._id === contact._id &&
                   "bg-zinc-800 bg-opacity-40 cursor-default select-none"
                 }`}
               >
