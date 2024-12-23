@@ -12,7 +12,7 @@ const ChatHeader = ({
   chatInfoVisible: boolean;
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatData, setChatType, setChatData, userInfo } = useAppStore();
+  const { chatType, chatData, setChatType, setChatData, userInfo } = useAppStore();
 
   useEffect(() => {
     console.log(userInfo);
@@ -82,6 +82,7 @@ const ChatHeader = ({
 
           <div>
             <h2 className="font-bold text-3xl">{chatData?.chatName}</h2>
+            <p>{chatType === "personal" && chatData?.chatMembers[0].status}</p>
           </div>
         </div>
       </div>

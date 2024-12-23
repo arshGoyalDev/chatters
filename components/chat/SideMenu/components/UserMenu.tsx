@@ -49,7 +49,7 @@ const UserMenu = () => {
 
         <div className="flex flex-col gap-0.5">
           <h2 className="text-xl font-bold">{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
-          <p className="text-zinc-300">{userInfo.status}</p>
+          <p className="text-zinc-300">{userInfo.status.length > 24 ? `${userInfo.status.substring(0, 24)}...` : userInfo.status}</p>
         </div>
       </div>
 

@@ -11,11 +11,12 @@ const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 
 const CONTACT_ROUTES = "api/contact";
 const SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTES}/search-contact`;
-const GET_PERSONAL_CONTACTS_ROUTE=`${CONTACT_ROUTES}/get-personal-contacts`;
+const GET_PERSONAL_CONTACTS_ROUTE = `${CONTACT_ROUTES}/get-personal-contacts`;
+const GET_ALL_CONTACTS = `${CONTACT_ROUTES}/get-all-contacts`;
 
 const MESSAGE_ROUTES = "api/messages";
 const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/get-messages`;
-const UPLOAD_FILE_ROUTE= `${MESSAGE_ROUTES}/upload-file`;
+const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/upload-file`;
 
 export {
   HOST,
@@ -30,6 +31,7 @@ export {
   CONTACT_ROUTES,
   GET_PERSONAL_CONTACTS_ROUTE,
   SEARCH_CONTACT_ROUTE,
+  GET_ALL_CONTACTS,
   GET_MESSAGES_ROUTE,
-  UPLOAD_FILE_ROUTE
+  UPLOAD_FILE_ROUTE,
 };

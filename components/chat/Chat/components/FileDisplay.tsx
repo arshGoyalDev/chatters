@@ -115,7 +115,7 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
       )}
 
       {fileType === "audio" && (
-        <div className=" flex items-center justify-between w-full px-4 py-4 bg-zinc-950 mx-auto rounded-lg">
+        <div className=" flex items-center justify-between gap-4 w-full px-4 py-4 bg-zinc-950 mx-auto rounded-lg">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-zinc-900 rounded-lg">
               <span className="stroke-white">
