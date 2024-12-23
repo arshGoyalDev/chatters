@@ -42,6 +42,8 @@ const NewChatModal = () => {
   };
 
   const selectContact = (contact: UserInfo) => {
+
+    console.log(contact);
     router.push("/chat");
 
     setChatType("personal");
@@ -147,7 +149,7 @@ const NewChatModal = () => {
                 </div>
                 <div className="flex flex-col gap-0.5">
                   <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
-                  <p>{contact.status}</p>
+                  <p>{contact.userOnline ? "Online" : contact.status}</p>
                 </div>
               </div>
             ))}
