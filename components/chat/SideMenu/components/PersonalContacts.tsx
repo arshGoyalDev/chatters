@@ -36,8 +36,6 @@ const PersonalContacts = () => {
     };
 
     getContacts();
-
-    
   }, [messages, setPersonalContacts]);
 
   useEffect(() => {
@@ -47,10 +45,10 @@ const PersonalContacts = () => {
   const viewPersonalChat = (contact: PersonalContact) => {
     setChatType("personal");
     setChatData({
-      chatName: `${contact.firstName} ${contact.lastName}`,
-      chatPic: contact.profilePic,
-      chatStatus: contact.status,
-      chatMembers: [contact],
+      chatName: `${contact.userInfo.firstName} ${contact.userInfo.lastName}`,
+      chatPic: contact.userInfo.profilePic,
+      chatStatus: contact.userInfo.status,
+      chatMembers: [contact.userInfo],
     });
   };
 
@@ -72,11 +70,11 @@ const PersonalContacts = () => {
               >
                 <div className="flex gap-4 items-center">
                   <div className="grid place-content-center w-[54px] h-[54px] rounded-lg bg-zinc-800 overflow-hidden">
-                    {contact.profilePic ? (
+                    {contact.userInfo.profilePic ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`${HOST}/${contact.profilePic}`}
-                        alt={contact.firstName}
+                        src={`${HOST}/${contact.userInfo.profilePic}`}
+                        alt={contact.userInfo.firstName}
                       />
                     ) : (
                       <span className="fill-zinc-700">
@@ -104,10 +102,10 @@ const PersonalContacts = () => {
                   </div>
                   <div className="flex-col gap-2">
                     <h2 className="font-bold text-xl">
-                      {contact.firstName} {contact.lastName}
+                      {contact.userInfo.firstName} {contact.userInfo.lastName}
                     </h2>
                     <div className="flex items-center gap-2">
-                      <span>{contact.lastMessageSender !== userInfo._id ? `${contact.firstName}:` : "You:"}</span>
+                      <span>{contact.lastMessageSender !== userInfo._id ? `${contact.userInfo.firstName}:` : "You:"}</span>
                       {contact.lastFile ? (
                         <>
                           <span className="stroke-white">

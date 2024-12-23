@@ -42,8 +42,6 @@ const NewChatModal = () => {
   };
 
   const selectContact = (contact: UserInfo) => {
-
-    console.log(contact);
     router.push("/chat");
 
     setChatType("personal");
