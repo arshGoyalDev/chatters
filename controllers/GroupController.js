@@ -3,6 +3,8 @@ import { renameSync, unlinkSync } from "fs";
 import User from "../models/UserModel.js";
 import Group from "../models/GroupModel.js";
 
+import mongoose from "mongoose";
+
 const addGroupPic = async (request, response, next) => {
   try {
     const { file } = request;
@@ -77,4 +79,18 @@ const createGroup = async (request, response, next) => {
   }
 };
 
-export { addGroupPic, removeGroupPic, createGroup };
+const getUserGroups = async (request, response, next) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(request.userId);
+
+    const groupsList = await Group.find({
+      $or: [{ groupAdmin: userId }, { groupMembers: userId }],
+    }).sort({ updatedAt: -1 });
+
+    return response.status(200).json({ groupsList });
+  } catch (error) {
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
+export { addGroupPic, removeGroupPic, createGroup, getUserGroups};
