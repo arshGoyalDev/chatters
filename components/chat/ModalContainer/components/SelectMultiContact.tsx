@@ -39,8 +39,40 @@ const SelectMultiContact = ({
     }
   };
 
+  const selectContact = (contact: UserInfo) => {
+    let newContacts: UserInfo[];
+
+    if (selectedContacts) {
+      let contactFound = false;
+
+      for (const selectedContact of selectedContacts) {
+        // console.log(selectedContact, contact);
+        if (selectedContact._id === contact._id) {
+          contactFound = true;
+          break;
+        }
+      }
+
+      if (!contactFound) newContacts = [...selectedContacts, contact];
+      else newContacts = selectedContacts;
+    } else {
+      newContacts = [contact];
+    }
+
+    setSelectedContacts(newContacts);
+  };
+
+  const removeContact = (contact: UserInfo) => {
+    const newContacts = selectedContacts?.filter((selectContact) => {
+      if (selectContact._id !== contact._id) return selectContact;
+    });
+
+    if (newContacts) setSelectedContacts(newContacts);
+    else setSelectedContacts(null);
+  };
+
   return (
-    <div className="w-full py-4 px-4">
+    <div className="w-full py-6 px-6">
       <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
         <input
           type="text"
@@ -89,11 +121,51 @@ const SelectMultiContact = ({
         </button>
       </div>
 
+      {selectedContacts && (
+        <div className="flex flex-wrap gap-2 pt-4">
+          {selectedContacts.map((contact) => (
+            <div
+              key={contact._id}
+              className="flex items-center gap-1 pl-3 pr-2 py-1 rounded-md bg-zinc-800"
+            >
+              <div className="font-semibold">
+                {`${contact.firstName} ${contact.lastName}`}
+              </div>
+              <button
+                onClick={() => removeContact(contact)}
+                className="stroke-white rotate-45"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 12H18"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 18V6"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
       {searchedContacts ? (
-        <div className="mt-4 h-[240px] overflow-auto">
+        <div className="mt-3 h-[240px] overflow-auto">
           {searchedContacts.map((contact: UserInfo) => (
             <div
-              // onClick={() => selectContact(contact)}
+              onClick={() => selectContact(contact)}
               key={contact.email}
               className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
             >
@@ -137,7 +209,7 @@ const SelectMultiContact = ({
           ))}
         </div>
       ) : (
-        <div className="grid place-content-center text-lg pt-28 text-center">
+        <div className="grid place-content-center text-lg pt-12 pb-6 text-center font-semibold">
           Nothing to see here, <br />
           Search people to start a new chat.
         </div>

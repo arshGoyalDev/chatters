@@ -64,7 +64,7 @@ const NewGroupChatModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[1000px] h-[80vh] lg:h-fit overflow-y-auto rounded-xl bg-zinc-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[1000px] max-h-[80vh] lg:h-fit overflow-y-auto rounded-xl bg-zinc-900 shadow-2xl">
       <ModalHeader title="New Group Chat" />
 
       <div className="flex flex-col lg:flex-row border-t-2 border-zinc-800">
@@ -219,7 +219,7 @@ const NewGroupChatModal = () => {
         />
       </div>
       <div className="flex justify-end border-t-2 border-zinc-800 px-6 py-5">
-        <button className="px-6 py-2 bg-primary rounded-lg font-bold text-lg">
+        <button className="px-6 py-2 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300">
           Create Group
         </button>
       </div>
