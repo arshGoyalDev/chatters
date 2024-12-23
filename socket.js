@@ -1,6 +1,8 @@
 import { Server as SocketIoServer } from "socket.io";
 import Message from "./models/MessagesModel.js";
 
+import User from "./models/UserModel.js";
+
 const setupSocket = (server) => {
   const io = new SocketIoServer(server, {
     cors: {
@@ -12,8 +14,18 @@ const setupSocket = (server) => {
 
   const userSocketMap = new Map();
 
-  const disconnect = (socket) => {
-    console.log(`Client disconnected! ${socket.id}`);
+  const disconnect = async (socket) => {
+    console.log(`${socket.handshake.query.userId} is offline`);
+
+    await User.findByIdAndUpdate(
+      socket.handshake.query.userId,
+      {
+        userOnline: false,
+      },
+      { new: true, runValidators: true }
+    );
+
+    // console.log(`Client disconnected! ${socket.id}`);
 
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
@@ -42,12 +54,21 @@ const setupSocket = (server) => {
     }
   };
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
     if (userId) {
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          userOnline: true,
+        },
+        { new: true, runValidators: true }
+      );
+
+      console.log(`${userId} is online`);
       userSocketMap.set(userId, socket.id);
-      console.log(`User Connected ${userId} with socket ID : ${socket.id}`);
+      // console.log(`User Connected ${userId} with socket ID : ${socket.id}`);
     } else {
       console.log("User Id not provided during connection");
     }

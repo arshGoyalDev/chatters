@@ -80,11 +80,7 @@ const getPersonalContacts = async (request, response, next) => {
           lastFile: 1,
           lastMessage: 1,
           lastMessageTime: 1,
-          email: "$contactInfo.email",
-          firstName: "$contactInfo.firstName",
-          lastName: "$contactInfo.lastName",
-          profilePic: "$contactInfo.profilePic",
-          status: "$contactInfo.status",
+          userInfo: "$contactInfo",
         },
       },
       {
