@@ -95,17 +95,4 @@ const getPersonalContacts = async (request, response, next) => {
   }
 };
 
-const getAllContacts = async (request, response, next) => {
-  try {
-    const users = await User.find(
-      { _id: { $ne: request.userId } },
-      "email firstName lastName _id profilePic status"
-    );
-    return response.status(200).json({ users });
-  } catch (error) {
-    console.log({ error });
-    return response.status(500).send("Internal Server Error");
-  }
-};
-
-export { searchContacts, getPersonalContacts, getAllContacts };
+export { searchContacts, getPersonalContacts };
