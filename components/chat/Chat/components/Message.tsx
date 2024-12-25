@@ -6,6 +6,8 @@ import FileDisplay from "./FileDisplay";
 
 import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const Message = ({
   message,
@@ -105,13 +107,13 @@ const Message = ({
       )}
       {message.content && (
         <div
-          className={`relative max-w-[80%] lg:max-w-[60%] leading-6 ${
+          className={`message-content relative max-w-[80%] lg:max-w-[60%] leading-6 ${
             userInfo._id !== message.sender
               ? "bg-primary text-black"
               : "bg-zinc-900 text-white"
-          } py-3 px-6 font-semibold text-xl rounded-lg break-words`}
+          } py-3 px-6 font-medium text-lg rounded-lg break-words`}
         >
-          {message.content}
+          <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
         </div>
       )}
       <div className="text-base px-1">

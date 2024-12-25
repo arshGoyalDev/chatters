@@ -7,10 +7,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import ContextContainer from "@/context";
+import { HOST } from "@/utils/constants";
 
 const metadata: Metadata = {
   title: "Chaters",
   description: "Chaters - A Powerful online chat application",
+  icons: {
+    icon: `${HOST}/uploads/favicon.ico`
+  }
 };
 
 const quicksand = Quicksand({
