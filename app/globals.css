@@ -45,6 +45,10 @@ html *::-webkit-scrollbar-thumb {
 
 /* Message */
 
-.message-content a {
+.message-receiver a {
   @apply text-primary;
+}
+
+.message-sender a {
+  @apply text-white;
 }

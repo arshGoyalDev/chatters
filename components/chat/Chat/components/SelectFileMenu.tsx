@@ -48,7 +48,7 @@ const SelectFileMenu = ({
   };
 
   return (
-    <div className="absolute bottom-20 right-0 w-[85vw] max-w-[440px] bg-zinc-900 rounded-lg">
+    <div className="absolute bottom-16 -right-2 w-[85vw] max-w-[440px] bg-zinc-900 rounded-lg shadow-lg shadow-zinc-950">
       <div className="flex items-center justify-between py-4 px-4">
         <h2 className="text-lg font-semibold">Select File</h2>
         <button

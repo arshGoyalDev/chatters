@@ -107,10 +107,10 @@ const Message = ({
       )}
       {message.content && (
         <div
-          className={`message-content relative max-w-[80%] lg:max-w-[60%] leading-6 ${
+          className={`relative max-w-[80%] lg:max-w-[60%] leading-6 ${
             userInfo._id !== message.sender
-              ? "bg-primary text-black"
-              : "bg-zinc-900 text-white"
+              ? "bg-primary text-black message-sender"
+              : "bg-zinc-900 text-white message-receiver"
           } py-3 px-6 font-medium text-lg rounded-lg break-words`}
         >
           <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
