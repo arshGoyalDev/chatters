@@ -14,7 +14,10 @@ import useAppStore from "@/store";
 
 import { apiClient } from "@/lib/api-client";
 
-import { GET_MESSAGES_ROUTE } from "@/utils/constants";
+import {
+  GET_GROUP_MESSAGES_ROUTE,
+  GET_MESSAGES_ROUTE,
+} from "@/utils/constants";
 
 const Chat = () => {
   const { chatType, messages, chatData, setMessages } = useAppStore();
@@ -37,7 +40,25 @@ const Chat = () => {
       }
     };
 
+    const getGroupMessages = async () => {
+      try {
+        const response = await apiClient.post(
+          GET_GROUP_MESSAGES_ROUTE,
+          { groupId: chatData?.chatId },
+          { withCredentials: true }
+        );
+
+        if (response.data.messages.length !== 0) {
+          setMessages(response.data.messages);
+        }
+
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+
     if (chatType === "personal") getMessages();
+    else if (chatType === "group") getGroupMessages();
   }, [chatType, setMessages]);
 
   return (

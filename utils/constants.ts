@@ -22,6 +22,7 @@ const ADD_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/add-group-pic`;
 const REMOVE_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/remove-group-pic`;
 const CREATE_GROUP_ROUTE = `${GROUP_ROUTES}/create-group`;
 const GET_USER_GROUPS_ROUTE = `${GROUP_ROUTES}/get-user-groups`;
+const GET_GROUP_MESSAGES_ROUTE = `${GROUP_ROUTES}/get-group-messages`;
 
 export {
   HOST,
@@ -42,4 +43,5 @@ export {
   REMOVE_GROUP_PIC_ROUTE,
   CREATE_GROUP_ROUTE,
   GET_USER_GROUPS_ROUTE,
+  GET_GROUP_MESSAGES_ROUTE,
 };

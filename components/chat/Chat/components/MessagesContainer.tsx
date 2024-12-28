@@ -32,8 +32,6 @@ const MessagesContainer = ({
           );
         })}
       </div>
-
-      {/* {renderMessages()} */}
       <div ref={scrollRef} />
     </div>
   );

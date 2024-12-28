@@ -48,7 +48,6 @@ const GroupsList = () => {
 
     setChatType("group");
     setChatData(newChatData);
-    setMessages(group.messages);
   };
 
   return (
