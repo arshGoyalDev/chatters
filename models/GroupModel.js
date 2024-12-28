@@ -11,7 +11,7 @@ const groupSchema = new mongoose.Schema({
   },
   groupPic: {
     type: String,
-    required: true,
+    required: false,
   },
   groupAdmin: {
     type: mongoose.Schema.ObjectId,

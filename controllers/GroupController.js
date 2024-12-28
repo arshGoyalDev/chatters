@@ -2,11 +2,9 @@ import { renameSync, unlinkSync } from "fs";
 
 import User from "../models/UserModel.js";
 import Group from "../models/GroupModel.js";
+import Message from "../models/MessagesModel.js";
 
 import mongoose from "mongoose";
-import { request } from "http";
-import { response } from "express";
-import Message from "../models/MessagesModel.js";
 
 const addGroupPic = async (request, response, next) => {
   try {
@@ -100,8 +98,13 @@ const getGroupMessages = async (request, response, next) => {
   try {
     const { groupId } = request.body;
     
-    const group = await Group.findById(groupId).populate("messages");
-    const messages = group.messages;
+    const group = await Group.findById(groupId);
+
+    const messages = await Message.find({
+      $or: [
+        {_id: group.messages}
+      ],
+    }).populate("sender").sort({ timestamp: 1 });
 
     return response.status(200).json({ messages });
   } catch (error) {
