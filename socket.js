@@ -1,5 +1,6 @@
 import { Server as SocketIoServer } from "socket.io";
 import Message from "./models/MessagesModel.js";
+import Group from "./models/GroupModel.js";
 
 import User from "./models/UserModel.js";
 
@@ -54,6 +55,48 @@ const setupSocket = (server) => {
     }
   };
 
+  const sendGroupMessage = async (message) => {
+    const { groupId, content, messageType, fileUrl, sender } = message;
+
+    const createdMessage = await Message.create({
+      sender,
+      recipient: null,
+      content,
+      messageType,
+      timeStamp: new Date(),
+      fileUrl,
+    });
+
+    const messageData = await Message.findById(createdMessage._id)
+      .populate(
+        "sender",
+        "id email profilePic firstName lastName status userOnline"
+      )
+      .exec();
+
+    await Group.findByIdAndUpdate(groupId, {
+      $push: { messages: createdMessage._id },
+    });
+
+    const group = await Group.findById(groupId).populate("groupMembers");
+
+    const finalData = { ...messageData._doc, groupId: group._id };
+
+    if (group && group.groupMembers) {
+      group.groupMembers.forEach((member) => {
+        const memberSocketId = userSocketMap.get(member._id.toString());
+        if (memberSocketId) {
+          io.to(memberSocketId).emit("receiveGroupMessage", finalData);
+        }
+      });
+
+      const adminSocketId = userSocketMap.get(group.groupAdmin.toString());
+      if (adminSocketId) {
+        io.to(adminSocketId).emit("receiveGroupMessage", finalData);
+      }
+    }
+  };
+
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
@@ -68,12 +111,13 @@ const setupSocket = (server) => {
 
       console.log(`${userId} is online`);
       userSocketMap.set(userId, socket.id);
-      // console.log(`User Connected ${userId} with socket ID : ${socket.id}`);
+      // console.log(`User Conn,ected ${userId} with socket ID : ${socket.id}`);
     } else {
       console.log("User Id not provided during connection");
     }
 
     socket.on("sendMessage", sendMessage);
+    socket.on("sendGroupMessage", sendGroupMessage);
     socket.on("disconnect", () => disconnect(socket));
   });
 };
