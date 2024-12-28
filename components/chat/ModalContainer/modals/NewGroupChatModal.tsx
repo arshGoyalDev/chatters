@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 
 import { ModalHeader, SelectMultiContact } from "../components";
 
-import { UserInfo } from "@/utils/types";
+import { ChatData, UserInfo } from "@/utils/types";
 import {
   ADD_GROUP_PIC_ROUTE,
   CREATE_GROUP_ROUTE,
@@ -89,7 +89,7 @@ const NewGroupChatModal = () => {
       const { group } = response.data;
 
       if (response.status === 201) {
-        const newChatData = {
+        const newChatData: ChatData = {
           chatName: group.groupName,
           chatPic: group.groupPic,
           chatStatus: group.groupStatus,
@@ -97,6 +97,7 @@ const NewGroupChatModal = () => {
           chatAdmin: group.groupAdmin,
           chatCreatedAt: group.createdAt,
           chatUpdatedAt: group.updatedAt,
+          chatId: group._id,
         };
 
         setChatData(newChatData);

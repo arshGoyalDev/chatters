@@ -8,16 +8,18 @@ interface ChatData {
   chatAdmin?: UserInfo;
   chatCreatedAt?: Date;
   chatUpdatedAt?: Date;
+  chatId?: string
 }
 
 interface Message {
   content: string | null;
   fileUrl: string | null;
   messageType: string;
-  recipient: UserInfo | string;
-  sender: UserInfo | string;
+  recipient: string | UserInfo;
+  sender: string | UserInfo;
   timeStamp: string;
   _id: string;
+  groupId?: string;
 }
 
 interface PersonalContact {

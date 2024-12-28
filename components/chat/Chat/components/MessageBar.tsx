@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import useAppStore from "@/store";
 
 import { useSocket } from "@/context";
+
 import SelectFileMenu from "./SelectFileMenu";
 
 const MessageBar = () => {
@@ -27,8 +28,16 @@ const MessageBar = () => {
         content: message ? message : null,
         recipient: chatData?.chatMembers[0]._id,
         fileUrl: filePath !== "" ? filePath : null,
-        messageType: "text",
+        messageType: filePath ? "file" : "text",
       });
+    } else {
+      socket?.socket?.emit("sendGroupMessage", {
+        sender: userInfo._id,
+        content: message ? message : null,
+        fileUrl: filePath !== "" ? filePath : null,
+        messageType: "text",
+        groupId: chatData?.chatId,
+      })
     }
 
     setMessage("");
@@ -36,7 +45,7 @@ const MessageBar = () => {
 
   return (
     <div className="flex justify-center pt-2 pb-10">
-      <div className=" flex items-center w-[90%] max-w-[900px] bg-zinc-900 pl-2 pr-4 rounded-xl">
+      <div className=" flex items-end w-[90%] max-w-[900px] bg-zinc-900 pl-2 pr-4 rounded-xl">
         <div className="py-1 w-full">
           <textarea
             name="message-input"
@@ -50,7 +59,7 @@ const MessageBar = () => {
           />
         </div>
 
-        <div className="relative flex items-center gap-2">
+        <div className="relative flex items-center gap-2 pb-3">
           <button
             onClick={() => setFileMenu(true)}
             className="p-1 border-2 border-transparent focus:border-zinc-800 rounded-lg"

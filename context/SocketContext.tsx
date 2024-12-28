@@ -37,22 +37,30 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       });
 
       const handleReceiveMessage = (message: Message) => {
-        const { chatData, chatType } = useAppStore.getState();
+        const { chatData } = useAppStore.getState();
         if (
           typeof message.sender !== "string" &&
           typeof message.recipient !== "string"
         ) {
           if (
-            chatType === "personal" &&
-            (chatData?.chatMembers[0]._id === message.sender._id ||
-              chatData?.chatMembers[0]._id === message.recipient._id)
+            chatData?.chatMembers[0]._id === message.sender._id ||
+            chatData?.chatMembers[0]._id === message.recipient._id
           ) {
             addMessage(message);
           }
         }
       };
 
+      const handleReceiveGroupMessage = (message: Message) => {
+        const { chatData } = useAppStore.getState();
+
+        if (chatData?.chatId === message.groupId) {
+          addMessage(message);
+        }
+      };
+
       socket.current.on("receiveMessage", handleReceiveMessage);
+      socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 
       return () => {
         socket.current?.disconnect();

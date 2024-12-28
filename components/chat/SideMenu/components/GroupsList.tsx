@@ -43,6 +43,7 @@ const GroupsList = () => {
       chatCreatedAt: group.createdAt,
       chatAdmin: group.groupAdmin,
       chatUpdatedAt: group.updatedAt,
+      chatId: group._id,
     };
 
     setChatType("group");
