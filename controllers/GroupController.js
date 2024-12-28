@@ -4,6 +4,9 @@ import User from "../models/UserModel.js";
 import Group from "../models/GroupModel.js";
 
 import mongoose from "mongoose";
+import { request } from "http";
+import { response } from "express";
+import Message from "../models/MessagesModel.js";
 
 const addGroupPic = async (request, response, next) => {
   try {
@@ -93,4 +96,24 @@ const getUserGroups = async (request, response, next) => {
   }
 };
 
-export { addGroupPic, removeGroupPic, createGroup, getUserGroups};
+const getGroupMessages = async (request, response, next) => {
+  try {
+    const { groupId } = request.body;
+    
+    const group = await Group.findById(groupId).populate("messages");
+    const messages = group.messages;
+
+    return response.status(200).json({ messages });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
+export {
+  addGroupPic,
+  removeGroupPic,
+  createGroup,
+  getUserGroups,
+  getGroupMessages,
+};
