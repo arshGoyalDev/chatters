@@ -59,7 +59,7 @@ const Chat = () => {
 
     if (chatType === "personal") getMessages();
     else if (chatType === "group") getGroupMessages();
-  }, [chatType, setMessages]);
+  }, [chatType, setMessages, chatData]);
 
   return (
     <main

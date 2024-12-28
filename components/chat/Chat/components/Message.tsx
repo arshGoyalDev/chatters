@@ -10,13 +10,16 @@ import { HOST } from "@/utils/constants";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import useAppStore from "@/store";
+import { useEffect } from "react";
+
 const Message = ({
   message,
-  userInfo,
 }: {
   message: Message;
-  userInfo: UserInfo;
 }) => {
+  const {userInfo} = useAppStore();
+
   const downloadFile = async () => {
     try {
       const response = await apiClient.get(`${HOST}/${message.fileUrl}`, {
@@ -43,6 +46,10 @@ const Message = ({
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log(message);
+  }, [])
 
   return (
     <div

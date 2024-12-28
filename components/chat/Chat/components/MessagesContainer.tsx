@@ -5,13 +5,14 @@ import useAppStore from "@/store";
 import { useEffect, useRef } from "react";
 
 import Message from "./Message";
+import GroupMessage from "./GroupMessage";
 
 const MessagesContainer = ({
   chatInfoVisible,
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, userInfo } = useAppStore();
+  const { messages, userInfo, chatType } = useAppStore();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,8 +28,10 @@ const MessagesContainer = ({
         } 2xl:px-0`}
       >
         {messages.map((message) => {
-          return (
-            <Message key={message._id} message={message} userInfo={userInfo} />
+          return chatType === "personal" ? (
+            <Message key={message._id} message={message} />
+          ) : (
+            <GroupMessage key={message._id} message={message} />
           );
         })}
       </div>
