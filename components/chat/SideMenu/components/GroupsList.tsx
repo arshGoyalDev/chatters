@@ -7,11 +7,13 @@ import useAppStore from "@/store";
 
 import moment from "moment";
 
-import { Group } from "@/utils/types";
+import { ChatData, Group } from "@/utils/types";
+
 import Link from "next/link";
 
 const GroupsList = () => {
-  const { chatType, chatData } = useAppStore();
+  const { chatType, chatData, setChatType, setChatData, setMessages } =
+    useAppStore();
   const [groupsList, setGroupsList] = useState<Group[] | null>(null);
 
   useEffect(() => {
@@ -32,6 +34,22 @@ const GroupsList = () => {
     getgroups();
   }, [chatType, chatData]);
 
+  const viewGroupChat = (group: Group) => {
+    const newChatData: ChatData = {
+      chatName: group.groupName,
+      chatStatus: group.groupStatus,
+      chatMembers: group.groupMembers,
+      chatPic: group.groupPic,
+      chatCreatedAt: group.createdAt,
+      chatAdmin: group.groupAdmin,
+      chatUpdatedAt: group.updatedAt,
+    };
+
+    setChatType("group");
+    setChatData(newChatData);
+    setMessages(group.messages);
+  };
+
   return (
     <div className="px-2 pt-2 pb-5">
       <h2 className="text-xl font-bold px-2">Groups</h2>
@@ -41,6 +59,7 @@ const GroupsList = () => {
           groupsList.map((group) => (
             <div
               key={group._id}
+              onClick={() => viewGroupChat(group)}
               className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40`}
             >
               <div className="flex gap-4 items-center">

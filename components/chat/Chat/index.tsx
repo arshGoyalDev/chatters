@@ -36,11 +36,9 @@ const Chat = () => {
         console.log({ error });
       }
     };
-    // if (chatData.)
-    if (chatData) {
-      if (chatData?.chatMembers.length === 1) getMessages();
-    }
-  }, [chatType, chatData, setMessages]);
+
+    if (chatType === "personal") getMessages();
+  }, [chatType, setMessages]);
 
   return (
     <main
