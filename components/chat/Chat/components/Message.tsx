@@ -124,7 +124,7 @@ const Message = ({
           <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
         </div>
       )}
-      <div className="text-base px-1">
+      <div className="text-sm px-1">
         {moment(message.timeStamp).format("lll")}
       </div>
     </div>

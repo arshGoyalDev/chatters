@@ -23,7 +23,7 @@ const MessagesContainer = ({
     <div id="messages-container" className={`flex-1 overflow-y-auto`}>
       <div
         id="messages"
-        className={`flex flex-col w-[90%] max-w-[1000px] mx-auto gap-2 p-6 lg:py-10 ${
+        className={`flex flex-col w-[90%] max-w-[1000px] mx-auto gap-4 p-6 lg:py-10 ${
           chatInfoVisible ? "lg:px-10" : "px-0"
         } 2xl:px-0`}
       >

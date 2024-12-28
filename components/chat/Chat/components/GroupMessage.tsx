@@ -67,8 +67,8 @@ const GroupMessage = ({ message }: { message: Message }) => {
                 <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
                   <span className="fill-zinc-700">
                     <svg
-                      width="16"
-                      height="16"
+                      width="20"
+                      height="20"
                       viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -168,9 +168,9 @@ const GroupMessage = ({ message }: { message: Message }) => {
             </div>
           </div>
           {userInfo._id !== message.sender._id && (
-            <div>{`${message.sender.firstName} ${message.sender.lastName}`}</div>
+            <div className="font-bold">{`${message.sender.firstName} ${message.sender.lastName}`}</div>
           )}
-          <div className="text-base">
+          <div className="text-sm -mt-1">
             {moment(message.timeStamp).format("lll")}
           </div>
         </div>
