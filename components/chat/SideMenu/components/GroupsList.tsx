@@ -56,13 +56,13 @@ const GroupsList = () => {
     <div className="px-2 pt-2 pb-5">
       <h2 className="text-zinc-700 uppercase font-bold px-2 pb-1">Groups</h2>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col">
         {groupsList ? (
           groupsList.map((group) => (
             <div
               key={group._id}
               onClick={() => viewGroupChat(group)}
-              className={`flex justify-between items-center hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40`}
+              className={`flex justify-between items-center hover:bg-zinc-800 transition-all duration-300 py-3 pl-3 pr-4 rounded-lg hover:bg-opacity-40`}
             >
               <div className="flex gap-4 items-center">
                 <div className="w-10 h-10 rounded-lg bg-zinc-800">

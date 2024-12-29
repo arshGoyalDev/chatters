@@ -1,15 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 import useAppStore from "@/store";
+
 import { HOST } from "@/utils/constants";
+
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import ChatMember from "./ChatMember";
 
 const ChatInfo = ({
   setChatInfoVisible,
 }: {
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatData } = useAppStore();
+  const { chatData, chatType } = useAppStore();
+
+  useEffect(() => {
+    console.log(chatData);
+  }, [chatData]);
 
   return (
     <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950">
@@ -83,14 +92,50 @@ const ChatInfo = ({
 
         <div className="flex flex-col gap-4">
           <div>
-            <h3 className="text-zinc-600 font-bold">Status</h3>
-            <p className="font-semibold">{chatData?.chatStatus}</p>
+            <h2 className="text-zinc-600 font-bold uppercase">
+              {chatType === "personal" ? "status" : "description"}
+            </h2>
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              className="font-semibold mt-1"
+            >
+              {chatData?.chatStatus}
+            </Markdown>
           </div>
-          <div>
-            <h3 className="text-zinc-600 font-bold">Email</h3>
-            <p className="font-semibold">{chatData?.chatMembers[0].email}</p>
-          </div>
+          {chatType === "personal" && (
+            <div>
+              <h2 className="text-zinc-600 font-bold uppercase">Email</h2>
+              <p className="font-semibold mt-1">
+                {chatData?.chatMembers[0].email}
+              </p>
+            </div>
+          )}
         </div>
+
+        {chatType === "group" && (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-zinc-600 font-bold uppercase">Group Admin</h2>
+              {chatData?.chatAdmin && (
+                <ChatMember
+                  key={chatData?.chatAdmin?._id}
+                  member={chatData?.chatAdmin}
+                  admin={true}
+                />
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-zinc-600 font-bold uppercase">
+                Group Members ( {chatData?.chatMembers.length} )
+              </h2>
+              <div className="flex flex-col gap-2">
+                {chatData?.chatMembers.map((member) => (
+                  <ChatMember key={member._id} member={member} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

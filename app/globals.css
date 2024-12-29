@@ -9,9 +9,8 @@
 input:focus,
 input:active,
 textarea:focus,
-textarea:active
- {
-  @apply outline-none border-zinc-500;  
+textarea:active {
+  @apply outline-none border-zinc-500;
 }
 
 button:focus,
@@ -40,7 +39,7 @@ html *::-webkit-scrollbar-thumb {
 }
 
 .scrollbar-invisible::-webkit-scrollbar-thumb {
-  @apply bg-transparent
+  @apply bg-transparent;
 }
 
 /* Message */
@@ -51,4 +50,10 @@ html *::-webkit-scrollbar-thumb {
 
 .message-sender a {
   @apply text-white;
+}
+
+/* Chat Info */
+
+a {
+  @apply text-primary;
 }
