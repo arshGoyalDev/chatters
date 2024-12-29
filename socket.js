@@ -131,6 +131,72 @@ const setupSocket = (server) => {
     }
   };
 
+  const leaveGroup = async (data) => {
+    const { groupId, leavingMember } = data;
+
+    const group = await Group.findById(groupId).populate("groupMembers");
+
+    const groupMembers = group.groupMembers.filter((member) => {
+      if (member._id.toString() !== leavingMember._id) return member;
+    });
+
+    const leavingMessage = await Message.create({
+      sender: leavingMember._id,
+      recipient: null,
+      content: `${leavingMember.firstName} ${leavingMember.lastName} left the group`,
+      messageType: "last",
+      timeStamp: new Date(),
+      fileUrl: null,
+    });
+
+    const messageData = await Message.findById(leavingMessage._id)
+      .populate(
+        "sender",
+        "id email profilePic firstName lastName status userOnline"
+      )
+      .exec();
+
+    await Group.findByIdAndUpdate(groupId, {
+      $push: { messages: leavingMessage._id },
+    });
+
+    const updatedGroup = await Group.findByIdAndUpdate(
+      groupId,
+      {
+        groupMembers,
+        $push: { messages: leavingMessage._id },
+      },
+      { new: true, runValidators: true }
+    )
+      .populate("groupMembers")
+      .populate("groupAdmin");
+
+      const finalData = {
+        messageData,
+        updatedGroup,
+        leavingMemberId: leavingMember._id,
+      }
+    
+      if (groupMembers) {
+        updatedGroup.groupMembers.forEach((member) => {
+          const memberSocketId = userSocketMap.get(member._id.toString());
+          if (memberSocketId) {
+            io.to(memberSocketId).emit("memberLeft", finalData);
+          }
+        });
+      }
+  
+      const adminSocketId = userSocketMap.get(updatedGroup.groupAdmin._id.toString());
+      if (adminSocketId) {
+        io.to(adminSocketId).emit("memberLeft", finalData);
+      }
+
+      const leavingMemberSocketId = userSocketMap.get(leavingMember._id.toString());
+      if (leavingMemberSocketId) {
+        io.to(leavingMemberSocketId).emit("memberLeft", finalData);
+      }
+  };
+
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
@@ -150,6 +216,7 @@ const setupSocket = (server) => {
       console.log("User Id not provided during connection");
     }
 
+    socket.on("leaveGroup", leaveGroup);
     socket.on("deleteGroup", deleteGroup);
     socket.on("sendMessage", sendMessage);
     socket.on("sendGroupMessage", sendGroupMessage);
