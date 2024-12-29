@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm";
 
 import ChatMember from "./ChatMember";
 import File from "./File";
+import { count } from "console";
 
 const ChatInfo = ({
   setChatInfoVisible,
@@ -17,10 +18,19 @@ const ChatInfo = ({
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { chatData, chatType, messages } = useAppStore();
+  const [filesLength, setFilesLength] = useState(0);
 
   useEffect(() => {
-    console.log(chatData);
-  }, [chatData]);
+    let count = 0;
+    messages.map((message) => {
+      if (message.messageType === "file") {
+        count++;
+        // setFilesLength(count);
+      }
+    });
+
+    setFilesLength(count);
+  }, [messages]);
 
   return (
     <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
@@ -114,19 +124,21 @@ const ChatInfo = ({
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h2 className="text-zinc-600 font-bold uppercase">Files</h2>
+        {filesLength !== 0 && (
           <div className="flex flex-col gap-2">
-            {messages.map(
-              (message) =>
-                message.messageType === "file" && (
-                  <div>
+            <h2 className="text-zinc-600 font-bold uppercase">
+              Files ( {filesLength} )
+            </h2>
+            <div className="flex flex-col gap-2">
+              {messages.map(
+                (message) =>
+                  message.messageType === "file" && (
                     <File key={message._id} filePath={message.fileUrl} />
-                  </div>
-                )
-            )}
+                  )
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {chatType === "group" && (
           <div className="flex flex-col gap-4">

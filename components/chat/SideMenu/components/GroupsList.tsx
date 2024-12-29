@@ -23,8 +23,6 @@ const GroupsList = () => {
           withCredentials: true,
         });
 
-        console.log(response.data.groupsList);
-
         if (response.status === 200) {
           setGroupsList(response.data.groupsList);
         }

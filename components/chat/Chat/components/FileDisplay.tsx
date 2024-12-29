@@ -92,25 +92,39 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
               </svg>
             </span>
           </div>
-          <p className="font-semibold">{filePath.split("/")[filePath.split("/").length - 1]}</p>
+          <p className="font-semibold">
+            {filePath.split("/")[filePath.split("/").length - 1]}
+          </p>
         </div>
       )}
-  
+
       {fileType === "video" && (
-        <div className="bg-zinc-900 w-full rounded-lg">
+        <div className="w-full rounded-lg">
           <div>
-            <video src={`${HOST}/${filePath}`} controls className="rounded-lg" controlsList="nodownload"/>
+            <video
+              src={`${HOST}/${filePath}`}
+              controls
+              className="rounded-lg"
+              controlsList="nodownload"
+            />
           </div>
-          <h2 className="font-semibold px-4 py-4">{filePath.split("/")[filePath.split("/").length - 1]}</h2>
+          <h2 className="font-semibold px-2 pt-3 pb-1">
+            {filePath.split("/")[filePath.split("/").length - 1]}
+          </h2>
         </div>
       )}
 
       {fileType === "image" && (
-        <img
-          src={`${HOST}/${filePath}`}
-          alt={filePath}
-          className="w-full h-full rounded-lg"
-        />
+        <div className="w-full rounded-lg">
+          <img
+            src={`${HOST}/${filePath}`}
+            alt={filePath}
+            className="w-full rounded-lg"
+          />
+          <h2 className="font-semibold px-2 pt-3 pb-1">
+            {filePath.split("/")[filePath.split("/").length - 1]}
+          </h2>
+        </div>
       )}
 
       {fileType === "audio" && (
