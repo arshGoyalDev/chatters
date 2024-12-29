@@ -3,21 +3,23 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import useAppStore from "@/store";
 
-import { HOST } from "@/utils/constants";
-
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import ChatMember from "./ChatMember";
 import File from "./File";
-import { count } from "console";
+
+import { useSocket } from "@/context";
+import { HOST } from "@/utils/constants";
 
 const ChatInfo = ({
   setChatInfoVisible,
 }: {
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatData, chatType, messages } = useAppStore();
+  const socket = useSocket();
+  const { chatData, chatType, messages, userInfo, setChatData, setChatType } =
+    useAppStore();
   const [filesLength, setFilesLength] = useState(0);
 
   useEffect(() => {
@@ -31,6 +33,10 @@ const ChatInfo = ({
 
     setFilesLength(count);
   }, [messages]);
+
+  const deleteGroup = async () => {
+    socket?.socket?.emit("deleteGroup", chatData?.chatId);
+  };
 
   return (
     <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
@@ -163,6 +169,39 @@ const ChatInfo = ({
               </div>
             </div>
           </div>
+        )}
+
+        {chatType === "group" && userInfo._id === chatData?.chatAdmin?._id && (
+          <button
+            onClick={deleteGroup}
+            className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
+          >
+            <span className="font-semibold text-primary">Delete Group</span>
+            <span className="stroke-primary">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M19.97 10H3.96997V18C3.96997 21 4.96997 22 7.96997 22H15.97C18.97 22 19.97 21 19.97 18V10Z"
+                  strokeWidth="1.5"
+                  strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
+                  strokeWidth="1.5"
+                  strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
         )}
       </div>
     </div>

@@ -23,6 +23,8 @@ const GroupsList = () => {
           withCredentials: true,
         });
 
+        console.log(response);
+
         if (response.status === 200) {
           setGroupsList(response.data.groupsList);
         }
@@ -30,6 +32,7 @@ const GroupsList = () => {
         console.error(error);
       }
     };
+
 
     getgroups();
   }, [chatType, chatData, messages]);

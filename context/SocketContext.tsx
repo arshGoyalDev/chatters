@@ -59,6 +59,24 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
+      const handleGroupDelete = (groupDetails: {
+        groupId: string;
+        groupName: string;
+        groupAdmin: string;
+      }) => {
+        const { chatData,setChatData, setChatType } = useAppStore.getState();
+
+        if (chatData?.chatId === groupDetails.groupId) {
+          setChatData(null);
+          setChatType(null);
+        }
+
+        alert(
+          `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
+        );
+      };
+
+      socket.current.on("groupDeleted", handleGroupDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
       socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 

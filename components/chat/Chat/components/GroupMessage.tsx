@@ -150,7 +150,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
 
               {message.content && (
                 <div
-                  className={`relative w-full leading-6 ${
+                  className={`relative w-fit leading-6 ${
                     userInfo._id !== message.sender._id
                       ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
                       : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
