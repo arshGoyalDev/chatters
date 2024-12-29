@@ -54,18 +54,18 @@ const GroupsList = () => {
 
   return (
     <div className="px-2 pt-2 pb-5">
-      <h2 className="text-xl font-bold px-2">Groups</h2>
+      <h2 className="text-zinc-700 uppercase font-bold px-2 pb-1">Groups</h2>
 
-      <div className="flex flex-col gap-1 mt-2">
+      <div className="flex flex-col gap-1">
         {groupsList ? (
           groupsList.map((group) => (
             <div
               key={group._id}
               onClick={() => viewGroupChat(group)}
-              className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40`}
+              className={`flex justify-between items-center hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40`}
             >
               <div className="flex gap-4 items-center">
-                <div className="w-[54px] h-[54px] rounded-lg bg-zinc-800">
+                <div className="w-10 h-10 rounded-lg bg-zinc-800">
                   {group.groupPic ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <div className="w-full h-full overflow-hidden rounded-lg">
@@ -78,8 +78,8 @@ const GroupsList = () => {
                     <div className="w-full h-full grid place-content-center">
                       <span className="fill-zinc-700">
                         <svg
-                          width="54"
-                          height="36"
+                          width="24"
+                          height="24"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
                         >
@@ -100,53 +100,10 @@ const GroupsList = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex-col gap-2">
-                  <h2 className="font-bold text-xl">{group.groupName}</h2>
-                  <div className="flex items-center gap-2">
-                    {group.messages.length !== 0 ? (
-                      <>
-                        <span>
-                          {group.messages.at(-1)?.sender._id === userInfo._id
-                            ? "You :"
-                            : `${group.messages.at(-1)?.sender.firstName} :`}
-                        </span>
-                        {group.messages.at(-1)?.messageType === "file" ? (
-                          <span className="stroke-white">
-                            <svg
-                              width="20"
-                              height="20"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M22 10V15C22 20 20 22 15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H14"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M22 10H18C15 10 14 9 14 6V2L22 10Z"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </span>
-                        ) : (
-                          <p>Message</p>
-                        )}
-                      </>
-                    ) : (
-                      <div>{group.groupStatus}</div>
-                    )}
-                  </div>
-                </div>
+                <h2 className="font-bold text-xl">{group.groupName}</h2>
               </div>
-              <div className="pt-1">
-                <span className="font-semibold text-base">
-                  {moment(group.updatedAt).format("LT")}
-                </span>
+              <div className="font-semibold text-base">
+                {moment(group.updatedAt).format("LT")}
               </div>
             </div>
           ))

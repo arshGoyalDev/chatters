@@ -64,23 +64,23 @@ const Message = ({
           }`}
         >
           <div
-            className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 ${
-              userInfo._id === message.sender ? "bg-zinc-900" : "bg-primary"
+            className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
+              userInfo._id === message.sender ? "bg-zinc-900 bg-opacity-40 border-zinc-800" : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
           >
             <FileDisplay filePath={message.fileUrl} />
           </div>
           <button
             onClick={downloadFile}
-            className={`p-0.5 rounded-lg ${
-              userInfo._id === message.sender ? "bg-zinc-900" : "bg-primary"
+            className={`p-0.5 rounded-lg border-2 ${
+              userInfo._id === message.sender ? "bg-zinc-900 bg-opacity-40 border-zinc-800" : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
           >
             <span
               className={`${
                 userInfo._id === message.sender
                   ? "stroke-white"
-                  : "stroke-black"
+                  : "stroke-primary"
               }`}
             >
               <svg
@@ -117,9 +117,9 @@ const Message = ({
         <div
           className={`relative max-w-[80%] lg:max-w-[60%] leading-6 ${
             userInfo._id !== message.sender
-              ? "bg-primary text-black message-sender font-semibold"
-              : "bg-zinc-900 text-white message-receiver font-medium"
-          } py-3 px-6 text-lg rounded-lg break-words`}
+              ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
+              : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
+          } py-3 px-6 text-lg rounded-lg break-words border-2`}
         >
           <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
         </div>

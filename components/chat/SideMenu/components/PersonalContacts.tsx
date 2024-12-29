@@ -51,16 +51,16 @@ const PersonalContacts = () => {
 
   return (
     <div className="px-2 py-2">
-      <h2 className="text-xl font-bold px-2">Personal Chats</h2>
+      <h2 className="font-bold text-zinc-700 uppercase px-2 pb-1">Personal Chats</h2>
 
-      <div className="flex flex-col gap-1 mt-2">
+      <div className="flex flex-col gap-1">
         {personalContacts.length !== 0 ? (
           personalContacts.map((contact) => {
             return (
               <div
                 key={contact._id}
                 onClick={() => viewPersonalChat(contact)}
-                className={`flex justify-between hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
+                className={`flex justify-between items-center hover:bg-zinc-800 transition-all duration-300 py-4 pl-3 pr-4 rounded-lg hover:bg-opacity-40 ${
                   chatType === "personal" &&
                   chatData?.chatMembers[0]._id === contact._id &&
                   "bg-zinc-800 bg-opacity-40 cursor-default select-none"

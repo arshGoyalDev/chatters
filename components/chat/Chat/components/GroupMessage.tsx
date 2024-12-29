@@ -50,11 +50,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
             userInfo._id === message.sender._id ? "items-end" : "items-start"
           }`}
         >
-          <div
-            className={`flex items-end ${
-              userInfo._id === message.sender._id && "flex-row-reverse"
-            } gap-3 max-w-[80%] lg:max-w-[60%]`}
-          >
+          <div className="flex items-end gap-3 max-w-[80%] lg:max-w-[60%]">
             {userInfo._id !== message.sender._id &&
               (message.sender.profilePic ? (
                 <div className="w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
@@ -98,27 +94,27 @@ const GroupMessage = ({ message }: { message: Message }) => {
                   }`}
                 >
                   <div
-                    className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 ${
+                    className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
                       userInfo._id === message.sender._id
-                        ? "bg-zinc-900"
-                        : "bg-primary"
+                        ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
+                        : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
                     }`}
                   >
                     <FileDisplay filePath={message.fileUrl} />
                   </div>
                   <button
                     onClick={downloadFile}
-                    className={`p-0.5 rounded-lg ${
+                    className={`p-0.5 rounded-lg border-2 ${
                       userInfo._id === message.sender._id
-                        ? "bg-zinc-900"
-                        : "bg-primary"
+                        ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
+                        : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
                     }`}
                   >
                     <span
                       className={`${
                         userInfo._id === message.sender._id
                           ? "stroke-white"
-                          : "stroke-black"
+                          : "stroke-primary"
                       }`}
                     >
                       <svg
@@ -156,22 +152,26 @@ const GroupMessage = ({ message }: { message: Message }) => {
                 <div
                   className={`relative w-full leading-6 ${
                     userInfo._id !== message.sender._id
-                      ? "bg-primary text-black message-sender font-semibold"
-                      : "bg-zinc-900 text-white message-receiver font-medium"
-                  } py-3 px-6 text-lg rounded-lg break-words`}
+                      ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
+                      : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
+                  } py-3 px-6 text-lg rounded-lg break-words border-2`}
                 >
                   <Markdown remarkPlugins={[remarkGfm]}>
                     {message.content}
                   </Markdown>
                 </div>
               )}
+              <div className={`flex items-end gap-2 ${userInfo._id === message.sender._id && "justify-end"}`}>
+                {userInfo._id !== message.sender._id && (
+                  <div className="font-bold">
+                    {`${message.sender.firstName} ${message.sender.lastName}`}
+                  </div>
+                )}
+                <div className="text-sm">
+                  {moment(message.timeStamp).format("lll")}
+                </div>
+              </div>
             </div>
-          </div>
-          {userInfo._id !== message.sender._id && (
-            <div className="font-bold">{`${message.sender.firstName} ${message.sender.lastName}`}</div>
-          )}
-          <div className="text-sm -mt-1">
-            {moment(message.timeStamp).format("lll")}
           </div>
         </div>
       )}
