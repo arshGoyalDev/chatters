@@ -7,21 +7,23 @@ import { HOST } from "@/utils/constants";
 
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
 import ChatMember from "./ChatMember";
+import File from "./File";
 
 const ChatInfo = ({
   setChatInfoVisible,
 }: {
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatData, chatType } = useAppStore();
+  const { chatData, chatType, messages } = useAppStore();
 
   useEffect(() => {
     console.log(chatData);
   }, [chatData]);
 
   return (
-    <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950">
+    <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
       <div className="flex justify-end w-full mb-10 px-10">
         <div className="bg-zinc-800 rounded-lg">
           <button
@@ -110,6 +112,20 @@ const ChatInfo = ({
               </p>
             </div>
           )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <h2 className="text-zinc-600 font-bold uppercase">Files</h2>
+          <div className="flex flex-col gap-2">
+            {messages.map(
+              (message) =>
+                message.messageType === "file" && (
+                  <div>
+                    <File key={message._id} filePath={message.fileUrl} />
+                  </div>
+                )
+            )}
+          </div>
         </div>
 
         {chatType === "group" && (

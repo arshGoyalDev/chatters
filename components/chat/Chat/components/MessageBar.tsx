@@ -33,8 +33,8 @@ const MessageBar = () => {
     } else {
       socket?.socket?.emit("sendGroupMessage", {
         sender: userInfo._id,
-        content: message ? message : null,
-        fileUrl: filePath !== "" ? filePath : null,
+        content: message ? message : "",
+        fileUrl: filePath !== "" ? filePath : "",
         messageType: filePath ? "file" : "text",
         groupId: chatData?.chatId,
       })
