@@ -10,32 +10,12 @@ import moment from "moment";
 import { ChatData, Group } from "@/utils/types";
 
 import Link from "next/link";
+import { useChatList } from "@/context";
 
 const GroupsList = () => {
-  const { chatType, chatData, setChatType, setChatData, userInfo, messages } =
-    useAppStore();
-  const [groupsList, setGroupsList] = useState<Group[] | null>(null);
+  const chatList = useChatList();
+  const { setChatType, setChatData } = useAppStore();
 
-  useEffect(() => {
-    const getgroups = async () => {
-      try {
-        const response = await apiClient.get(GET_USER_GROUPS_ROUTE, {
-          withCredentials: true,
-        });
-
-        console.log(response);
-
-        if (response.status === 200) {
-          setGroupsList(response.data.groupsList);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-
-    getgroups();
-  }, [chatType, chatData, messages]);
 
   const viewGroupChat = (group: Group) => {
     const newChatData: ChatData = {
@@ -58,8 +38,8 @@ const GroupsList = () => {
       <h2 className="text-zinc-700 uppercase font-bold px-2 pb-1">Groups</h2>
 
       <div className="flex flex-col">
-        {groupsList ? (
-          groupsList.map((group) => (
+        {chatList?.groupsList ? (
+          chatList?.groupsList.map((group) => (
             <div
               key={group._id}
               onClick={() => viewGroupChat(group)}

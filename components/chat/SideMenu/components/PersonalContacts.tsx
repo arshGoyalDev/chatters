@@ -1,43 +1,16 @@
 import useAppStore from "@/store";
 
-import { apiClient } from "@/lib/api-client";
-import { GET_PERSONAL_CONTACTS_ROUTE, HOST } from "@/utils/constants";
-
-import { useEffect } from "react";
+import { HOST } from "@/utils/constants";
 
 import moment from "moment";
 
 import { PersonalContact } from "@/utils/types";
+import { useChatList } from "@/context";
 
 const PersonalContacts = () => {
-  const {
-    personalContacts,
-    setPersonalContacts,
-    messages,
-    setChatData,
-    chatType,
-    setChatType,
-    chatData,
-    userInfo,
-  } = useAppStore();
-
-  useEffect(() => {
-    const getContacts = async () => {
-      try {
-        const response = await apiClient.get(GET_PERSONAL_CONTACTS_ROUTE, {
-          withCredentials: true,
-        });
-
-        if (response.data.contacts.length !== 0) {
-          setPersonalContacts(response.data.contacts);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getContacts();
-  }, [messages, setPersonalContacts]);
+  const { setChatData, chatType, setChatType, chatData, userInfo } =
+    useAppStore();
+  const chatList = useChatList();
 
   const viewPersonalChat = (contact: PersonalContact) => {
     setChatType("personal");
@@ -51,11 +24,13 @@ const PersonalContacts = () => {
 
   return (
     <div className="px-2 py-2">
-      <h2 className="font-bold text-zinc-700 uppercase px-2 pb-1">Personal Chats</h2>
+      <h2 className="font-bold text-zinc-700 uppercase px-2 pb-1">
+        Personal Chats
+      </h2>
 
       <div className="flex flex-col gap-1">
-        {personalContacts.length !== 0 ? (
-          personalContacts.map((contact) => {
+        {chatList?.personalContacts.length !== 0 ? (
+          chatList?.personalContacts.map((contact) => {
             return (
               <div
                 key={contact._id}

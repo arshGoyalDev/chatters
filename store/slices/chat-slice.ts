@@ -14,7 +14,7 @@ interface ChatSlice {
   addMessage: (message: Message) => void;
 
   personalContacts: [PersonalContact] | [];
-  setPersonalContacts: (personalContacts: [PersonalContact] | []) => void
+  setPersonalContacts: (personalContacts: [PersonalContact] | []) => void;
 
   closeChat: () => void;
 }
@@ -47,7 +47,7 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
   },
 
   personalContacts: [],
-  setPersonalContacts: (personalContacts) => set({personalContacts}),
+  setPersonalContacts: (personalContacts) => set({ personalContacts }),
 
   closeChat: () => set({ chatData: null, chatType: null, messages: [] }),
 });

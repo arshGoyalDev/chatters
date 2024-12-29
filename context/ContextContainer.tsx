@@ -1,12 +1,13 @@
 import { ReactElement } from "react";
 
 import SocketProvider from "./SocketContext";
+import ChatListProvider from "./ChatListContext";
 
-const ContextContainer = ({children} :{children: ReactElement}) => {
+const ContextContainer = ({ children }: { children: ReactElement }) => {
   return (
-    <SocketProvider>
-      {children}
-    </SocketProvider>
-  )
-}
-export default ContextContainer
+    <ChatListProvider>
+      <SocketProvider>{children}</SocketProvider>
+    </ChatListProvider>
+  );
+};
+export default ContextContainer;

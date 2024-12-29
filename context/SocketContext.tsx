@@ -17,11 +17,14 @@ import { HOST } from "@/utils/constants";
 
 import { GroupMessage, Message, SocketContextType } from "@/utils/types";
 
+import { useChatList } from "./ChatListContext";
+
 const SocketContext = createContext<SocketContextType | null>(null);
 
 const useSocket = () => useContext(SocketContext);
 
 const SocketProvider = ({ children }: { children: ReactElement }) => {
+  const chatList = useChatList();
   const socket = useRef<Socket | null>(null);
   const { userInfo, addMessage } = useAppStore();
 
@@ -70,7 +73,9 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           setChatData(null);
           setChatType(null);
         }
-
+        
+        chatList?.getGroups();
+        
         alert(
           `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
         );
