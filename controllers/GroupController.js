@@ -45,7 +45,7 @@ const removeGroupPic = async (request, response, next) => {
 
 const createGroup = async (request, response, next) => {
   try {
-    const { groupName, groupStatus, groupPic } = request.body;
+    const { groupName, groupDescription, groupPic } = request.body;
     let { groupMembers } = request.body;
     const userId = request.userId;
 
@@ -65,7 +65,7 @@ const createGroup = async (request, response, next) => {
 
     const newGroup = new Group({
       groupName,
-      groupStatus,
+      groupDescription,
       groupPic,
       groupAdmin,
       groupMembers,
@@ -73,7 +73,11 @@ const createGroup = async (request, response, next) => {
 
     await newGroup.save();
 
-    return response.status(201).json({ group: newGroup });
+    const updatedGroupData = await Group.findById(newGroup._id)
+      .populate("groupMembers")
+      .populate("groupAdmin");
+
+    return response.status(201).json({ group: updatedGroupData });
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Internal Server Error");
@@ -86,7 +90,10 @@ const getUserGroups = async (request, response, next) => {
 
     const groupsList = await Group.find({
       $or: [{ groupAdmin: userId }, { groupMembers: userId }],
-    }).sort({ updatedAt: -1 });
+    })
+      .populate("groupAdmin")
+      .populate("groupMembers")
+      .sort({ updatedAt: -1 });
 
     return response.status(200).json({ groupsList });
   } catch (error) {
@@ -97,14 +104,14 @@ const getUserGroups = async (request, response, next) => {
 const getGroupMessages = async (request, response, next) => {
   try {
     const { groupId } = request.body;
-    
+
     const group = await Group.findById(groupId);
 
     const messages = await Message.find({
-      $or: [
-        {_id: group.messages}
-      ],
-    }).populate("sender").sort({ timestamp: 1 });
+      $or: [{ _id: group.messages }],
+    })
+      .populate("sender")
+      .sort({ timestamp: 1 });
 
     return response.status(200).json({ messages });
   } catch (error) {
