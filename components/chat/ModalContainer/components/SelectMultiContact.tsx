@@ -79,7 +79,6 @@ const SelectMultiContact = ({
           id="search-people"
           value={searchValue}
           autoComplete="off"
-          autoFocus={true}
           onChange={(e) => {
             setSearchValue(e.target.value);
             if (e.target.value === "") setSearchedContacts(null);
@@ -120,7 +119,7 @@ const SelectMultiContact = ({
         </button>
       </div>
 
-      {selectedContacts && (
+      {selectedContacts?.length !== 0 && selectedContacts && (
         <div className="flex flex-wrap gap-2 pt-4">
           {selectedContacts.map((contact) => (
             <div
@@ -161,7 +160,7 @@ const SelectMultiContact = ({
       )}
 
       {searchedContacts ? (
-        <div className="mt-3 h-[240px] overflow-auto">
+        <div className="mt-3 h-[240px] lg:h-[360px] overflow-y-auto">
           {searchedContacts.map((contact: UserInfo) => (
             <div
               onClick={() => selectContact(contact)}

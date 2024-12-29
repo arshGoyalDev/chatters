@@ -6,6 +6,7 @@ import moment from "moment";
 
 import { PersonalContact } from "@/utils/types";
 import { useChatList } from "@/context";
+import Link from "next/link";
 
 const PersonalContacts = () => {
   const { setChatData, chatType, setChatType, chatData, userInfo } =
@@ -150,7 +151,7 @@ const PersonalContacts = () => {
           <div className="font-semibold text-center py-5">
             No personal chats to show.
             <br />
-            Start a New Personal Chat.
+            Start a <Link href={"/chat?new-chat=true"}>new personal chat</Link>.
           </div>
         )}
       </div>

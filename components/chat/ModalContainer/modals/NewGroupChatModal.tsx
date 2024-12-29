@@ -138,7 +138,6 @@ const NewGroupChatModal = () => {
               id="group-status"
               value={groupDescription}
               autoComplete="off"
-              autoFocus={true}
               rows={3}
               onChange={(e) => {
                 setGroupDescription(e.target.value);
