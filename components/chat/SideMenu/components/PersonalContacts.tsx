@@ -66,7 +66,7 @@ const PersonalContacts = () => {
                   "bg-zinc-800 bg-opacity-40 cursor-default select-none"
                 }`}
               >
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4 items-center w-full">
                   <div className="relative w-[54px] h-[54px] rounded-lg bg-zinc-800">
                     {contact.userInfo.profilePic ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -143,12 +143,12 @@ const PersonalContacts = () => {
                           <p>
                             {contact.lastFile.split("/")[
                               contact.lastFile.split("/").length - 1
-                            ].length > 15
+                            ].length > 7
                               ? `${contact.lastFile
                                   .split("/")
                                   [
                                     contact.lastFile.split("/").length - 1
-                                  ].substring(0, 15)}...`
+                                  ].substring(0, 7)}...`
                               : contact.lastFile.split("/")[
                                   contact.lastFile.split("/").length - 1
                                 ]}
@@ -156,14 +156,14 @@ const PersonalContacts = () => {
                         </>
                       ) : (
                         contact.lastMessage &&
-                        (contact.lastMessage?.length > 15
-                          ? `${contact.lastMessage?.substring(0, 15)}...`
+                        (contact.lastMessage?.length > 10
+                          ? `${contact.lastMessage?.substring(0, 10)}...`
                           : contact.lastMessage)
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="pt-1">
+                <div className="pt-1 min-w-fit">
                   <span className="font-semibold text-base">
                     {moment(contact.lastMessageTime).format("LT")}
                   </span>

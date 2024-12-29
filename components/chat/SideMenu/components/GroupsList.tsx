@@ -12,7 +12,7 @@ import { ChatData, Group } from "@/utils/types";
 import Link from "next/link";
 
 const GroupsList = () => {
-  const { chatType, chatData, setChatType, setChatData, setMessages } =
+  const { chatType, chatData, setChatType, setChatData, userInfo, messages } =
     useAppStore();
   const [groupsList, setGroupsList] = useState<Group[] | null>(null);
 
@@ -23,6 +23,8 @@ const GroupsList = () => {
           withCredentials: true,
         });
 
+        console.log(response.data.groupsList);
+
         if (response.status === 200) {
           setGroupsList(response.data.groupsList);
         }
@@ -32,7 +34,7 @@ const GroupsList = () => {
     };
 
     getgroups();
-  }, [chatType, chatData]);
+  }, [chatType, chatData, messages]);
 
   const viewGroupChat = (group: Group) => {
     const newChatData: ChatData = {
@@ -101,9 +103,14 @@ const GroupsList = () => {
                 <div className="flex-col gap-2">
                   <h2 className="font-bold text-xl">{group.groupName}</h2>
                   <div className="flex items-center gap-2">
-                    {/* <span>{group.lastMessageSender !== userInfo._id ? `${group.userInfo.firstName}:` : "You:"}</span>
-                      {group.lastFile ? (
-                        <>
+                    {group.messages.length !== 0 ? (
+                      <>
+                        <span>
+                          {group.messages.at(-1)?.sender._id === userInfo._id
+                            ? "You :"
+                            : `${group.messages.at(-1)?.sender.firstName} :`}
+                        </span>
+                        {group.messages.at(-1)?.messageType === "file" ? (
                           <span className="stroke-white">
                             <svg
                               width="20"
@@ -126,26 +133,13 @@ const GroupsList = () => {
                               />
                             </svg>
                           </span>
-                          <p>
-                            {group.lastFile.split("/")[
-                              group.lastFile.split("/").length - 1
-                            ].length > 15
-                              ? `${group.lastFile
-                                  .split("/")
-                                  [
-                                    group.lastFile.split("/").length - 1
-                                  ].substring(0, 15)}...`
-                              : group.lastFile.split("/")[
-                                  group.lastFile.split("/").length - 1
-                                ]}
-                          </p>
-                        </>
-                      ) : (
-                        group.lastMessage &&
-                        (group.lastMessage?.length > 15
-                          ? `${group.lastMessage?.substring(0, 15)}...`
-                          : group.lastMessage)
-                      )} */}
+                        ) : (
+                          <p>Message</p>
+                        )}
+                      </>
+                    ) : (
+                      <div>{group.groupStatus}</div>
+                    )}
                   </div>
                 </div>
               </div>

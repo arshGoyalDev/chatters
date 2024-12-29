@@ -15,7 +15,7 @@ import { io, Socket } from "socket.io-client";
 
 import { HOST } from "@/utils/constants";
 
-import { Message, SocketContextType } from "@/utils/types";
+import { GroupMessage, Message, SocketContextType } from "@/utils/types";
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
@@ -51,7 +51,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
-      const handleReceiveGroupMessage = (message: Message) => {
+      const handleReceiveGroupMessage = (message: GroupMessage) => {
         const { chatData } = useAppStore.getState();
 
         if (chatData?.chatId === message.groupId) {

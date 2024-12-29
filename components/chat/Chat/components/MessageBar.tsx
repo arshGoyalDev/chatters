@@ -25,9 +25,9 @@ const MessageBar = () => {
     if (chatType === "personal" && (filePath !== "" || message !== "")) {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
-        content: message ? message : null,
+        content: message ? message : "",
         recipient: chatData?.chatMembers[0]._id,
-        fileUrl: filePath !== "" ? filePath : null,
+        fileUrl: filePath !== "" ? filePath : "",
         messageType: filePath ? "file" : "text",
       });
     } else {
@@ -35,7 +35,7 @@ const MessageBar = () => {
         sender: userInfo._id,
         content: message ? message : null,
         fileUrl: filePath !== "" ? filePath : null,
-        messageType: "text",
+        messageType: filePath ? "file" : "text",
         groupId: chatData?.chatId,
       })
     }
