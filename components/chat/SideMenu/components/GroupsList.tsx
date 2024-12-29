@@ -39,7 +39,7 @@ const GroupsList = () => {
   const viewGroupChat = (group: Group) => {
     const newChatData: ChatData = {
       chatName: group.groupName,
-      chatStatus: group.groupStatus,
+      chatStatus: group.groupDescription,
       chatMembers: group.groupMembers,
       chatPic: group.groupPic,
       chatCreatedAt: group.createdAt,

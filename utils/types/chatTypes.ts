@@ -39,7 +39,7 @@ interface PersonalContact {
 interface Group {
   _id: string;
   groupName: string;
-  groupStatus: string;
+  groupDescription: string;
   groupPic: string;
   updatedAt: Date;
   createdAt: Date;

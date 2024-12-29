@@ -24,7 +24,7 @@ const NewGroupChatModal = () => {
   );
 
   const [groupName, setGroupName] = useState("");
-  const [groupStatus, setGroupStatus] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
 
   const [groupPic, setGroupPic] = useState("");
   const [buttonHovered, setButtonHovered] = useState(false);
@@ -79,7 +79,7 @@ const NewGroupChatModal = () => {
         CREATE_GROUP_ROUTE,
         {
           groupName,
-          groupStatus,
+          groupDescription,
           groupPic,
           groupMembers: selectedContacts,
         },
@@ -92,7 +92,7 @@ const NewGroupChatModal = () => {
         const newChatData: ChatData = {
           chatName: group.groupName,
           chatPic: group.groupPic,
-          chatStatus: group.groupStatus,
+          chatStatus: group.groupDescription,
           chatMembers: group.groupMembers,
           chatAdmin: group.groupAdmin,
           chatCreatedAt: group.createdAt,
@@ -135,18 +135,18 @@ const NewGroupChatModal = () => {
           </div>
           <div>
             <h2 className="font-bold text-lg mb-2">Group Status</h2>
-            <input
-              type="text"
+            <textarea
               name="group-status"
               id="group-status"
-              value={groupStatus}
+              value={groupDescription}
               autoComplete="off"
               autoFocus={true}
+              rows={3}
               onChange={(e) => {
-                setGroupStatus(e.target.value);
+                setGroupDescription(e.target.value);
               }}
-              placeholder="Group Name..."
-              className="w-full bg-zinc-800 px-3 py-3 bg-transparent rounded-lg placeholder:text-zinc-400"
+              placeholder="Group Description..."
+              className="w-full bg-zinc-800 px-3 py-3 bg-transparent rounded-lg placeholder:text-zinc-400 resize-none"
             />
           </div>
 
