@@ -53,7 +53,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
           <div className="flex items-end gap-3 max-w-[80%] lg:max-w-[60%]">
             {userInfo._id !== message.sender._id &&
               (message.sender.profilePic ? (
-                <div className="w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
+                <div className="min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
                   <img
                     src={`${HOST}/${message.sender.profilePic}`}
                     alt={`${message.sender.firstName} ${message.sender.lastName}`}
@@ -161,13 +161,17 @@ const GroupMessage = ({ message }: { message: Message }) => {
                   </Markdown>
                 </div>
               )}
-              <div className={`flex items-end gap-2 ${userInfo._id === message.sender._id && "justify-end"}`}>
+              <div
+                className={`flex gap-2 ${
+                  userInfo._id === message.sender._id && "justify-end"
+                }`}
+              >
                 {userInfo._id !== message.sender._id && (
                   <div className="font-bold">
                     {`${message.sender.firstName} ${message.sender.lastName}`}
                   </div>
                 )}
-                <div className="text-sm">
+                <div className="text-sm pt-0.5 text-zinc-500">
                   {moment(message.timeStamp).format("lll")}
                 </div>
               </div>

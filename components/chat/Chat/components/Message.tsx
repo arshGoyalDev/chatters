@@ -47,10 +47,6 @@ const Message = ({
     }
   };
 
-  useEffect(() => {
-    console.log(message);
-  }, [])
-
   return (
     <div
       className={`flex flex-col gap-2 ${

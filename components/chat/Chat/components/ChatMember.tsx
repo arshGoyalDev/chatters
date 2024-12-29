@@ -62,7 +62,7 @@ const ChatMember = ({
             </div>
           )}
         </div>
-        <div className="font-semibold text-sm">{`${member.firstName} ${member.lastName}`}</div>
+        <div className="font-semibold text-sm">{userInfo._id === member._id ? "You" : `${member.firstName} ${member.lastName}`}</div>
       </div>
 
       <div className="flex gap-1 items-center">
