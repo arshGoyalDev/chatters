@@ -12,15 +12,20 @@ interface ChatData {
 }
 
 interface Message {
-  content: string | null;
-  fileUrl: string | null;
+  content: string;
+  fileUrl: string;
   messageType: string;
   recipient: string | UserInfo;
   sender: string | UserInfo;
   timeStamp: string;
   _id: string;
+}
+
+interface GroupMessage extends Message {
+  sender: UserInfo;
   groupId?: string;
 }
+
 
 interface PersonalContact {
   _id: string;
@@ -38,9 +43,9 @@ interface Group {
   groupPic: string;
   updatedAt: Date;
   createdAt: Date;
-  messages: [];
+  messages: [GroupMessage] | [];
   groupAdmin: UserInfo;
   groupMembers: UserInfo[];
 }
 
-export type { ChatData, Message, PersonalContact, Group };
+export type { ChatData, Message, PersonalContact, Group, GroupMessage };
