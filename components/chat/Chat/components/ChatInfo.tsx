@@ -38,6 +38,13 @@ const ChatInfo = ({
     socket?.socket?.emit("deleteGroup", chatData?.chatId);
   };
 
+  const leaveGroup = async () => {
+    socket?.socket?.emit("leaveGroup", {
+      groupId: chatData?.chatId,
+      leavingMember: userInfo,
+    });
+  };
+
   return (
     <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
       <div className="flex justify-end w-full mb-10 px-10">
@@ -196,6 +203,43 @@ const ChatInfo = ({
                   d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
                   strokeWidth="1.5"
                   strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+        )}
+
+        {chatType === "group" && userInfo._id !== chatData?.chatAdmin?._id && (
+          <button
+            onClick={leaveGroup}
+            className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
+          >
+            <span className="font-semibold text-primary">Leave Group</span>
+            <span className="stroke-primary">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M15 12H3.62"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />

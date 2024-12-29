@@ -15,7 +15,13 @@ import { io, Socket } from "socket.io-client";
 
 import { HOST } from "@/utils/constants";
 
-import { GroupMessage, Message, SocketContextType } from "@/utils/types";
+import {
+  ChatData,
+  Group,
+  GroupMessage,
+  Message,
+  SocketContextType,
+} from "@/utils/types";
 
 import { useChatList } from "./ChatListContext";
 
@@ -67,20 +73,59 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         groupName: string;
         groupAdmin: string;
       }) => {
-        const { chatData,setChatData, setChatType } = useAppStore.getState();
+        const { chatData, setChatData, setChatType } = useAppStore.getState();
 
         if (chatData?.chatId === groupDetails.groupId) {
           setChatData(null);
           setChatType(null);
         }
-        
+
         chatList?.getGroups();
-        
+
         alert(
           `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
         );
       };
 
+      const handleMemberLeaving = (data: {
+        leavingMemberId: string;
+        messageData: Message;
+        updatedGroup: Group;
+      }) => {
+        const { chatData, setChatData, setChatType } = useAppStore.getState();
+        const { leavingMemberId, messageData, updatedGroup } = data;
+
+        chatList?.getGroups();
+
+        if (
+          userInfo._id === leavingMemberId &&
+          chatData?.chatId === updatedGroup._id
+        ) {
+          setChatData(null);
+          setChatType(null);
+        }
+
+        if (
+          userInfo._id !== leavingMemberId &&
+          chatData?.chatId === updatedGroup._id
+        ) {
+          const newChat: ChatData = {
+            chatName: updatedGroup.groupName,
+            chatPic: updatedGroup.groupPic,
+            chatStatus: updatedGroup.groupDescription,
+            chatMembers: updatedGroup.groupMembers,
+            chatId: updatedGroup._id,
+            chatAdmin: updatedGroup.groupAdmin,
+            chatUpdatedAt: updatedGroup.updatedAt,
+            chatCreatedAt: updatedGroup.createdAt,
+          };
+
+          setChatData(newChat);
+          addMessage(messageData);
+        }
+      };
+
+      socket.current.on("memberLeft", handleMemberLeaving);
       socket.current.on("groupDeleted", handleGroupDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
       socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);

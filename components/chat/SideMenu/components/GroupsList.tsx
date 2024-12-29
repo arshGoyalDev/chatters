@@ -38,7 +38,7 @@ const GroupsList = () => {
       <h2 className="text-zinc-700 uppercase font-bold px-2 pb-1">Groups</h2>
 
       <div className="flex flex-col">
-        {chatList?.groupsList ? (
+        {chatList?.groupsList.length !== 0 ? (
           chatList?.groupsList.map((group) => (
             <div
               key={group._id}
@@ -93,7 +93,7 @@ const GroupsList = () => {
             No groups to show.
             <br />
             Create a{" "}
-            <Link className="text-primary" href={"/chat/new-group-chat=true"}>
+            <Link className="text-primary" href={"/chat?new-group-chat=true"}>
               new group
             </Link>
             .
