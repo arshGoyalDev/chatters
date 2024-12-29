@@ -97,6 +97,40 @@ const setupSocket = (server) => {
     }
   };
 
+  const deleteGroup = async (groupId) => {
+    // await Group.find
+    const group = await Group.findById(groupId).populate("groupAdmin");
+
+    await Message.findOneAndDelete({
+      $or: [{ _id: group.messages }],
+    });
+
+    const groupMembers = group.groupMembers;
+    const groupAdmin = group.groupAdmin;
+
+    const finalData = {
+      groupId: group._id,
+      groupName: group.groupName,
+      groupAdmin: `${groupAdmin.firstName} ${groupAdmin.lastName}`,
+    };
+
+    await Group.findByIdAndDelete(groupId);
+
+    if (groupMembers) {
+      groupMembers.forEach((memberId) => {
+        const memberSocketId = userSocketMap.get(memberId.toString());
+        if (memberSocketId) {
+          io.to(memberSocketId).emit("groupDeleted", finalData);
+        }
+      });
+    }
+
+    const adminSocketId = userSocketMap.get(groupAdmin._id.toString());
+    if (adminSocketId) {
+      io.to(adminSocketId).emit("groupDeleted", finalData);
+    }
+  };
+
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
@@ -116,6 +150,7 @@ const setupSocket = (server) => {
       console.log("User Id not provided during connection");
     }
 
+    socket.on("deleteGroup", deleteGroup);
     socket.on("sendMessage", sendMessage);
     socket.on("sendGroupMessage", sendGroupMessage);
     socket.on("disconnect", () => disconnect(socket));

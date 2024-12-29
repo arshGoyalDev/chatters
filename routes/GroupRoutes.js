@@ -25,7 +25,6 @@ groupRoutes.delete("/remove-group-pic", verifyToken, removeGroupPic);
 
 groupRoutes.post("/create-group", verifyToken, createGroup);
 groupRoutes.get("/get-user-groups", verifyToken, getUserGroups);
-
 groupRoutes.post("/get-group-messages", verifyToken, getGroupMessages);
 
 export default groupRoutes;
