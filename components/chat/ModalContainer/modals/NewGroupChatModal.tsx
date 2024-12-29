@@ -104,8 +104,6 @@ const NewGroupChatModal = () => {
         setChatType("group");
         router.push("/chat");
       }
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

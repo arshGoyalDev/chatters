@@ -11,7 +11,6 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
-import { useEffect } from "react";
 
 const Message = ({
   message,

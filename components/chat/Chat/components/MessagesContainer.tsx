@@ -12,7 +12,7 @@ const MessagesContainer = ({
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, userInfo, chatType } = useAppStore();
+  const { messages, chatType } = useAppStore();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
