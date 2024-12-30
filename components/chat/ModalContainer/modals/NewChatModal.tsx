@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ModalHeader } from "../components";
 
@@ -19,27 +19,34 @@ const NewChatModal = () => {
   const { setChatData, setChatType } = useAppStore();
 
   const [searchValue, setSearchValue] = useState("");
-  const [searchedContacts, setSearchedContacts] = useState<[UserInfo] | null>(null);
+  const [searchedContacts, setSearchedContacts] = useState<[UserInfo] | null>(
+    null
+  );
 
-  const searchContacts = async () => {
-    try {
-      if (searchValue !== "") {
-        const response = await apiClient.post(
-          SEARCH_CONTACT_ROUTE,
-          { searchTerm: searchValue },
-          { withCredentials: true }
-        );
+  useEffect(() => {
+    const searchContacts = setTimeout(async () => {
+      try {
+        console.log(searchValue);
+        if (searchValue !== "") {
+          const response = await apiClient.post(
+            SEARCH_CONTACT_ROUTE,
+            { searchTerm: searchValue },
+            { withCredentials: true }
+          );
 
-        if (response.status === 200) {
-          if (response.data.contacts[0])
-            setSearchedContacts(response.data.contacts);
-          else setSearchedContacts(null);
+          if (response.status === 200) {
+            if (response.data.contacts[0])
+              setSearchedContacts(response.data.contacts);
+            else setSearchedContacts(null);
+          }
         }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    }, 500);
+
+    return () => clearTimeout(searchContacts);
+  }, [searchValue]);
 
   const selectContact = (contact: UserInfo) => {
     router.push("/chat");
@@ -54,7 +61,7 @@ const NewChatModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] rounded-xl bg-zinc-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] lg:h-[480px] rounded-xl bg-zinc-900 shadow-2xl">
       <ModalHeader title="New Chat" />
       <div className="pb-4 px-5">
         <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
@@ -65,21 +72,12 @@ const NewChatModal = () => {
             value={searchValue}
             autoComplete="off"
             autoFocus={true}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              if (e.target.value === "") setSearchedContacts(null);
-              else searchContacts();
-            }}
-            onKeyDown={(e) => {
-              if (e.keyCode === 13) {
-                searchContacts();
-              }
-            }}
+            onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search for people..."
             className="w-full py-3 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
           />
 
-          <button className="p-1" onClick={searchContacts}>
+          <button className="p-1">
             <span className="stroke-white">
               <svg
                 width="22"
@@ -106,7 +104,7 @@ const NewChatModal = () => {
         </div>
 
         {searchedContacts ? (
-          <div className="mt-4 h-[240px] overflow-auto">
+          <div className="mt-4 h-[240px] lg:h-[320px] overflow-auto">
             {searchedContacts.map((contact: UserInfo) => (
               <div
                 onClick={() => selectContact(contact)}
@@ -115,10 +113,12 @@ const NewChatModal = () => {
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden">
                   {contact.profilePic ? (
-                    <img
-                      src={`${HOST}/${contact.profilePic}`}
-                      alt={contact.firstName + contact.lastName}
-                    />
+                    <div className="w-full h-full rounded-lg overflow-hidden">
+                      <img
+                        src={`${HOST}/${contact.profilePic}`}
+                        alt={contact.firstName + contact.lastName}
+                      />
+                    </div>
                   ) : (
                     <div className="grid place-content-center bg-zinc-800 h-full">
                       <span className="fill-zinc-600">

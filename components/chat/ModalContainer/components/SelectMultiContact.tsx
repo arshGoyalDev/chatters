@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { apiClient } from "@/lib/api-client";
 import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
@@ -19,25 +19,29 @@ const SelectMultiContact = ({
     null
   );
 
-  const searchContacts = async () => {
-    try {
-      if (searchValue !== "") {
-        const response = await apiClient.post(
-          SEARCH_CONTACT_ROUTE,
-          { searchTerm: searchValue },
-          { withCredentials: true }
-        );
+  useEffect(() => {
+    const searchContacts = setTimeout(async () => {
+      try {
+        if (searchValue !== "") {
+          const response = await apiClient.post(
+            SEARCH_CONTACT_ROUTE,
+            { searchTerm: searchValue },
+            { withCredentials: true }
+          );
 
-        if (response.status === 200) {
-          if (response.data.contacts[0])
-            setSearchedContacts(response.data.contacts);
-          else setSearchedContacts(null);
+          if (response.status === 200) {
+            if (response.data.contacts[0])
+              setSearchedContacts(response.data.contacts);
+            else setSearchedContacts(null);
+          }
         }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    }, 500);
+
+    return () => clearTimeout(searchContacts);
+  }, [searchValue]);
 
   const selectContact = (contact: UserInfo) => {
     let newContacts: UserInfo[];
@@ -79,21 +83,12 @@ const SelectMultiContact = ({
           id="search-people"
           value={searchValue}
           autoComplete="off"
-          onChange={(e) => {
-            setSearchValue(e.target.value);
-            if (e.target.value === "") setSearchedContacts(null);
-            else searchContacts();
-          }}
-          onKeyDown={(e) => {
-            if (e.keyCode === 13) {
-              searchContacts();
-            }
-          }}
+          onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Search for people..."
           className="w-full py-3 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
         />
 
-        <button className="p-1" onClick={searchContacts}>
+        <button className="p-1">
           <span className="stroke-white">
             <svg
               width="22"

@@ -18,6 +18,12 @@ button:active {
   @apply outline-none;
 }
 
+/* img */
+img {
+  @apply w-full h-full object-cover
+}
+
+
 /* scrollbar */
 
 /* firebox based browsers */
