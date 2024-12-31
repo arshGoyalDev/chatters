@@ -30,14 +30,13 @@ const addGroupPic = async (request, response, next) => {
 
 const removeGroupPic = async (request, response, next) => {
   try {
-    const { fileName } = request;
+    const { fileName } = request.body;
 
     if (!fileName) {
       return response.status(404).send("File Not found");
     }
 
     unlinkSync(fileName);
-
     return response.status(200).send("Group Pic deleted successfully");
   } catch (error) {
     return response.status(500).send("Internal Server Error");

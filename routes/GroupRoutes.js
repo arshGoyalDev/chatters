@@ -21,7 +21,7 @@ groupRoutes.post(
   upload.single("group-pic"),
   addGroupPic
 );
-groupRoutes.delete("/remove-group-pic", verifyToken, removeGroupPic);
+groupRoutes.post("/remove-group-pic", verifyToken, removeGroupPic);
 
 groupRoutes.post("/create-group", verifyToken, createGroup);
 groupRoutes.get("/get-user-groups", verifyToken, getUserGroups);
