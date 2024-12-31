@@ -21,24 +21,6 @@ const MessageBar = () => {
     setFileMenu(false);
   }, [messages]);
 
-  useEffect(() => {
-    const userTyping = setTimeout(async () => {
-      if (message !== "") {
-        socket?.socket?.emit("chatTyping", {
-          chatType,
-          chatId: chatType === "personal" ? chatData?.chatMembers[0]._id : chatData?.chatId,
-          userTyping: userInfo,
-        });
-      } else {
-        socket?.socket?.emit("stopTyping", {
-          chatType,
-          chatId: chatType === "personal" ? chatData?.chatMembers[0]._id : chatData?.chatId,
-        })
-      }
-    }, 500);
-
-    return () => clearTimeout(userTyping);
-  }, [message]);
 
   const sendMessage = async () => {
     if (chatType === "personal" && (filePath !== "" || message !== "")) {

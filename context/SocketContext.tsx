@@ -35,25 +35,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   const chatList = useChatList();
   const socket = useRef<Socket | null>(null);
 
-  const [typingData, setTypingData] = useState<{
-    isTyping: boolean;
-    chatType: string;
-    chatId: string;
-    userTyping: {
-      profilePic: string;
-      name: string;
-    };
-  }>({
-    isTyping: false,
-    chatType: "",
-    chatId: "",
-    userTyping: {
-      profilePic: "",
-      name: "",
-    },
-  });
-
-  const { userInfo, addMessage, chatData } = useAppStore();
+  const { userInfo, addMessage } = useAppStore();
 
   useEffect(() => {
     if (userInfo.email !== "") {
@@ -146,52 +128,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
-      const handleChatTyping = (data: {
-        chatType: string;
-        chatId: string;
-        userTyping: UserInfo;
-      }) => {
-        const { userInfo, chatType, chatData } = useAppStore.getState();
-        // const { chatType, chatId, userTyping } = data;
-
-        if (data.chatType === "personal" && chatType === "personal") {
-          if (
-            data.chatId === userInfo._id &&
-            data.userTyping._id === chatData?.chatMembers[0]._id
-          ) {
-            setTypingData({
-              isTyping: true,
-              chatType: data.chatType,
-              chatId: data.chatId,
-              userTyping: {
-                profilePic: data.userTyping.profilePic,
-                name: `${data.userTyping.firstName} ${data.userTyping.lastName}`,
-              },
-            });
-          }
-        }
-      };
-
-      const handleStopTyping = (data: { chatType: string; chatId: string }) => {
-        const { chatType, chatId } = data;
-
-        if (chatType === "personal") {
-          if (chatId === userInfo._id) {
-            setTypingData({
-              isTyping: false,
-              chatId: "",
-              chatType: "",
-              userTyping: {
-                name: "",
-                profilePic: "",
-              },
-            });
-          }
-        }
-      };
-
-      socket.current.on("stopTyping", handleStopTyping);
-      socket.current.on("chatTyping", handleChatTyping);
       socket.current.on("memberLeft", handleMemberLeaving);
       socket.current.on("groupDeleted", handleGroupDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
@@ -203,18 +139,9 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    setTypingData({
-      isTyping: false,
-      chatId: typingData.chatId,
-      chatType: typingData.chatType,
-      userTyping: typingData.userTyping,
-    });
-  }, [chatData]);
-
   return (
     <SocketContext.Provider
-      value={{ socket: socket.current, typingData: typingData }}
+      value={{ socket: socket.current}}
     >
       {children}
     </SocketContext.Provider>
