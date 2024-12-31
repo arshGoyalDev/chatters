@@ -197,27 +197,6 @@ const setupSocket = (server) => {
       }
   };
 
-  const chatTyping = (chatInfo) => {
-    const {chatType, chatId} = chatInfo;
-
-    if (chatType === "personal") {
-      const otherUserSocketId = userSocketMap.get(chatId);
-      if (otherUserSocketId) {
-        io.to(otherUserSocketId).emit("chatTyping",  chatInfo);
-      }
-    }
-  }
-
-  const stopTyping = (chatInfo) => {
-    const {chatType, chatId} = chatInfo;
-
-    if (chatType === "personal") {
-      const otherUserSocketId = userSocketMap.get(chatId);
-      if (otherUserSocketId) {
-        io.to(otherUserSocketId).emit("stopTyping",  chatInfo);
-      }
-    }  }
-
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
@@ -237,8 +216,6 @@ const setupSocket = (server) => {
       console.log("User Id not provided during connection");
     }
 
-    socket.on("stopTyping", stopTyping);
-    socket.on("chatTyping", chatTyping);
     socket.on("leaveGroup", leaveGroup);
     socket.on("deleteGroup", deleteGroup);
     socket.on("sendMessage", sendMessage);
