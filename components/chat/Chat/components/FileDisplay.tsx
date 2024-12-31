@@ -99,7 +99,7 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
       )}
 
       {fileType === "video" && (
-        <div className="w-full rounded-lg">
+        <div className="w-full h-fit rounded-lg">
           <div>
             <video
               src={`${HOST}/${filePath}`}
@@ -115,7 +115,7 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
       )}
 
       {fileType === "image" && (
-        <div className="w-full rounded-lg">
+        <div className="w-full h-fit rounded-lg">
           <img
             src={`${HOST}/${filePath}`}
             alt={filePath}

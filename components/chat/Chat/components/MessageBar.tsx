@@ -21,7 +21,6 @@ const MessageBar = () => {
     setFileMenu(false);
   }, [messages]);
 
-
   const sendMessage = async () => {
     if (chatType === "personal" && (filePath !== "" || message !== "")) {
       socket?.socket?.emit("sendMessage", {
