@@ -11,6 +11,10 @@ A Chat App for power users
 - Tailwind CSS - CSS Utility Framework
 - GSAP - Animations
 - Zustand - React State Management Library
+- Moment
+- Iconsax - Icon Library
+- React Markdown
+- Remark GFM
 
 ### Backend
 
@@ -18,6 +22,7 @@ A Chat App for power users
 - Express.js - Framework of Node.js
 - Sockets.io
 - MongoDB
+- Multer
 
 ## Features
 
@@ -25,3 +30,6 @@ A Chat App for power users
 - Realtime Chat
 - Personal Chat
 - Group Chat
+- Leave Group as a member
+- Delete Group as a Admin of the Group
+- User Online Status
