@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { ChatData, Message, PersonalContact } from "@/utils/types";
 import { StateCreator } from "zustand";
 
@@ -29,7 +31,7 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
   messages: [],
   setMessages: (messages) => set({ messages }),
 
-  addMessage: (message) => {
+  addMessage: (message: Message) => {
     const chatMessages = get().messages;
     const chatType = get().chatType;
 

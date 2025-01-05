@@ -17,6 +17,7 @@ const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
     profilePic: "",
     status: "",
     profileSetup: false,
+    userOnline: false
   },
 
   setUserInfo: (userInfo: UserInfo) => set({ userInfo }),
