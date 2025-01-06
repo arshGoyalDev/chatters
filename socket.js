@@ -4,6 +4,8 @@ import Group from "./models/GroupModel.js";
 
 import User from "./models/UserModel.js";
 
+import { decryptMessage, encryptMessage } from "./cryptr/index.js";
+
 const setupSocket = (server) => {
   const io = new SocketIoServer(server, {
     cors: {
@@ -37,14 +39,21 @@ const setupSocket = (server) => {
   };
 
   const sendMessage = async (message) => {
+    const { content } = message;
+
     const senderSocketId = userSocketMap.get(message.sender);
     const recipientSocketId = userSocketMap.get(message.recipient);
 
-    const createdMessage = await Message.create(message);
+    const createdMessage = await Message.create({
+      ...message,
+      content: encryptMessage(content),
+    });
 
-    const messageData = await Message.findById(createdMessage._id)
+    let messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email firstName lastName profilePic status")
       .populate("recipient", "id email firstName lastName profilePic status");
+
+    messageData.content = decryptMessage(messageData.content);
 
     if (recipientSocketId) {
       io.to(recipientSocketId).emit("receiveMessage", messageData);
@@ -171,30 +180,34 @@ const setupSocket = (server) => {
       .populate("groupMembers")
       .populate("groupAdmin");
 
-      const finalData = {
-        messageData,
-        updatedGroup,
-        leavingMemberId: leavingMember._id,
-      }
-    
-      if (groupMembers) {
-        updatedGroup.groupMembers.forEach((member) => {
-          const memberSocketId = userSocketMap.get(member._id.toString());
-          if (memberSocketId) {
-            io.to(memberSocketId).emit("memberLeft", finalData);
-          }
-        });
-      }
-  
-      const adminSocketId = userSocketMap.get(updatedGroup.groupAdmin._id.toString());
-      if (adminSocketId) {
-        io.to(adminSocketId).emit("memberLeft", finalData);
-      }
+    const finalData = {
+      messageData,
+      updatedGroup,
+      leavingMemberId: leavingMember._id,
+    };
 
-      const leavingMemberSocketId = userSocketMap.get(leavingMember._id.toString());
-      if (leavingMemberSocketId) {
-        io.to(leavingMemberSocketId).emit("memberLeft", finalData);
-      }
+    if (groupMembers) {
+      updatedGroup.groupMembers.forEach((member) => {
+        const memberSocketId = userSocketMap.get(member._id.toString());
+        if (memberSocketId) {
+          io.to(memberSocketId).emit("memberLeft", finalData);
+        }
+      });
+    }
+
+    const adminSocketId = userSocketMap.get(
+      updatedGroup.groupAdmin._id.toString()
+    );
+    if (adminSocketId) {
+      io.to(adminSocketId).emit("memberLeft", finalData);
+    }
+
+    const leavingMemberSocketId = userSocketMap.get(
+      leavingMember._id.toString()
+    );
+    if (leavingMemberSocketId) {
+      io.to(leavingMemberSocketId).emit("memberLeft", finalData);
+    }
   };
 
   io.on("connection", async (socket) => {

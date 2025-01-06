@@ -2,6 +2,8 @@ import Message from "../models/MessagesModel.js";
 
 import { mkdirSync, renameSync } from "fs";
 
+import { decryptMessage } from "../cryptr/index.js";
+
 const getMessages = async (request, response, next) => {
   try {
     const user1 = request.userId;
@@ -17,7 +19,14 @@ const getMessages = async (request, response, next) => {
       ],
     }).sort({ timestamp: 1 });
 
-    return response.status(200).json({ messages });
+    const decryptedMessages = messages.map((message) => {
+      return {
+        ...message._doc,
+        content: decryptMessage(message._doc.content),
+      };
+    });
+
+    return response.status(200).json({ messages: decryptedMessages });
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Internal Server Error");
@@ -35,7 +44,7 @@ const uploadFile = async (request, response, next) => {
     let fileDir = `uploads/files/${date}`;
     let fileName = `${fileDir}/${request.file.originalname}`;
 
-    mkdirSync(fileDir, {recursive: true});
+    mkdirSync(fileDir, { recursive: true });
 
     renameSync(request.file.path, fileName);
 
