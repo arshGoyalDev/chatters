@@ -49,7 +49,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       });
 
       const handleReceiveMessage = (message: Message) => {
-        const { chatData } = useAppStore.getState();
+        const { chatData, chatType } = useAppStore.getState();
         if (
           typeof message.sender !== "string" &&
           typeof message.recipient !== "string"
@@ -58,7 +58,10 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
             chatData?.chatMembers[0]._id === message.sender._id ||
             chatData?.chatMembers[0]._id === message.recipient._id
           ) {
-            addMessage(message);
+            if (chatType === "personal") {
+              addMessage(message);
+            }
+            // if (chatData.)
           }
         }
       };
@@ -140,9 +143,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   }, [userInfo]);
 
   return (
-    <SocketContext.Provider
-      value={{ socket: socket.current}}
-    >
+    <SocketContext.Provider value={{ socket: socket.current }}>
       {children}
     </SocketContext.Provider>
   );
