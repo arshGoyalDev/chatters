@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import User from "../models/UserModel.js";
 import Message from "../models/MessagesModel.js";
+import { decryptMessage } from "../cryptr/index.js";
 
 const searchContacts = async (request, response, next) => {
   try {
@@ -88,7 +89,14 @@ const getPersonalContacts = async (request, response, next) => {
       },
     ]);
 
-    return response.status(200).json({ contacts });
+    const decryptedContacts = contacts.map((contact) => {
+      return {
+        ...contact,
+        lastMessage: decryptMessage(contact.lastMessage),
+      }
+    })
+
+    return response.status(200).json({ contacts: decryptedContacts });
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Internal Server Error");
