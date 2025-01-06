@@ -70,18 +70,20 @@ const setupSocket = (server) => {
     const createdMessage = await Message.create({
       sender,
       recipient: null,
-      content,
+      content: encryptMessage(content),
       messageType,
       timeStamp: new Date(),
       fileUrl,
     });
 
-    const messageData = await Message.findById(createdMessage._id)
+    let messageData = await Message.findById(createdMessage._id)
       .populate(
         "sender",
         "id email profilePic firstName lastName status userOnline"
       )
       .exec();
+
+    messageData.content = decryptMessage(messageData.content);
 
     await Group.findByIdAndUpdate(groupId, {
       $push: { messages: createdMessage._id },

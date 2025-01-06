@@ -5,7 +5,8 @@ import Group from "../models/GroupModel.js";
 import Message from "../models/MessagesModel.js";
 
 import mongoose from "mongoose";
-import { request } from "http";
+
+import { decryptMessage } from "../cryptr/index.js";
 
 const addGroupPic = async (request, response, next) => {
   try {
@@ -113,7 +114,14 @@ const getGroupMessages = async (request, response, next) => {
       .populate("sender")
       .sort({ timestamp: 1 });
 
-    return response.status(200).json({ messages });
+    const decryptedMessages = messages.map((message) => {
+      return {
+        ...message._doc,
+        content: decryptMessage(message._doc.content),
+      };
+    });
+
+    return response.status(200).json({ messages: decryptedMessages });
   } catch (error) {
     console.log(error);
     return response.status(500).send("Internal Server Error");

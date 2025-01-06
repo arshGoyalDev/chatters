@@ -18,7 +18,7 @@ const decryptMessage = (encryptedContent) => {
 
   let decrypted = decipher.update(encryptedContent, "hex", "utf8");
   decrypted += decipher.final("utf8");
-
+  
   return decrypted;
 };
 
