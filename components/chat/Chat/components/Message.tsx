@@ -12,12 +12,8 @@ import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
 
-const Message = ({
-  message,
-}: {
-  message: Message;
-}) => {
-  const {userInfo} = useAppStore();
+const Message = ({ message }: { message: Message }) => {
+  const { userInfo } = useAppStore();
 
   const downloadFile = async () => {
     try {
@@ -60,7 +56,9 @@ const Message = ({
         >
           <div
             className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
-              userInfo._id === message.sender ? "bg-zinc-900 bg-opacity-40 border-zinc-800" : "bg-primary bg-opacity-5 border-primary border-opacity-20"
+              userInfo._id === message.sender
+                ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
+                : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
           >
             <FileDisplay filePath={message.fileUrl} />
@@ -68,7 +66,9 @@ const Message = ({
           <button
             onClick={downloadFile}
             className={`p-0.5 rounded-lg border-2 ${
-              userInfo._id === message.sender ? "bg-zinc-900 bg-opacity-40 border-zinc-800" : "bg-primary bg-opacity-5 border-primary border-opacity-20"
+              userInfo._id === message.sender
+                ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
+                : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
           >
             <span
@@ -119,7 +119,7 @@ const Message = ({
           <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
         </div>
       )}
-      <div className="text-sm px-1">
+      <div className="text-sm pt-0.5 font-semibold text-zinc-500">
         {moment(message.timeStamp).format("lll")}
       </div>
     </div>

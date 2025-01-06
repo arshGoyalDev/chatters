@@ -88,7 +88,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
                       </span>
                     </div>
                   ))}
-                <div className={`flex flex-col ${userInfo._id === message.sender._id && "items-end"} gap-2`}>
+                <div className={`flex flex-col ${userInfo._id === message.sender._id && "items-end"} gap-1`}>
                   {message.fileUrl && (
                     <div
                       className={`flex gap-2 items-end ${
@@ -175,7 +175,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
                         {`${message.sender.firstName} ${message.sender.lastName}`}
                       </div>
                     )}
-                    <div className="text-sm pt-0.5 text-zinc-500">
+                    <div className="text-sm pt-0.5 font-semibold text-zinc-500">
                       {moment(message.timeStamp).format("lll")}
                     </div>
                   </div>
