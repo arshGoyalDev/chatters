@@ -30,7 +30,8 @@ const MessageBar = () => {
         fileUrl: filePath !== "" ? filePath : "",
         messageType: filePath ? "file" : "text",
       });
-    } else {
+    }
+    if (chatType === "group" && (filePath !== "" || message !== "")) {
       socket?.socket?.emit("sendGroupMessage", {
         sender: userInfo._id,
         content: message ? message : "",
@@ -45,7 +46,7 @@ const MessageBar = () => {
 
   return (
     <div className="flex justify-center pt-2 pb-10">
-      <div className=" flex items-end w-[90%] max-w-[900px] bg-zinc-900 pl-2 pr-4 rounded-xl">
+      <div className=" flex items-center w-[90%] max-w-[900px] bg-zinc-900 pl-2 pr-4 rounded-xl">
         <div className="py-1 w-full">
           <textarea
             name="message-input"
@@ -54,12 +55,12 @@ const MessageBar = () => {
             autoComplete="off"
             autoFocus={true}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type Something..."
+            placeholder="Type a message..."
             className="scrollbar-invisible w-full py-4 h-12 pl-4 pr-2 placeholder:text-zinc-500 bg-transparent resize-none"
           />
         </div>
 
-        <div className="relative flex items-center gap-2 pb-3">
+        <div className="relative flex items-center gap-2">
           <button
             onClick={() => setFileMenu(true)}
             className="p-1 border-2 border-transparent focus:border-zinc-800 rounded-lg"
