@@ -1,8 +1,12 @@
+import dotenv from "dotenv"
+
 import crypto from "crypto";
 
+dotenv.config();
+
 const algorithm = "aes-256-cbc";
-const key = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
+const key = crypto.pbkdf2Sync(process.env.CRYPTOKEY1, process.env.CRYPTOKEY1, 10000, 32, 'sha512');
+const iv = new Buffer(process.env.BUFFERCODE, 'binary');
 
 const encryptMessage = (messageContent) => {
   const cipher = crypto.createCipheriv(algorithm, key, iv);
