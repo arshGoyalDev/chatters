@@ -10,6 +10,7 @@ import {
 } from "@/utils/constants";
 
 import { Group, PersonalContact } from "@/utils/types";
+import { userInfo } from "os";
 
 import {
   createContext,
@@ -34,7 +35,7 @@ const ChatListProvider = ({ children }: { children: ReactElement }) => {
   const [personalContacts, setPersonalContacts] = useState<
     [PersonalContact] | []
   >([]);
-  const { chatData, chatType, messages } = useAppStore();
+  const { chatData, chatType, messages, userInfo } = useAppStore();
 
   const getGroups = async () => {
     try {
@@ -65,12 +66,16 @@ const ChatListProvider = ({ children }: { children: ReactElement }) => {
   };
 
   useEffect(() => {
-    getGroups();
-    getContacts();
-  }, [chatData, chatType, messages]);
+    if (userInfo.email !== "") {
+      getGroups();
+      getContacts();
+    }
+  }, [chatData, chatType, messages, userInfo]);
 
   return (
-    <ChatListContext.Provider value={{ groupsList, personalContacts, getGroups }}>
+    <ChatListContext.Provider
+      value={{ groupsList, personalContacts, getGroups }}
+    >
       {children}
     </ChatListContext.Provider>
   );

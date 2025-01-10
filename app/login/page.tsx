@@ -43,7 +43,7 @@ const SignUpPage = () => {
           { withCredentials: true }
         );
 
-        if (response.data.user.id) {
+        if (response.data.user._id) {
           setUserInfo(response.data.user);
 
           if (response.data.user.profileSetup) {
