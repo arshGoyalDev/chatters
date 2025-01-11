@@ -48,8 +48,6 @@ const Chat = () => {
           { withCredentials: true }
         );
 
-        console.log(response.data);
-
         if (response.data.messages.length !== 0) {
           setMessages(response.data.messages);
         }
