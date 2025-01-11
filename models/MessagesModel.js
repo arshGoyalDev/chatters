@@ -13,7 +13,7 @@ const messageSchema = new mongoose.Schema({
   },
   messageType: {
     type: String,
-    enum: ["text", "file", "last"],
+    enum: ["text", "file", "leaving"],
     required: true,
   },
   content: {

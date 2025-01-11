@@ -154,8 +154,10 @@ const setupSocket = (server) => {
     const leavingMessage = await Message.create({
       sender: leavingMember._id,
       recipient: null,
-      content: `${leavingMember.firstName} ${leavingMember.lastName} left the group`,
-      messageType: "last",
+      content: encryptMessage(
+        `${leavingMember.firstName} ${leavingMember.lastName} left the group`
+      ),
+      messageType: "leaving",
       timeStamp: new Date(),
       fileUrl: null,
     });
@@ -167,23 +169,24 @@ const setupSocket = (server) => {
       )
       .exec();
 
-    await Group.findByIdAndUpdate(groupId, {
-      $push: { messages: leavingMessage._id },
-    });
-
-    const updatedGroup = await Group.findByIdAndUpdate(
+    await Group.findByIdAndUpdate(
       groupId,
       {
-        groupMembers,
+        groupMembers: groupMembers,
         $push: { messages: leavingMessage._id },
-      },
-      { new: true, runValidators: true }
-    )
+      }
+      // { new: true, runValidators: true }
+    );
+
+    const updatedGroup = await Group.findById(groupId)
       .populate("groupMembers")
       .populate("groupAdmin");
 
     const finalData = {
-      messageData,
+      messageData: {
+        ...messageData,
+        content: decryptMessage(messageData.content),
+      },
       updatedGroup,
       leavingMemberId: leavingMember._id,
     };
