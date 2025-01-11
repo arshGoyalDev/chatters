@@ -45,8 +45,8 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center pt-2 pb-10">
-      <div className=" flex items-center w-[90%] max-w-[900px] bg-zinc-900 pl-2 pr-4 rounded-xl">
+    <div className="flex justify-center py-3 lg:pt-2 lg:pb-10 border-t-2 border-zinc-900 lg:border-0">
+      <div className=" flex items-center px-1 md:px-0 gap-3 md:gap-0 w-[95%] max-w-[900px] md:bg-zinc-900 md:pl-2 lg:pr-4 rounded-xl">
         <div className="py-1 w-full">
           <textarea
             name="message-input"
@@ -56,11 +56,11 @@ const MessageBar = () => {
             autoFocus={true}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message..."
-            className="scrollbar-invisible w-full py-4 h-12 pl-4 pr-2 placeholder:text-zinc-500 bg-transparent resize-none"
+            className="scrollbar-invisible w-full py-4 px-3 h-12 md:h-12 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
           />
         </div>
 
-        <div className="relative flex items-center gap-2">
+        <div className="relative flex items-center gap-1 md:gap-2">
           <button
             onClick={() => setFileMenu(true)}
             className="p-1 border-2 border-transparent focus:border-zinc-800 rounded-lg"
