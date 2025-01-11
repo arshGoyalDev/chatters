@@ -27,9 +27,19 @@ A Chat App for power users
 ## Features
 
 - Authentication using email and password
+
 - Realtime Chat
-- Personal Chat
-- Group Chat
-- Leave Group as a member
-- Delete Group as a Admin of the Group
-- User Online Status
+- Message encryption
+- Send files as messages
+
+- ### Personal Chat
+    - User Online Status
+
+- ### Group Chat
+    - Group Chat
+    - Leave Group as a member
+    - Delete Group as a Admin of the Group
+
+- ### Chat Info
+    - View Group Members
+    - View files send in the chat
