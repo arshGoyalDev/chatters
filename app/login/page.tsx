@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { TransitionLink } from "@/components/animations";
+import { ImageCarousel, TransitionLink } from "@/components/animations";
 
 import { Input, PasswordInput } from "@/components/inputs";
 
@@ -120,22 +120,10 @@ const SignUpPage = () => {
           </div>
         </form>
       </section>
-      <section className="relative hidden xl:flex flex-col gap-3 items-center justify-center min-h-full rounded-xl bg-zinc-900 overflow-hidden">
-        <div className="absolute -top-4 -left-1 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden rotate-12">
-          <img src="/interface.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -top-4 -right-6 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden -rotate-[30deg]">
-          <img src="/chat-3.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -bottom-2 -left-3 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden rotate-6">
-          <img src="/profile.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -bottom-0 -right-10 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden -rotate-[20deg]">
-          <img src="/chat-2.png" alt="chat" className=" object-contain" />
-        </div>
-        <h2 className="text-5xl font-extrabold">Chaters</h2>
-        <div className="text-lg font-bold">Encrypted Messages!!</div>
-      </section>{" "}
+      <section className="relative hidden xl:flex flex-col gap-3 items-center justify-center min-h-full border-2 border-zinc-800 rounded-xl bg-zinc-900 bg-opacity-70 overflow-hidden">
+        <ImageCarousel />
+      </section>
+
     </main>
   );
 };

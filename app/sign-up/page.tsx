@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { TransitionLink } from "@/components/animations";
+import { ImageCarousel, TransitionLink } from "@/components/animations";
 
 import { Input, PasswordInput } from "@/components/inputs";
 
@@ -13,8 +13,6 @@ import { SIGN_UP_ROUTE } from "@/utils/constants";
 import { authErrors } from "@/utils/errors";
 
 import useAppStore from "@/store";
-import Image from "next/image";
-import Link from "next/link";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -74,30 +72,11 @@ const SignUpPage = () => {
 
   return (
     <main className="min-h-screen xl:p-8 grid place-content-center xl:place-content-stretch xl:grid-cols-2 gap-8">
-      <section className="relative hidden xl:flex flex-col gap-3 items-center justify-center min-h-full rounded-xl bg-zinc-900 overflow-hidden">
-        <div className="absolute -top-4 -left-1 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden rotate-12">
-          <img src="/chat.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -top-4 -right-6 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden -rotate-[30deg]">
-          <img src="/chat-2.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -bottom-2 -left-3 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden rotate-6">
-          <img src="/profile.png" alt="chat" className=" object-contain" />
-        </div>
-        <div className="absolute -bottom-0 -right-10 w-[420px] border-4 border-zinc-800 rounded-xl overflow-hidden -rotate-[20deg]">
-          <img src="/chat-4.png" alt="chat" className=" object-contain" />
-        </div>
-        <h2 className="text-5xl font-extrabold">Chaters</h2>
-        <div className="text-lg font-bold">Encrypted Messages!!</div>
+      <section className="relative hidden xl:flex flex-col gap-3 items-center justify-center min-h-full border-2 border-zinc-800 rounded-xl bg-zinc-900 bg-opacity-70 overflow-hidden">
+        <ImageCarousel />
       </section>
 
       <section className="relative min-h-screen px-8 xl:px-0 xl:min-h-full flex flex-col items-center w-screen xl:w-full justify-center">
-        <Link
-          href="/"
-          className="absolute top-4 left-4 lg:top-10 lg:left-10 text-white py-2 px-4 bg-zinc-900 bg-opacity-30 border-2 border-zinc-800 rounded-md"
-        >
-          Home
-        </Link>
         <div className="grid gap-4 w-full max-w-[460px]">
           <h1 className="text-3xl font-semibold xl:text-5xl 2xl:text-5xl">
             Create an Account
