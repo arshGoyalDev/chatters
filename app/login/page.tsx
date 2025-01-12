@@ -70,13 +70,6 @@ const SignUpPage = () => {
 
   return (
     <main className="relative min-h-screen xl:p-8 grid place-content-center xl:place-content-stretch xl:grid-cols-2 gap-8">
-      <Link
-        href="/"
-        className="absolute top-4 left-4 lg:top-10 lg:left-10 text-white py-2 px-4 bg-zinc-900 bg-opacity-30 border-2 border-zinc-800 rounded-md"
-      >
-        Home
-      </Link>
-      
       <section className="min-h-screen px-8 xl:px-0 xl:min-h-full flex flex-col items-center w-screen xl:w-full justify-center">
         <div className="grid gap-4 w-full max-w-[460px]">
           <h1 className="text-3xl font-semibold xl:text-5xl 2xl:text-5xl">
