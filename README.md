@@ -52,3 +52,5 @@ npm install
 - Create .env.local file
 
 - Add `NEXT_PUBLIC_SERVER_URL` with value of locally hosted server url
+
+- `npm run dev`
