@@ -43,3 +43,12 @@ A Chat App for power users
 - ### Chat Info
     - View Group Members
     - View files send in the chat
+
+## Run Locally
+
+- `
+npm install
+`
+- Create .env.local file
+
+- Add `NEXT_PUBLIC_SERVER_URL` with value of locally hosted server url
