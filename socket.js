@@ -28,8 +28,6 @@ const setupSocket = (server) => {
       { new: true, runValidators: true }
     );
 
-    // console.log(`Client disconnected! ${socket.id}`);
-
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
         userSocketMap.delete(userId);
@@ -109,7 +107,6 @@ const setupSocket = (server) => {
   };
 
   const deleteGroup = async (groupId) => {
-    // await Group.find
     const group = await Group.findById(groupId).populate("groupAdmin");
 
     await Message.findOneAndDelete({
@@ -175,7 +172,6 @@ const setupSocket = (server) => {
         groupMembers: groupMembers,
         $push: { messages: leavingMessage._id },
       }
-      // { new: true, runValidators: true }
     );
 
     const updatedGroup = await Group.findById(groupId)
@@ -229,7 +225,6 @@ const setupSocket = (server) => {
 
       console.log(`${userId} is online`);
       userSocketMap.set(userId, socket.id);
-      // console.log(`User Conn,ected ${userId} with socket ID : ${socket.id}`);
     } else {
       console.log("User Id not provided during connection");
     }
