@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 
 import mongoose from "mongoose";
 
+import { Server as SocketIoServer } from "socket.io";
+
 import setupSocket from "./socket.js";
 
 import {
@@ -44,7 +46,15 @@ const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
-setupSocket(server);
+const io = new SocketIoServer(server, {
+  cors: {
+    origin: process.env.ORIGIN,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+setupSocket(io);
 
 mongoose
   .connect(databaseURL)

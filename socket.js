@@ -1,4 +1,3 @@
-import { Server as SocketIoServer } from "socket.io";
 import Message from "./models/MessagesModel.js";
 import Group from "./models/GroupModel.js";
 
@@ -6,15 +5,7 @@ import User from "./models/UserModel.js";
 
 import { decryptMessage, encryptMessage } from "./cryptr/index.js";
 
-const setupSocket = (server) => {
-  const io = new SocketIoServer(server, {
-    cors: {
-      origin: process.env.origin,
-      methods: ["GET", "POST"],
-      credentials: true,
-    },
-  });
-
+const setupSocket = (io) => {
   const userSocketMap = new Map();
 
   const disconnect = async (socket) => {
@@ -166,13 +157,10 @@ const setupSocket = (server) => {
       )
       .exec();
 
-    await Group.findByIdAndUpdate(
-      groupId,
-      {
-        groupMembers: groupMembers,
-        $push: { messages: leavingMessage._id },
-      }
-    );
+    await Group.findByIdAndUpdate(groupId, {
+      groupMembers: groupMembers,
+      $push: { messages: leavingMessage._id },
+    });
 
     const updatedGroup = await Group.findById(groupId)
       .populate("groupMembers")
@@ -223,10 +211,9 @@ const setupSocket = (server) => {
         { new: true, runValidators: true }
       );
 
-      console.log(`${userId} is online`);
       userSocketMap.set(userId, socket.id);
     } else {
-      console.log("User Id not provided during connection");
+      console.log("No userId provided");
     }
 
     socket.on("leaveGroup", leaveGroup);
