@@ -7,9 +7,9 @@ import { getMessages, uploadFile } from "../controllers/MessageController.js";
 const messageRoutes = Router();
 const upload = multer({ dest: "uploads/files" });
 
-messageRoutes.post("/get-messages", verifyToken, getMessages);
+messageRoutes.post("/messages", verifyToken, getMessages);
 messageRoutes.post(
-  "/upload-file",
+  "/file",
   verifyToken,
   upload.single("file"),
   uploadFile

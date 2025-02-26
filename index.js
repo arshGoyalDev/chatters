@@ -39,7 +39,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/messages", messageRoutes);
+app.use("/api/message", messageRoutes);
 app.use("/api/group", groupRoutes);
 
 const server = app.listen(port, () => {

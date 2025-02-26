@@ -10,6 +10,6 @@ import {
 const contactRoutes = Router();
 
 contactRoutes.post("/search-contact", verifyToken, searchContacts);
-contactRoutes.get("/get-personal-contacts", verifyToken, getPersonalContacts);
+contactRoutes.get("/personal-contacts", verifyToken, getPersonalContacts);
 
 export default contactRoutes;

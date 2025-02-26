@@ -22,15 +22,15 @@ authRoutes.post("/login", login);
 authRoutes.post("/logout", logout);
 
 authRoutes.get("/user-info", verifyToken, getUserInfo);
-authRoutes.post("/update-profile", verifyToken, updateProfile);
+authRoutes.patch("/user-info", verifyToken, updateProfile);
 
 authRoutes.post(
-  "/add-profile-image",
+  "/profile-image",
   verifyToken,
   upload.single("profile-image"),
   addProfileImage
 );
-authRoutes.delete("/delete-profile-image", verifyToken, removeProfileImage);
+authRoutes.delete("/profile-image", verifyToken, removeProfileImage);
 
 
 export default authRoutes;
