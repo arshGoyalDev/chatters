@@ -76,7 +76,7 @@ const SelectMultiContact = ({
 
   return (
     <div className="w-full py-6 px-6">
-      <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
+      <div className="flex gap-2 items-centerbg-zinc-800 rounded-lg px-3">
         <input
           type="text"
           name="search-people"

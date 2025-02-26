@@ -7,7 +7,6 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
 } from "react";
 
 import useAppStore from "@/store";
@@ -22,7 +21,6 @@ import {
   GroupMessage,
   Message,
   SocketContextType,
-  UserInfo,
 } from "@/utils/types";
 
 import { useChatList } from "./ChatListContext";
@@ -38,6 +36,8 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   const { userInfo, addMessage } = useAppStore();
 
   useEffect(() => {
+    let disconnect = () => {};
+
     if (userInfo.email !== "") {
       socket.current = io(HOST, {
         withCredentials: true,
@@ -50,19 +50,16 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
 
       const handleReceiveMessage = (message: Message) => {
         const { chatData, chatType } = useAppStore.getState();
-        if (
-          typeof message.sender !== "string" &&
-          typeof message.recipient !== "string"
-        ) {
-          if (
-            chatData?.chatMembers[0]._id === message.sender._id ||
-            chatData?.chatMembers[0]._id === message.recipient._id
-          ) {
-            if (chatType === "personal") {
-              addMessage(message);
-            }
-            // if (chatData.)
-          }
+        
+        if (!message.sender || !message.recipient || typeof message.sender === 'string' || typeof message.recipient === 'string') {
+          return;
+        }
+
+        const isRelevantChat = chatData?.chatMembers[0]._id === message.sender._id || 
+                             chatData?.chatMembers[0]._id === message.recipient._id;
+
+        if (isRelevantChat && chatType === "personal") {
+          addMessage(message);
         }
       };
 
@@ -136,11 +133,19 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       socket.current.on("receiveMessage", handleReceiveMessage);
       socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 
-      return () => {
-        socket.current?.disconnect();
+      disconnect = () => {
+        if (socket.current) {
+          socket.current.off("memberLeft", handleMemberLeaving);
+          socket.current.off("groupDeleted", handleGroupDelete);
+          socket.current.off("receiveMessage", handleReceiveMessage);
+          socket.current.off("receiveGroupMessage", handleReceiveGroupMessage);
+          socket.current.disconnect();
+        }
       };
     }
-  }, [userInfo]);
+
+    return disconnect;
+  }, [userInfo, addMessage]);
 
   return (
     <SocketContext.Provider value={{ socket: socket.current }}>

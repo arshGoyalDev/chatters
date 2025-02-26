@@ -44,7 +44,7 @@ const ProfilePage = () => {
   const updateProfile = async () => {
     if (checkForErrors()) {
       try {
-        const response = await apiClient.post(
+        const response = await apiClient.patch(
           UPDATE_PROFILE_ROUTE,
           { firstName, lastName, status },
           { withCredentials: true }

@@ -3,10 +3,10 @@ import { TransitionLink } from "@/components/animations";
 const HomePage = () => {
   return (
     <main className="min-h-screen flex flex-col justify-center items-center gap-6">
-      <h1 className="text-6xl font-extrabold">CHATERS</h1>
+      <h1 className="text-6xl font-extrabold">CHATTERS</h1>
 
       <div className="flex flex-col gap-2 text-center text-xl">
-        <p>Chat App like non other.</p>
+        <p>Chat App like no other.</p>
         <p>
           Connect to world{" "}
           <span className="text-gray-100 font-bold">

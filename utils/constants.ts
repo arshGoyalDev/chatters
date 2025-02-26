@@ -4,25 +4,25 @@ const AUTH_ROUTES = "api/auth";
 const SIGN_UP_ROUTE = `${AUTH_ROUTES}/sign-up`;
 const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
 const GET_USER_INFO_ROUTE = `${AUTH_ROUTES}/user-info`;
-const UPDATE_PROFILE_ROUTE = `${AUTH_ROUTES}/update-profile`;
-const ADD_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/add-profile-image`;
-const DELETE_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/delete-profile-image`;
+const UPDATE_PROFILE_ROUTE = `${AUTH_ROUTES}/user-info`;
+const ADD_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-image`;
+const DELETE_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-image`;
 const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 
 const CONTACT_ROUTES = "api/contact";
 const SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTES}/search-contact`;
-const GET_PERSONAL_CONTACTS_ROUTE = `${CONTACT_ROUTES}/get-personal-contacts`;
+const GET_PERSONAL_CONTACTS_ROUTE = `${CONTACT_ROUTES}/personal-contacts`;
 
-const MESSAGE_ROUTES = "api/messages";
-const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/get-messages`;
-const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/upload-file`;
+const MESSAGE_ROUTES = "api/message";
+const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/messages`;
+const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/file`;
 
 const GROUP_ROUTES = "api/group";
-const ADD_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/add-group-pic`;
+const ADD_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/group-pic`;
 const REMOVE_GROUP_PIC_ROUTE = `${GROUP_ROUTES}/remove-group-pic`;
 const CREATE_GROUP_ROUTE = `${GROUP_ROUTES}/create-group`;
-const GET_USER_GROUPS_ROUTE = `${GROUP_ROUTES}/get-user-groups`;
-const GET_GROUP_MESSAGES_ROUTE = `${GROUP_ROUTES}/get-group-messages`;
+const GET_USER_GROUPS_ROUTE = `${GROUP_ROUTES}/user-groups`;
+const GET_GROUP_MESSAGES_ROUTE = `${GROUP_ROUTES}/group-messages`;
 
 export {
   HOST,
