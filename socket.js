@@ -100,12 +100,11 @@ const setupSocket = (io) => {
   const deleteGroup = async (groupId) => {
     const group = await Group.findById(groupId).populate("groupAdmin");
 
-    await Message.findOneAndDelete({
-      $or: [{ _id: group.messages }],
-    });
-
-    const groupMembers = group.groupMembers;
-    const groupAdmin = group.groupAdmin;
+    if (group.messages && group.messages.length > 0) {
+      await Message.deleteMany({
+        _id: { $in: group.messages },
+      });
+    }
 
     const finalData = {
       groupId: group._id,
@@ -115,8 +114,8 @@ const setupSocket = (io) => {
 
     await Group.findByIdAndDelete(groupId);
 
-    if (groupMembers) {
-      groupMembers.forEach((memberId) => {
+    if (group.groupMembers) {
+      group.groupMembers.forEach((memberId) => {
         const memberSocketId = userSocketMap.get(memberId.toString());
         if (memberSocketId) {
           io.to(memberSocketId).emit("groupDeleted", finalData);
@@ -124,7 +123,7 @@ const setupSocket = (io) => {
       });
     }
 
-    const adminSocketId = userSocketMap.get(groupAdmin._id.toString());
+    const adminSocketId = userSocketMap.get(group.groupAdmin._id.toString());
     if (adminSocketId) {
       io.to(adminSocketId).emit("groupDeleted", finalData);
     }
@@ -135,9 +134,9 @@ const setupSocket = (io) => {
 
     const group = await Group.findById(groupId).populate("groupMembers");
 
-    const groupMembers = group.groupMembers.filter((member) => {
-      if (member._id.toString() !== leavingMember._id) return member;
-    });
+    const groupMembers = group.groupMembers.filter((member) =>
+      member._id.toString() !== leavingMember._id
+    );
 
     const leavingMessage = await Message.create({
       sender: leavingMember._id,
