@@ -6,7 +6,7 @@ import Message from "../models/MessagesModel.js";
 
 import mongoose from "mongoose";
 
-import { decryptMessage } from "../cryptr/index.js";
+import { decryptMessage, encryptMessage } from "../cryptr/index.js";
 
 const addGroupPic = async (request, response, next) => {
   try {
@@ -63,12 +63,25 @@ const createGroup = async (request, response, next) => {
         .status(400)
         .send("Some Group Members are not valid users");
     }
+    
+    const groupCreatedMessage = await Message.create({
+      sender: groupAdmin._id,
+      recipient: null,
+      content: encryptMessage(`${groupAdmin.firstName} ${groupAdmin.lastName} created the group "${groupName}"`),
+      messageType: "create",
+      timeStamp: new Date(),
+      fileUrl: null,
+    });
+
+
+    await groupCreatedMessage.save();
 
     const newGroup = new Group({
       groupName,
       groupDescription,
       groupPic,
       groupAdmin,
+      messages: [groupCreatedMessage._id],
       groupMembers,
     });
 
