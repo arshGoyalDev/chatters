@@ -46,7 +46,7 @@ const MessageBar = () => {
 
   return (
     <div className="flex justify-center py-3 lg:pt-2 lg:pb-10 border-t-2 border-zinc-900 lg:border-0">
-      <div className=" flex items-center px-1 md:px-0 gap-3 md:gap-0 w-[95%] max-w-[900px] md:bg-zinc-900 md:pl-2 lg:pr-4 rounded-xl">
+      <div className=" flex items-center gap-3 md:gap-0 w-[95%] max-w-[900px] md:bg-zinc-900 md:pl-2 md:pr-4 rounded-xl">
         <div className="py-1 w-full">
           <textarea
             name="message-input"

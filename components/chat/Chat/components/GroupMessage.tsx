@@ -54,7 +54,9 @@ const GroupMessage = ({ message }: { message: Message }) => {
                   : "items-start"
               }`}
             >
-              <div className={`flex items-end gap-3 max-w-[80%] lg:max-w-[60%]`}>
+              <div
+                className={`flex items-end gap-3 max-w-[80%] lg:max-w-[60%]`}
+              >
                 {userInfo._id !== message.sender._id &&
                   (message.sender.profilePic ? (
                     <div className="min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
@@ -88,7 +90,11 @@ const GroupMessage = ({ message }: { message: Message }) => {
                       </span>
                     </div>
                   ))}
-                <div className={`flex flex-col ${userInfo._id === message.sender._id && "items-end"} gap-1`}>
+                <div
+                  className={`flex flex-col ${
+                    userInfo._id === message.sender._id && "items-end"
+                  } gap-1`}
+                >
                   {message.fileUrl && (
                     <div
                       className={`flex gap-2 items-end ${
@@ -185,9 +191,12 @@ const GroupMessage = ({ message }: { message: Message }) => {
           )}
         </>
       )}
-      {message.messageType === "leaving" && (
+      {(message.messageType === "leaving" ||
+        message.messageType === "create") && (
         <div className="flex justify-center w-full">
-          <div className="bg-zinc-900 bg-opacity-40 py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">{message.content}</div>
+          <div className="bg-zinc-900 bg-opacity-40 py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
+            {message.content}
+          </div>
         </div>
       )}
     </>

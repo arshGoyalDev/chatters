@@ -24,6 +24,7 @@ interface ChatListContextType {
   personalContacts: PersonalContact[] | [];
   groupsList: Group[] | [];
   getGroups: () => void;
+  getContacts: () => void;
 }
 
 const ChatListContext = createContext<ChatListContextType | null>(null);
@@ -74,7 +75,7 @@ const ChatListProvider = ({ children }: { children: ReactElement }) => {
 
   return (
     <ChatListContext.Provider
-      value={{ groupsList, personalContacts, getGroups }}
+      value={{ groupsList, personalContacts, getGroups, getContacts }}
     >
       {children}
     </ChatListContext.Provider>

@@ -58,6 +58,8 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         const isRelevantChat = chatData?.chatMembers[0]._id === message.sender._id || 
                              chatData?.chatMembers[0]._id === message.recipient._id;
 
+        chatList?.getContacts();
+
         if (isRelevantChat && chatType === "personal") {
           addMessage(message);
         }
@@ -66,6 +68,8 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       const handleReceiveGroupMessage = (message: GroupMessage) => {
         const { chatData } = useAppStore.getState();
 
+        chatList?.getGroups();
+        
         if (chatData?.chatId === message.groupId) {
           addMessage(message);
         }
