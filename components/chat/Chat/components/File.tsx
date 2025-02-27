@@ -1,8 +1,12 @@
+import { useError } from "@/context";
+
 import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
+
 import { useEffect, useState } from "react";
 
 const File = ({ filePath }: { filePath: string }) => {
+  const errorContext = useError();
   const [fileType, setFileType] = useState("");
 
   useEffect(() => {
@@ -56,9 +60,10 @@ const File = ({ filePath }: { filePath: string }) => {
       link.remove();
       window.URL.revokeObjectURL(urlBlob);
     } catch (error) {
-      console.log(error);
+      errorContext?.setErrorMessage("Failed to download file");
     }
   };
+
   return (
     <div className="flex justify-between items-center py-3 px-3 bg-zinc-800 bg-opacity-5 border-2 border-zinc-800 rounded-lg">
       <div className="flex items-center gap-2">

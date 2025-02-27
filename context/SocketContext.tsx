@@ -36,7 +36,10 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   const { userInfo, addMessage } = useAppStore();
 
   useEffect(() => {
-    let disconnect = () => {};
+    // Don't attempt to connect if user is not logged in
+    if (userInfo.email === "") {
+      return;
+    }
 
     if (userInfo.email !== "") {
       socket.current = io(HOST, {
@@ -50,13 +53,19 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
 
       const handleReceiveMessage = (message: Message) => {
         const { chatData, chatType } = useAppStore.getState();
-        
-        if (!message.sender || !message.recipient || typeof message.sender === 'string' || typeof message.recipient === 'string') {
+
+        if (
+          !message.sender ||
+          !message.recipient ||
+          typeof message.sender === "string" ||
+          typeof message.recipient === "string"
+        ) {
           return;
         }
 
-        const isRelevantChat = chatData?.chatMembers[0]._id === message.sender._id || 
-                             chatData?.chatMembers[0]._id === message.recipient._id;
+        const isRelevantChat =
+          chatData?.chatMembers[0]._id === message.sender._id ||
+          chatData?.chatMembers[0]._id === message.recipient._id;
 
         chatList?.getContacts();
 
@@ -69,7 +78,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         const { chatData } = useAppStore.getState();
 
         chatList?.getGroups();
-        
+
         if (chatData?.chatId === message.groupId) {
           addMessage(message);
         }
@@ -132,23 +141,29 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
+      // Register event handlers
       socket.current.on("memberLeft", handleMemberLeaving);
       socket.current.on("groupDeleted", handleGroupDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
       socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 
-      disconnect = () => {
+      // Cleanup function
+      return () => {
         if (socket.current) {
-          socket.current.off("memberLeft", handleMemberLeaving);
-          socket.current.off("groupDeleted", handleGroupDelete);
-          socket.current.off("receiveMessage", handleReceiveMessage);
-          socket.current.off("receiveGroupMessage", handleReceiveGroupMessage);
+          // Remove all event listeners
+          socket.current.off("connect");
+          socket.current.off("connect_error");
+          socket.current.off("disconnect");
+          socket.current.off("memberLeft");
+          socket.current.off("groupDeleted");
+          socket.current.off("receiveMessage");
+          socket.current.off("receiveGroupMessage");
+
+          // Disconnect socket
           socket.current.disconnect();
         }
       };
     }
-
-    return disconnect;
   }, [userInfo, addMessage]);
 
   return (

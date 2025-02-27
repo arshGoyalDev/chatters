@@ -14,7 +14,6 @@ import { apiClient } from "@/lib/api-client";
 import { authErrors } from "@/utils/errors";
 
 import useAppStore from "@/store";
-import Link from "next/link";
 
 const SignUpPage = () => {
   const router = useRouter();

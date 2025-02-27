@@ -14,9 +14,12 @@ import { UserInfo } from "@/utils/types";
 
 import { useRouter } from "next/navigation";
 
+import { useError } from "@/context";
+
 const NewChatModal = () => {
   const router = useRouter();
   const { setChatData, setChatType } = useAppStore();
+  const errorContext = useError();
 
   const [searchValue, setSearchValue] = useState("");
   const [searchedContacts, setSearchedContacts] = useState<[UserInfo] | null>(
@@ -41,7 +44,7 @@ const NewChatModal = () => {
           }
         }
       } catch (error) {
-        console.error(error);
+        errorContext?.setErrorMessage("Failed to search contacts");
       }
     }, 500);
 

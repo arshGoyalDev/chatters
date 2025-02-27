@@ -7,6 +7,8 @@ import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
 
 import FileDisplay from "./FileDisplay";
 
+import { useError } from "@/context";
+
 const SelectFileMenu = ({
   setFileMenu,
   filePath,
@@ -17,6 +19,8 @@ const SelectFileMenu = ({
   setFilePath: Dispatch<SetStateAction<string>>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const errorContext = useError();
 
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
@@ -43,7 +47,7 @@ const SelectFileMenu = ({
         }
       }
     } catch (error) {
-      console.log(error);
+      errorContext?.setErrorMessage("Failed to upload file");
     }
   };
 

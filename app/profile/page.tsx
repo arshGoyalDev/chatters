@@ -16,9 +16,12 @@ import {
 
 import { useRouter } from "next/navigation";
 
+import { useError } from "@/context";
+
 const ProfilePage = () => {
   const router = useRouter();
   const { userInfo, setUserInfo } = useAppStore();
+  const errorContext = useError();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -104,7 +107,7 @@ const ProfilePage = () => {
           setProfilePic(response.data.user.profilePic);
         }
       } catch (error) {
-        console.error(error);
+        errorContext?.setErrorMessage("Failed to update profile picture");
       }
     }
   };
@@ -123,7 +126,7 @@ const ProfilePage = () => {
         setUserInfo(newUserInfo);
       }
     } catch (error) {
-      console.error(error);
+      errorContext?.setErrorMessage("Failed to delete profile picture");
     }
   };
 

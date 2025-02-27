@@ -10,14 +10,18 @@ import {
   HOST,
   REMOVE_GROUP_PIC_ROUTE,
 } from "@/utils/constants";
-
 import { apiClient } from "@/lib/api-client";
+
 import { useRouter } from "next/navigation";
+
 import useAppStore from "@/store";
+
+import { useError } from "@/context";
 
 const NewGroupChatModal = () => {
   const router = useRouter();
   const { setChatType, setChatData } = useAppStore();
+  const errorContext = useError();
 
   const [selectedContacts, setSelectedContacts] = useState<UserInfo[] | null>(
     null
@@ -54,7 +58,7 @@ const NewGroupChatModal = () => {
           setGroupPic(response.data.groupPic);
         }
       } catch (error) {
-        console.error(error);
+        errorContext?.setErrorMessage("Failed to update group picture");
       }
     }
   };
@@ -75,7 +79,7 @@ const NewGroupChatModal = () => {
         setGroupPic("");
       }
     } catch (error) {
-      console.error(error);
+      errorContext?.setErrorMessage("Failed to delete group picture");
     }
   };
 
@@ -111,7 +115,7 @@ const NewGroupChatModal = () => {
         router.push("/chat");
       }
     } catch (error) {
-      console.log(error);
+      errorContext?.setErrorMessage("Failed to create group");
     }
   };
 
