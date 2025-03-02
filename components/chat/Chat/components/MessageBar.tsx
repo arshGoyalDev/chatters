@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -10,7 +10,7 @@ import SelectFileMenu from "./SelectFileMenu";
 
 const MessageBar = () => {
   const socket = useSocket();
-  const { chatType, chatData, userInfo, messages } = useAppStore();
+  const { chatData, userInfo, messages } = useAppStore();
 
   const [message, setMessage] = useState("");
   const [fileMenu, setFileMenu] = useState(false);
@@ -22,22 +22,13 @@ const MessageBar = () => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (chatType === "personal" && (filePath !== "" || message !== "")) {
+    if (filePath !== "" || message !== "") {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
         content: message ? message : "",
-        recipient: chatData?.chatMembers[0]._id,
+        recipient: chatData?._id,
         fileUrl: filePath !== "" ? filePath : "",
         messageType: filePath ? "file" : "text",
-      });
-    }
-    if (chatType === "group" && (filePath !== "" || message !== "")) {
-      socket?.socket?.emit("sendGroupMessage", {
-        sender: userInfo._id,
-        content: message ? message : "",
-        fileUrl: filePath !== "" ? filePath : "",
-        messageType: filePath ? "file" : "text",
-        groupId: chatData?.chatId,
       });
     }
 

@@ -11,6 +11,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
+import { useEffect } from "react";
 
 const Message = ({ message }: { message: Message }) => {
   const { userInfo } = useAppStore();
@@ -42,21 +43,25 @@ const Message = ({ message }: { message: Message }) => {
     }
   };
 
+  useEffect(() => {
+    // console.log(message);
+  }, [])
+
   return (
     <div
       className={`flex flex-col gap-2 ${
-        userInfo._id === message.sender ? "items-end" : "items-start"
+        userInfo._id === message.sender._id ? "items-end" : "items-start"
       }`}
     >
       {message.fileUrl && (
         <div
           className={`flex gap-2 items-end ${
-            userInfo._id !== message.sender ? "flex-row" : "flex-row-reverse"
+            userInfo._id !== message.sender._id ? "flex-row" : "flex-row-reverse"
           }`}
         >
           <div
             className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
-              userInfo._id === message.sender
+              userInfo._id === message.sender._id
                 ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
                 : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
@@ -66,14 +71,14 @@ const Message = ({ message }: { message: Message }) => {
           <button
             onClick={downloadFile}
             className={`p-0.5 rounded-lg border-2 ${
-              userInfo._id === message.sender
+              userInfo._id === message.sender._id
                 ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
                 : "bg-primary bg-opacity-5 border-primary border-opacity-20"
             }`}
           >
             <span
               className={`${
-                userInfo._id === message.sender
+                userInfo._id === message.sender._id
                   ? "stroke-white"
                   : "stroke-primary"
               }`}
@@ -111,7 +116,7 @@ const Message = ({ message }: { message: Message }) => {
       {message.content && (
         <div
           className={`relative max-w-[80%] lg:max-w-[60%] leading-6 ${
-            userInfo._id !== message.sender
+            userInfo._id !== message.sender._id
               ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
               : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
           } py-3 px-6 text-lg rounded-lg break-words border-2`}

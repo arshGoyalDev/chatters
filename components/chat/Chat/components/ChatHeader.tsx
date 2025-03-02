@@ -12,14 +12,13 @@ const ChatHeader = ({
   chatInfoVisible: boolean;
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { chatType, chatData, setChatType, setChatData } = useAppStore();
+  const { chatData, setChatData, userInfo } = useAppStore();
 
   return (
     <header className="flex items-center gap-4 justify-between py-6 px-5 border-b-2 border-zinc-900">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
-            setChatType(null);
             setChatData(null);
           }}
           className="md:hidden"
@@ -44,9 +43,23 @@ const ChatHeader = ({
         </button>
         <div className="flex items-center gap-4 md:gap-6">
           <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden">
-            {chatData?.chatPic ? (
+            {(
+              chatData?.chatType === "personal"
+                ? userInfo._id === chatData.chatAdmin._id
+                  ? chatData.chatMembers[0].profilePic
+                  : chatData.chatAdmin.profilePic
+                : chatData?.chatPic
+            ) ? (
               <img
-                src={`${HOST}/${chatData?.chatPic}`}
+                src={
+                  chatData?.chatType === "personal"
+                    ? `${HOST}/${
+                        userInfo._id === chatData.chatAdmin._id
+                          ? chatData.chatMembers[0].profilePic
+                          : chatData.chatAdmin.profilePic
+                      }`
+                    : `${HOST}/${chatData?.chatPic}`
+                }
                 alt={chatData?.chatName}
               />
             ) : (
@@ -77,9 +90,15 @@ const ChatHeader = ({
           </div>
 
           <div>
-            <h2 className="font-bold text-3xl">{chatData?.chatName}</h2>
+            <h2 className="font-bold text-3xl">
+              {chatData?.chatType === "personal"
+                ? userInfo._id === chatData?.chatAdmin._id
+                  ? `${chatData?.chatMembers[0].firstName} ${chatData?.chatMembers[0].lastName}`
+                  : `${chatData?.chatAdmin.firstName} ${chatData?.chatAdmin.lastName}`
+                : chatData?.chatName}
+            </h2>
             <p>
-              {chatType === "personal" &&
+              {chatData?.chatType === "personal" &&
                 (chatData?.chatMembers[0].userOnline
                   ? "Online"
                   : chatData?.chatMembers[0].status)}

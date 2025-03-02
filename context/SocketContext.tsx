@@ -16,9 +16,9 @@ import { io, Socket } from "socket.io-client";
 import { HOST } from "@/utils/constants";
 
 import {
-  ChatData,
-  Group,
-  GroupMessage,
+  // ChatData,
+  // Group,
+  // GroupMessage,
   Message,
   SocketContextType,
 } from "@/utils/types";
@@ -52,100 +52,78 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       });
 
       const handleReceiveMessage = (message: Message) => {
-        const { chatData, chatType } = useAppStore.getState();
-
-        if (
-          !message.sender ||
-          !message.recipient ||
-          typeof message.sender === "string" ||
-          typeof message.recipient === "string"
-        ) {
-          return;
-        }
-
-        const isRelevantChat =
-          chatData?.chatMembers[0]._id === message.sender._id ||
-          chatData?.chatMembers[0]._id === message.recipient._id;
-
-        chatList?.getContacts();
-
-        if (isRelevantChat && chatType === "personal") {
-          addMessage(message);
-        }
-      };
-
-      const handleReceiveGroupMessage = (message: GroupMessage) => {
         const { chatData } = useAppStore.getState();
 
-        chatList?.getGroups();
+        const isCurrentChat = chatData?._id === message.recipient;
 
-        if (chatData?.chatId === message.groupId) {
+        chatList?.getChats();
+        
+        if (isCurrentChat) {
           addMessage(message);
         }
       };
 
-      const handleGroupDelete = (groupDetails: {
-        groupId: string;
-        groupName: string;
-        groupAdmin: string;
-      }) => {
-        const { chatData, setChatData, setChatType } = useAppStore.getState();
+      // const handleGroupDelete = (groupDetails: {
+      //   groupId: string;
+      //   groupName: string;
+      //   groupAdmin: string;
+      // }) => {
+      //   const { chatData, setChatData, setChatType } = useAppStore.getState();
 
-        if (chatData?.chatId === groupDetails.groupId) {
-          setChatData(null);
-          setChatType(null);
-        }
+      //   if (chatData?.chatId === groupDetails.groupId) {
+      //     setChatData(null);
+      //     setChatType(null);
+      //   }
 
-        chatList?.getGroups();
+      //   chatList?.getGroups();
 
-        alert(
-          `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
-        );
-      };
+      //   alert(
+      //     `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
+      //   );
+      // };
 
-      const handleMemberLeaving = (data: {
-        leavingMemberId: string;
-        messageData: Message;
-        updatedGroup: Group;
-      }) => {
-        const { chatData, setChatData, setChatType } = useAppStore.getState();
-        const { leavingMemberId, messageData, updatedGroup } = data;
+      // const handleMemberLeaving = (data: {
+      //   leavingMemberId: string;
+      //   messageData: Message;
+      //   updatedGroup: Group;
+      // }) => {
+      //   const { chatData, setChatData, setChatType } = useAppStore.getState();
+      //   const { leavingMemberId, messageData, updatedGroup } = data;
 
-        chatList?.getGroups();
+      //   chatList?.getGroups();
 
-        if (
-          userInfo._id === leavingMemberId &&
-          chatData?.chatId === updatedGroup._id
-        ) {
-          setChatData(null);
-          setChatType(null);
-        }
+      //   if (
+      //     userInfo._id === leavingMemberId &&
+      //     chatData?.chatId === updatedGroup._id
+      //   ) {
+      //     setChatData(null);
+      //     setChatType(null);
+      //   }
 
-        if (
-          userInfo._id !== leavingMemberId &&
-          chatData?.chatId === updatedGroup._id
-        ) {
-          const newChat: ChatData = {
-            chatName: updatedGroup.groupName,
-            chatPic: updatedGroup.groupPic,
-            chatStatus: updatedGroup.groupDescription,
-            chatMembers: updatedGroup.groupMembers,
-            chatId: updatedGroup._id,
-            chatAdmin: updatedGroup.groupAdmin,
-            chatUpdatedAt: updatedGroup.updatedAt,
-            chatCreatedAt: updatedGroup.createdAt,
-          };
+      //   if (
+      //     userInfo._id !== leavingMemberId &&
+      //     chatData?.chatId === updatedGroup._id
+      //   ) {
+      //     const newChat: ChatData = {
+      //       chatName: updatedGroup.groupName,
+      //       chatPic: updatedGroup.groupPic,
+      //       chatStatus: updatedGroup.groupDescription,
+      //       chatMembers: updatedGroup.groupMembers,
+      //       chatId: updatedGroup._id,
+      //       chatAdmin: updatedGroup.groupAdmin,
+      //       chatUpdatedAt: updatedGroup.updatedAt,
+      //       chatCreatedAt: updatedGroup.createdAt,
+      //     };
 
-          setChatData(newChat);
-          addMessage(messageData);
-        }
-      };
+      //     setChatData(newChat);
+      //     addMessage(messageData);
+      //   }
+      // };
 
       // Register event handlers
-      socket.current.on("memberLeft", handleMemberLeaving);
-      socket.current.on("groupDeleted", handleGroupDelete);
+      // socket.current.on("memberLeft", handleMemberLeaving);
+      // socket.current.on("groupDeleted", handleGroupDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
-      socket.current.on("receiveGroupMessage", handleReceiveGroupMessage);
 
       // Cleanup function
       return () => {
@@ -154,10 +132,9 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           socket.current.off("connect");
           socket.current.off("connect_error");
           socket.current.off("disconnect");
-          socket.current.off("memberLeft");
-          socket.current.off("groupDeleted");
+          // socket.current.off("memberLeft");
+          // socket.current.off("groupDeleted");
           socket.current.off("receiveMessage");
-          socket.current.off("receiveGroupMessage");
 
           // Disconnect socket
           socket.current.disconnect();

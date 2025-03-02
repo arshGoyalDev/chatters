@@ -3,12 +3,12 @@ import { useRef, useState } from "react";
 
 import { ModalHeader, SelectMultiContact } from "../components";
 
-import { ChatData, UserInfo } from "@/utils/types";
+import { UserInfo } from "@/utils/types";
 import {
-  ADD_GROUP_PIC_ROUTE,
-  CREATE_GROUP_ROUTE,
+  ADD_CHAT_PIC_ROUTE,
+  CREATE_GROUP_CHAT_ROUTE,
   HOST,
-  REMOVE_GROUP_PIC_ROUTE,
+  REMOVE_CHAT_PIC_ROUTE,
 } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
 
@@ -20,7 +20,7 @@ import { useError } from "@/context";
 
 const NewGroupChatModal = () => {
   const router = useRouter();
-  const { setChatType, setChatData } = useAppStore();
+  const { setChatData } = useAppStore();
   const errorContext = useError();
 
   const [selectedContacts, setSelectedContacts] = useState<UserInfo[] | null>(
@@ -47,15 +47,15 @@ const NewGroupChatModal = () => {
 
     if (file) {
       const formData = new FormData();
-      formData.append("group-pic", file);
+      formData.append("chat-pic", file);
 
       try {
-        const response = await apiClient.post(ADD_GROUP_PIC_ROUTE, formData, {
+        const response = await apiClient.post(ADD_CHAT_PIC_ROUTE, formData, {
           withCredentials: true,
         });
 
         if (response.status === 200) {
-          setGroupPic(response.data.groupPic);
+          setGroupPic(response.data.chatPic);
         }
       } catch (error) {
         errorContext?.setErrorMessage("Failed to update group picture");
@@ -66,7 +66,7 @@ const NewGroupChatModal = () => {
   const deleteGroupPic = async () => {
     try {
       const response = await apiClient.post(
-        REMOVE_GROUP_PIC_ROUTE,
+        REMOVE_CHAT_PIC_ROUTE,
         {
           fileName: groupPic,
         },
@@ -86,32 +86,20 @@ const NewGroupChatModal = () => {
   const createGroup = async () => {
     try {
       const response = await apiClient.post(
-        CREATE_GROUP_ROUTE,
+        CREATE_GROUP_CHAT_ROUTE,
         {
-          groupName,
-          groupDescription,
-          groupPic,
-          groupMembers: selectedContacts,
+          chatName: groupName,
+          chatDescription: groupDescription,
+          chatPic: groupPic,
+          chatMembers: selectedContacts,
         },
         { withCredentials: true }
       );
 
-      const { group } = response.data;
+      const { chat } = response.data;
 
       if (response.status === 201) {
-        const newChatData: ChatData = {
-          chatName: group.groupName,
-          chatPic: group.groupPic,
-          chatStatus: group.groupDescription,
-          chatMembers: group.groupMembers,
-          chatAdmin: group.groupAdmin,
-          chatCreatedAt: group.createdAt,
-          chatUpdatedAt: group.updatedAt,
-          chatId: group._id,
-        };
-
-        setChatData(newChatData);
-        setChatType("group");
+        setChatData(chat);
         router.push("/chat");
       }
     } catch (error) {
@@ -295,7 +283,7 @@ const NewGroupChatModal = () => {
                 type="file"
                 ref={fileUploadRef}
                 onChange={handleImageChange}
-                name="group-pic"
+                name="chat-pic"
                 accept=".png, .jpg, .svg, .jpeg, .webp"
                 className="absolute hidden top-0 left-0 w-full h-full"
               />

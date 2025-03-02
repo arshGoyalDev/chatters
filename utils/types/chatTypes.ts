@@ -1,51 +1,25 @@
 import { UserInfo } from "./authTypes";
-
-interface ChatData {
-  chatName: string;
-  chatPic: string;
-  chatStatus: string;
-  chatMembers: UserInfo[];
-  chatAdmin?: UserInfo;
-  chatCreatedAt?: Date;
-  chatUpdatedAt?: Date;
-  chatId?: string
-}
-
 interface Message {
   content: string;
   fileUrl: string;
   messageType: string;
-  recipient: string | UserInfo;
-  sender: string | UserInfo;
+  recipient: string;
+  sender: UserInfo;
   timeStamp: string;
   _id: string;
 }
 
-interface GroupMessage extends Message {
-  sender: UserInfo;
-  groupId?: string;
-}
-
-
-interface PersonalContact {
+interface Chat {
   _id: string;
-  lastMessageSender: string;
-  lastFile: string | null;
-  lastMessage: string | null;
-  lastMessageTime: string;
-  userInfo: UserInfo;
-}
-
-interface Group {
-  _id: string;
-  groupName: string;
-  groupDescription: string;
-  groupPic: string;
+  chatType: string;
+  chatName: string;
+  chatDescription: string;
+  chatPic: string;
   updatedAt: Date;
   createdAt: Date;
-  messages: [GroupMessage] | [];
-  groupAdmin: UserInfo;
-  groupMembers: UserInfo[];
+  messages: [Message] | [];
+  chatAdmin: UserInfo;
+  chatMembers: UserInfo[];
 }
 
-export type { ChatData, Message, PersonalContact, Group, GroupMessage };
+export type { Message, Chat };

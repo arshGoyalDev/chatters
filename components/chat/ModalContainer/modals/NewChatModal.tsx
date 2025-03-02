@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import { ModalHeader } from "../components";
 
 import { apiClient } from "@/lib/api-client";
-import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
+import {
+  CREATE_PERSONAL_CHAT_ROUTE,
+  HOST,
+  SEARCH_CONTACT_ROUTE,
+} from "@/utils/constants";
 
 import useAppStore from "@/store";
 
@@ -18,7 +22,7 @@ import { useError } from "@/context";
 
 const NewChatModal = () => {
   const router = useRouter();
-  const { setChatData, setChatType } = useAppStore();
+  const { setChatData } = useAppStore();
   const errorContext = useError();
 
   const [searchValue, setSearchValue] = useState("");
@@ -51,16 +55,21 @@ const NewChatModal = () => {
     return () => clearTimeout(searchContacts);
   }, [searchValue]);
 
-  const selectContact = (contact: UserInfo) => {
-    router.push("/chat");
+  const selectContact = async (contact: UserInfo) => {
+    try {
+      const response = await apiClient.post(
+        CREATE_PERSONAL_CHAT_ROUTE,
+        { chatMemberId: contact._id, chatMemberFirstName: contact.firstName },
+        { withCredentials: true }
+      );
 
-    setChatType("personal");
-    setChatData({
-      chatName: `${contact.firstName} ${contact.lastName}`,
-      chatPic: contact.profilePic,
-      chatStatus: contact.status,
-      chatMembers: [contact],
-    });
+      if (response.status === 201) {
+        setChatData(response.data.chat);
+        router.push("/chat");
+      }
+    } catch (error) {
+      errorContext?.setErrorMessage("Failed to start a new personal chat");
+    }
   };
 
   return (

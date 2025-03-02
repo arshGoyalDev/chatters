@@ -12,7 +12,7 @@ const MessagesContainer = ({
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, chatType } = useAppStore();
+  const { messages, chatData } = useAppStore();
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const MessagesContainer = ({
         } 2xl:px-0`}
       >
         {messages.map((message) => {
-          return chatType === "personal" ? (
+          return chatData?.chatType === "personal" ? (
             <Message key={message._id} message={message} />
           ) : (
             <GroupMessage key={message._id} message={message} />

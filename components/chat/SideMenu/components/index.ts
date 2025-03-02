@@ -1,5 +1,4 @@
 import UserMenu from "./UserMenu";
-import PersonalContacts from "./PersonalContacts";
-import GroupsList from "./GroupsList";
+import ChatsList from "./ChatsList";
 
-export { UserMenu, PersonalContacts,GroupsList };
+export { UserMenu, ChatsList };

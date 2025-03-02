@@ -18,7 +18,7 @@ const ChatInfo = ({
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
   const socket = useSocket();
-  const { chatData, chatType, messages, userInfo, setChatData, setChatType } =
+  const { chatData, messages, userInfo, } =
     useAppStore();
   const [filesLength, setFilesLength] = useState(0);
 
@@ -27,7 +27,6 @@ const ChatInfo = ({
     messages.map((message) => {
       if (message.messageType === "file") {
         count++;
-        // setFilesLength(count);
       }
     });
 
@@ -35,12 +34,12 @@ const ChatInfo = ({
   }, [messages]);
 
   const deleteGroup = async () => {
-    socket?.socket?.emit("deleteGroup", chatData?.chatId);
+    socket?.socket?.emit("deleteGroup", chatData?._id);
   };
 
   const leaveGroup = async () => {
     socket?.socket?.emit("leaveGroup", {
-      groupId: chatData?.chatId,
+      groupId: chatData?._id,
       leavingMember: userInfo,
     });
   };
@@ -79,9 +78,23 @@ const ChatInfo = ({
       <div className="flex flex-col gap-6 w-full px-12">
         <div className="flex items-center flex-col gap-6">
           <div className="w-52 h-52 rounded-xl overflow-hidden">
-            {chatData?.chatPic ? (
+            {(
+              chatData?.chatType === "personal"
+                ? userInfo._id === chatData.chatAdmin._id
+                  ? chatData.chatMembers[0].profilePic
+                  : chatData.chatAdmin.profilePic
+                : chatData?.chatPic
+            ) ? (
               <img
-                src={`${HOST}/${chatData?.chatPic}`}
+                src={
+                  chatData?.chatType === "personal"
+                    ? `${HOST}/${
+                        userInfo._id === chatData.chatAdmin._id
+                          ? chatData.chatMembers[0].profilePic
+                          : chatData.chatAdmin.profilePic
+                      }`
+                    : `${HOST}/${chatData?.chatPic}`
+                }
                 alt={chatData?.chatName}
               />
             ) : (
@@ -111,23 +124,31 @@ const ChatInfo = ({
             )}
           </div>
           <h2 className="px-10 font-bold text-4xl text-center">
-            {chatData?.chatName}
+            {chatData?.chatType === "personal"
+              ? userInfo._id === chatData.chatAdmin._id
+                ? `${chatData.chatMembers[0].firstName} ${chatData.chatMembers[0].lastName}`
+                : `${chatData.chatAdmin.firstName} ${chatData.chatAdmin.lastName}`
+              : chatData?.chatName}
           </h2>
         </div>
 
         <div className="flex flex-col gap-4">
           <div>
             <h2 className="text-zinc-600 font-bold uppercase">
-              {chatType === "personal" ? "status" : "description"}
+              {chatData?.chatType === "personal" ? "status" : "description"}
             </h2>
             <Markdown
               remarkPlugins={[remarkGfm]}
               className="font-semibold mt-1"
             >
-              {chatData?.chatStatus}
+              {chatData?.chatType === "personal"
+                ? userInfo._id === chatData.chatAdmin._id
+                  ? chatData.chatMembers[0].status
+                  : chatData.chatAdmin.status
+                : chatData?.chatDescription}
             </Markdown>
           </div>
-          {chatType === "personal" && (
+          {chatData?.chatType === "personal" && (
             <div>
               <h2 className="text-zinc-600 font-bold uppercase">Email</h2>
               <p className="font-semibold mt-1">
@@ -153,7 +174,7 @@ const ChatInfo = ({
           </div>
         )}
 
-        {chatType === "group" && (
+        {chatData?.chatType === "group" && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <h2 className="text-zinc-600 font-bold uppercase">Group Admin</h2>
@@ -178,7 +199,7 @@ const ChatInfo = ({
           </div>
         )}
 
-        {chatType === "group" && userInfo._id === chatData?.chatAdmin?._id && (
+        {chatData?.chatType === "group" && userInfo._id === chatData?.chatAdmin?._id && (
           <button
             onClick={deleteGroup}
             className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
@@ -211,7 +232,7 @@ const ChatInfo = ({
           </button>
         )}
 
-        {chatType === "group" && userInfo._id !== chatData?.chatAdmin?._id && (
+        {chatData?.chatType === "group" && userInfo._id !== chatData?.chatAdmin?._id && (
           <button
             onClick={leaveGroup}
             className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"

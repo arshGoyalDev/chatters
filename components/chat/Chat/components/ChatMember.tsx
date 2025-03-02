@@ -1,8 +1,18 @@
+import { useChatList, useError } from "@/context";
+
+import { apiClient } from "@/lib/api-client";
+import { UserInfo } from "@/utils/types";
+import {
+  CREATE_PERSONAL_CHAT_ROUTE,
+  GET_CHAT_DATA,
+  HOST,
+} from "@/utils/constants";
+
 import useAppStore from "@/store";
 
-import { HOST } from "@/utils/constants";
+import { useRouter } from "next/navigation";
 
-import { ChatData, UserInfo } from "@/utils/types";
+import { useEffect, useState } from "react";
 
 const ChatMember = ({
   member,
@@ -11,18 +21,58 @@ const ChatMember = ({
   member: UserInfo;
   admin?: boolean;
 }) => {
-  const { userInfo, setChatData, setChatType } = useAppStore();
+  const router = useRouter();
+  const errorContext = useError();
 
-  const startChat = () => {
-    const newChatData: ChatData = {
-      chatName: `${member.firstName} ${member.lastName}`,
-      chatStatus: member.status,
-      chatPic: member.profilePic,
-      chatMembers: [member],
-    };
+  const { userInfo, setChatData } = useAppStore();
+  const chatList = useChatList();
 
-    setChatType("personal");
-    setChatData(newChatData);
+  const [chatExists, setChatExists] = useState("");
+
+  useEffect(() => {
+    chatList?.chatsList.forEach((chat) => {
+      if (chat.chatType === "personal") {
+        if (
+          member._id === chat.chatAdmin._id ||
+          member._id === chat.chatMembers[0]._id
+        ) {
+          setChatExists(chat._id);
+        }
+      }
+    });
+  }, [chatList]);
+
+  const startChat = async () => {
+    if (chatExists !== "") {
+      try {
+        const response = await apiClient.post(
+          GET_CHAT_DATA,
+          { chatId: chatExists },
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          setChatData(response.data.chat);
+        }
+      } catch (error) {
+        errorContext?.setErrorMessage("Failed to retrieve chat data");
+      }
+    } else {
+      try {
+        const response = await apiClient.post(
+          CREATE_PERSONAL_CHAT_ROUTE,
+          { chatMemberId: member._id, chatMemberFirstName: member.firstName },
+          { withCredentials: true }
+        );
+
+        if (response.status === 201) {
+          setChatData(response.data.chat);
+          router.push("/chat");
+        }
+      } catch (error) {
+        errorContext?.setErrorMessage("Failed to start a new personal chat");
+      }
+    }
   };
 
   return (
@@ -62,7 +112,11 @@ const ChatMember = ({
             </div>
           )}
         </div>
-        <div className="font-semibold text-sm">{userInfo._id === member._id ? "You" : `${member.firstName} ${member.lastName}`}</div>
+        <div className="font-semibold text-sm">
+          {userInfo._id === member._id
+            ? "You"
+            : `${member.firstName} ${member.lastName}`}
+        </div>
       </div>
 
       <div className="flex gap-1 items-center">
