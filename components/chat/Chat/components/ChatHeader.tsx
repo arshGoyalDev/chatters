@@ -15,7 +15,7 @@ const ChatHeader = ({
   const { chatData, setChatData, userInfo } = useAppStore();
 
   return (
-    <header className="flex items-center gap-4 justify-between py-6 px-5 border-b-2 border-zinc-900">
+    <header className="flex items-center gap-4 justify-between py-5 px-5 border-b-2 border-zinc-900">
       <div className="flex items-center gap-2">
         <button
           onClick={() => {
@@ -42,7 +42,7 @@ const ChatHeader = ({
           </span>
         </button>
         <div className="flex items-center gap-4 md:gap-6">
-          <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden">
+          <div className="w-12 md:w-[52px] aspect-square rounded-lg overflow-hidden">
             {(
               chatData?.chatType === "personal"
                 ? userInfo._id === chatData.chatAdmin._id
@@ -90,7 +90,7 @@ const ChatHeader = ({
           </div>
 
           <div>
-            <h2 className="font-bold text-3xl">
+            <h2 className="font-bold text-2xl">
               {chatData?.chatType === "personal"
                 ? userInfo._id === chatData?.chatAdmin._id
                   ? `${chatData?.chatMembers[0].firstName} ${chatData?.chatMembers[0].lastName}`

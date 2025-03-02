@@ -111,10 +111,12 @@ const NewGroupChatModal = () => {
     <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[1000px] max-h-[80vh] lg:h-fit overflow-y-auto rounded-xl bg-zinc-900 shadow-2xl">
       <ModalHeader title="New Group Chat" />
 
-      <div className="flex flex-col lg:flex-row border-t-2 border-zinc-800">
-        <div className="flex flex-col gap-5 w-full border-b-2 lg:border-b-0 lg:border-r-2 border-zinc-800 px-6 py-6">
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col gap-3 w-full border-b-2 lg:border-b-0 lg:border-r-2 border-zinc-800 px-4 py-4">
           <div>
-            <h2 className="font-bold text-lg mb-2">Group Name</h2>
+            <h2 className="font-bold uppercase text-zinc-600 mb-2">
+              Group Name
+            </h2>
             <input
               type="text"
               name="group-name"
@@ -126,11 +128,13 @@ const NewGroupChatModal = () => {
                 setGroupName(e.target.value);
               }}
               placeholder="Group Name..."
-              className="w-full bg-zinc-800 px-3 py-3 bg-transparent rounded-lg placeholder:text-zinc-400"
+              className="w-full bg-zinc-800 px-3 py-2.5 bg-transparent rounded-lg placeholder:text-zinc-600"
             />
           </div>
           <div>
-            <h2 className="font-bold text-lg mb-2">Group Status</h2>
+            <h2 className="font-bold uppercase text-zinc-600 mb-2">
+              Group Status
+            </h2>
             <textarea
               name="group-status"
               id="group-status"
@@ -141,18 +145,20 @@ const NewGroupChatModal = () => {
                 setGroupDescription(e.target.value);
               }}
               placeholder="Group Description..."
-              className="w-full bg-zinc-800 px-3 py-3 bg-transparent rounded-lg placeholder:text-zinc-400 resize-none"
+              className="w-full bg-zinc-800 px-3 py-2.5 bg-transparent rounded-lg placeholder:text-zinc-600 resize-none"
             />
           </div>
 
           <div>
-            <h2 className="font-bold text-lg mb-3">Group Pic</h2>
-            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-700 rounded-xl overflow-hidden">
+            <h2 className="font-bold uppercase text-zinc-600 mb-2">
+              Group Pic
+            </h2>
+            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-800 rounded-xl overflow-hidden">
               <div
                 onMouseEnter={() => setButtonHovered(true)}
                 onMouseLeave={() => setButtonHovered(false)}
                 onClick={handleFileInputClick}
-                className="relative w-[160px] h-[160px] grid place-content-center"
+                className="relative w-32 aspect-square grid place-content-center"
               >
                 {buttonHovered && !groupPic && (
                   <div className="grid place-content-center absolute z-20 top-0 left-0 w-full h-full bg-zinc-950 bg-opacity-90 transition-all duration-300 cursor-pointer">
@@ -192,7 +198,7 @@ const NewGroupChatModal = () => {
                     }
                     <button
                       onClick={deleteGroupPic}
-                      className="absolute top-2 right-2 pt-1.5 p-2 bg-zinc-800 border-2 border-zinc-700 rounded-lg"
+                      className="absolute top-2 right-2 pt-1.5 p-2 bg-zinc-800 border-2 border-zinc-800 rounded-lg"
                     >
                       <span className="stroke-white">
                         <svg
@@ -244,11 +250,12 @@ const NewGroupChatModal = () => {
                     </button>
                   </div>
                 ) : (
-                  <span className="stroke-zinc-700 fill-zinc-800">
+                  <span className="stroke-zinc-800 fill-zinc-800">
                     <svg
-                      width="80"
-                      height="80"
+                      width="60"
+                      height="60"
                       viewBox="0 0 24 24"
+                      fill="#27272a"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
@@ -296,10 +303,10 @@ const NewGroupChatModal = () => {
           setSelectedContacts={setSelectedContacts}
         />
       </div>
-      <div className="flex justify-end border-t-2 border-zinc-800 px-6 py-5">
+      <div className="flex justify-end border-t-2 border-zinc-800 px-4 py-4">
         <button
           onClick={createGroup}
-          className="px-6 py-2 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300"
+          className="px-4 py-1.5 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300"
         >
           Create Group
         </button>

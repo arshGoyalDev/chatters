@@ -12,7 +12,7 @@ import { HOST } from "@/utils/constants";
 
 const ChatsList = () => {
   const chatList = useChatList();
-  const { setChatData, userInfo } = useAppStore();
+  const { setChatData, userInfo, chatData } = useAppStore();
 
   const openChat = (chat: Chat) => {
     setChatData(chat);
@@ -20,19 +20,19 @@ const ChatsList = () => {
 
   return (
     <div className="px-2 pt-2 pb-5">
-      <h2 className="text-zinc-700 uppercase font-bold px-2 pb-1">Chats</h2>
+      <h2 className="text-zinc-700 uppercase font-bold px-2 pb-3">Chats</h2>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         {chatList?.chatsList.length !== 0 ? (
           chatList?.chatsList.map((chat) => (
             <div
               key={chat._id}
               onClick={() => openChat(chat)}
-              className={`flex justify-between gap-2 items-center hover:bg-zinc-800 transition-all duration-300 py-2 pl-2 pr-2 rounded-lg hover:bg-opacity-40`}
+              className={`flex justify-between gap-2 items-center hover:bg-zinc-800 ${chatData?._id === chat._id && "bg-zinc-800"} transition-all duration-300 py-2 pl-2 pr-4 rounded-lg hover:bg-opacity-40`}
             >
               {chat.chatType === "personal" && (
                 <div className="flex gap-4 items-center">
-                  <div className="w-10 h-10 rounded-lg bg-zinc-800">
+                  <div className="w-9 h-9 rounded-lg bg-zinc-800">
                     {(
                       userInfo._id === chat.chatAdmin._id
                         ? chat.chatMembers[0].profilePic
@@ -75,7 +75,7 @@ const ChatsList = () => {
                       </div>
                     )}
                   </div>
-                  <h2 className="font-bold text-lg">
+                  <h2 className="font-semibold text-lg">
                     {userInfo._id === chat.chatAdmin._id
                       ? `${chat.chatMembers[0].firstName} ${chat.chatMembers[0].lastName}`
                       : `${chat.chatAdmin.firstName} ${chat.chatAdmin.lastName}`}
@@ -85,7 +85,7 @@ const ChatsList = () => {
 
               {chat.chatType === "group" && (
                 <div className="flex gap-4 items-center">
-                  <div className="w-10 h-10 rounded-lg bg-zinc-800">
+                  <div className="w-9 h-9 rounded-lg bg-zinc-800">
                     {chat.chatPic ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <div className="w-full h-full overflow-hidden rounded-lg">
@@ -120,10 +120,10 @@ const ChatsList = () => {
                       </div>
                     )}
                   </div>
-                  <h2 className="font-bold text-lg">{chat.chatName}</h2>
+                  <h2 className="font-semibold text-lg">{chat.chatName}</h2>
                 </div>
               )}
-              <div className="font-semibold text-base">
+              <div className="text-sm">
                 {moment(chat.updatedAt).format("LT")}
               </div>
             </div>

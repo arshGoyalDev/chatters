@@ -73,9 +73,9 @@ const NewChatModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] lg:h-[480px] rounded-xl bg-zinc-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-900 shadow-2xl">
       <ModalHeader title="New Chat" />
-      <div className="pb-4 px-5">
+      <div className="py-4 px-4">
         <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
           <input
             type="text"
@@ -123,7 +123,7 @@ const NewChatModal = () => {
                 key={contact.email}
                 className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
               >
-                <div className="w-16 h-16 rounded-lg overflow-hidden">
+                <div className="w-12 h-12 rounded-lg overflow-hidden">
                   {contact.profilePic ? (
                     <div className="w-full h-full rounded-lg overflow-hidden">
                       <img
@@ -158,8 +158,8 @@ const NewChatModal = () => {
                   )}
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
-                  <p>{contact.userOnline ? "Online" : contact.status}</p>
+                  <p className="font-semibold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
+                  <p className="text-sm">{contact.userOnline ? "Online" : contact.status}</p>
                 </div>
               </div>
             ))}

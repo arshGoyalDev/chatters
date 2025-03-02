@@ -36,9 +36,9 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center py-3 lg:pt-2 lg:pb-10 border-t-2 border-zinc-900 lg:border-0">
-      <div className=" flex items-center gap-3 md:gap-0 w-[95%] max-w-[900px] md:bg-zinc-900 md:pl-2 md:pr-4 rounded-xl">
-        <div className="py-1 w-full">
+    <div className="flex justify-center py-2 lg:pt-2 lg:pb-10 border-t-2 border-zinc-900 lg:border-0">
+      <div className=" flex items-center gap-3 md:gap-0 w-[95%] max-w-[800px] md:bg-zinc-900 md:pl-2 md:pr-4 rounded-xl">
+        <div className="pt-1 w-full">
           <textarea
             name="message-input"
             id="message-input"
@@ -47,7 +47,7 @@ const MessageBar = () => {
             autoFocus={true}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message..."
-            className="scrollbar-invisible w-full py-4 px-3 h-12 md:h-12 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
+            className="scrollbar-invisible w-full py-2 px-3 h-12 md:h-10 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
           />
         </div>
 
@@ -58,8 +58,8 @@ const MessageBar = () => {
           >
             <span className="stroke-white">
               <svg
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +86,8 @@ const MessageBar = () => {
           >
             <span>
               <svg
-                width="28"
-                height="28"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

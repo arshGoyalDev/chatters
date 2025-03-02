@@ -46,7 +46,7 @@ const ChatInfo = ({
 
   return (
     <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
-      <div className="flex justify-end w-full mb-10 px-10">
+      <div className="flex justify-end w-full mb-8 px-10">
         <div className="bg-zinc-800 rounded-lg">
           <button
             onClick={() => setChatInfoVisible(false)}
@@ -76,8 +76,8 @@ const ChatInfo = ({
         </div>
       </div>
       <div className="flex flex-col gap-6 w-full px-12">
-        <div className="flex items-center flex-col gap-6">
-          <div className="w-52 h-52 rounded-xl overflow-hidden">
+        <div className="flex items-center flex-col gap-4">
+          <div className="w-40 h-40 rounded-xl overflow-hidden">
             {(
               chatData?.chatType === "personal"
                 ? userInfo._id === chatData.chatAdmin._id
@@ -123,7 +123,7 @@ const ChatInfo = ({
               </div>
             )}
           </div>
-          <h2 className="px-10 font-bold text-4xl text-center">
+          <h2 className="px-10 font-bold text-2xl text-center">
             {chatData?.chatType === "personal"
               ? userInfo._id === chatData.chatAdmin._id
                 ? `${chatData.chatMembers[0].firstName} ${chatData.chatMembers[0].lastName}`
@@ -134,7 +134,7 @@ const ChatInfo = ({
 
         <div className="flex flex-col gap-4">
           <div>
-            <h2 className="text-zinc-600 font-bold uppercase">
+            <h2 className="text-zinc-600 text-sm font-bold uppercase">
               {chatData?.chatType === "personal" ? "status" : "description"}
             </h2>
             <Markdown
@@ -150,7 +150,7 @@ const ChatInfo = ({
           </div>
           {chatData?.chatType === "personal" && (
             <div>
-              <h2 className="text-zinc-600 font-bold uppercase">Email</h2>
+              <h2 className="text-zinc-600 text-sm font-bold uppercase">Email</h2>
               <p className="font-semibold mt-1">
                 {chatData?.chatMembers[0].email}
               </p>
@@ -160,7 +160,7 @@ const ChatInfo = ({
 
         {filesLength !== 0 && (
           <div className="flex flex-col gap-2">
-            <h2 className="text-zinc-600 font-bold uppercase">
+            <h2 className="text-zinc-600 text-sm font-bold uppercase">
               Files ( {filesLength} )
             </h2>
             <div className="flex flex-col gap-2">
@@ -177,7 +177,7 @@ const ChatInfo = ({
         {chatData?.chatType === "group" && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-zinc-600 font-bold uppercase">Group Admin</h2>
+              <h2 className="text-zinc-600 text-sm font-bold uppercase">Group Admin</h2>
               {chatData?.chatAdmin && (
                 <ChatMember
                   key={chatData?.chatAdmin?._id}
@@ -187,7 +187,7 @@ const ChatInfo = ({
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <h2 className="text-zinc-600 font-bold uppercase">
+              <h2 className="text-zinc-600 text-sm font-bold uppercase">
                 Group Members ( {chatData?.chatMembers.length} )
               </h2>
               <div className="flex flex-col gap-2">

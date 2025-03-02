@@ -119,12 +119,12 @@ const Message = ({ message }: { message: Message }) => {
             userInfo._id !== message.sender._id
               ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
               : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
-          } py-3 px-6 text-lg rounded-lg break-words border-2`}
+          } py-2 px-4 rounded-lg break-words border-2`}
         >
           <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
         </div>
       )}
-      <div className="text-sm pt-0.5 font-semibold text-zinc-500">
+      <div className="text-xs pt-0.5 font-semibold text-zinc-500">
         {moment(message.timeStamp).format("lll")}
       </div>
     </div>

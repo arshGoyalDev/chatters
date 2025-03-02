@@ -13,9 +13,9 @@ const UserMenu = () => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   return (
-    <div className="flex py-6 justify-between items-center px-4">
+    <div className="flex py-5 justify-between items-center px-4">
       <div className="flex items-center justify-center gap-4">
-        <div className="w-16 h-16 rounded-lg bg-zinc-800">
+        <div className="w-[52px] aspect-square rounded-lg bg-zinc-800">
           {userInfo.profilePic ? (
             // eslint-disable-next-line @next/next/no-img-element
             <div className="w-full h-full overflow-hidden rounded-lg">
@@ -52,8 +52,8 @@ const UserMenu = () => {
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <h2 className="text-xl font-bold">{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
-          <p className="text-zinc-300">
+          <h2 className="text-lg font-bold">{`${userInfo.firstName} ${userInfo.lastName}`}</h2>
+          <p className="text-zinc-300 text-sm">
             {userInfo.status.length > 24
               ? `${userInfo.status.substring(0, 24)}...`
               : userInfo.status}
