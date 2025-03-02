@@ -1,6 +1,6 @@
 import authRoutes from "./AuthRoutes.js";
 import contactRoutes from "./ContactRoutes.js";
 import messageRoutes from "./MessageRoutes.js";
-import groupRoutes from "./GroupRoutes.js";
+import chatRoutes from "./ChatRoutes.js";
 
-export { authRoutes, contactRoutes, messageRoutes, groupRoutes };
+export { authRoutes, contactRoutes, messageRoutes, chatRoutes };

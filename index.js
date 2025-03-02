@@ -14,7 +14,7 @@ import {
   authRoutes,
   contactRoutes,
   messageRoutes,
-  groupRoutes,
+  chatRoutes,
 } from "./routes/index.js";
 
 dotenv.config();
@@ -40,7 +40,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/message", messageRoutes);
-app.use("/api/group", groupRoutes);
+app.use("/api/chat", chatRoutes);
 
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
