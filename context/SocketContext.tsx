@@ -16,6 +16,7 @@ import { io, Socket } from "socket.io-client";
 import { HOST } from "@/utils/constants";
 
 import {
+  Chat,
   // ChatData,
   // Group,
   // GroupMessage,
@@ -30,7 +31,7 @@ const SocketContext = createContext<SocketContextType | null>(null);
 const useSocket = () => useContext(SocketContext);
 
 const SocketProvider = ({ children }: { children: ReactElement }) => {
-  const chatList = useChatList();
+  const { getChats } = useChatList();
   const socket = useRef<Socket | null>(null);
 
   const { userInfo, addMessage } = useAppStore();
@@ -56,73 +57,57 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
 
         const isCurrentChat = chatData?._id === message.recipient;
 
-        chatList?.getChats();
-        
+        getChats();
+
         if (isCurrentChat) {
           addMessage(message);
         }
       };
 
-      // const handleGroupDelete = (groupDetails: {
-      //   groupId: string;
-      //   groupName: string;
-      //   groupAdmin: string;
-      // }) => {
-      //   const { chatData, setChatData, setChatType } = useAppStore.getState();
+      const handleGroupChatDelete = (chat: {
+        chatId: string;
+        chatName: string;
+        chatAdmin: {
+          name: string;
+          _id: string;
+        };
+      }) => {
+        const { chatData, setChatData } = useAppStore.getState();
 
-      //   if (chatData?.chatId === groupDetails.groupId) {
-      //     setChatData(null);
-      //     setChatType(null);
-      //   }
+        getChats();
 
-      //   chatList?.getGroups();
+        if (chatData?._id === chat.chatId) {
+          setChatData(null);
+        }
 
-      //   alert(
-      //     `${groupDetails.groupName} was deleted by admin ${groupDetails.groupAdmin}`
-      //   );
-      // };
+        if (userInfo._id !== chat.chatAdmin._id) {
+          alert(`${chat.chatName} was deleted by admin ${chat.chatAdmin.name}`);
+        }
+      };
 
-      // const handleMemberLeaving = (data: {
-      //   leavingMemberId: string;
-      //   messageData: Message;
-      //   updatedGroup: Group;
-      // }) => {
-      //   const { chatData, setChatData, setChatType } = useAppStore.getState();
-      //   const { leavingMemberId, messageData, updatedGroup } = data;
+      const handleMemberLeaving = (data: {
+        leavingMemberId: string;
+        messageData: Message;
+        newChat: Chat;
+      }) => {
+        const { chatData, setChatData } = useAppStore.getState();
+        const { leavingMemberId, messageData, newChat } = data;
 
-      //   chatList?.getGroups();
+        getChats();
 
-      //   if (
-      //     userInfo._id === leavingMemberId &&
-      //     chatData?.chatId === updatedGroup._id
-      //   ) {
-      //     setChatData(null);
-      //     setChatType(null);
-      //   }
-
-      //   if (
-      //     userInfo._id !== leavingMemberId &&
-      //     chatData?.chatId === updatedGroup._id
-      //   ) {
-      //     const newChat: ChatData = {
-      //       chatName: updatedGroup.groupName,
-      //       chatPic: updatedGroup.groupPic,
-      //       chatStatus: updatedGroup.groupDescription,
-      //       chatMembers: updatedGroup.groupMembers,
-      //       chatId: updatedGroup._id,
-      //       chatAdmin: updatedGroup.groupAdmin,
-      //       chatUpdatedAt: updatedGroup.updatedAt,
-      //       chatCreatedAt: updatedGroup.createdAt,
-      //     };
-
-      //     setChatData(newChat);
-      //     addMessage(messageData);
-      //   }
-      // };
+        if (chatData?._id === newChat._id) {
+          if (userInfo._id === leavingMemberId) {
+            setChatData(null);
+          } else {
+            setChatData(newChat);
+            addMessage(messageData);
+          }
+        }
+      };
 
       // Register event handlers
-      // socket.current.on("memberLeft", handleMemberLeaving);
-      // socket.current.on("groupDeleted", handleGroupDelete);
+      socket.current.on("memberLeft", handleMemberLeaving);
+      socket.current.on("groupDeleted", handleGroupChatDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
 
       // Cleanup function
@@ -132,8 +117,8 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           socket.current.off("connect");
           socket.current.off("connect_error");
           socket.current.off("disconnect");
-          // socket.current.off("memberLeft");
-          // socket.current.off("groupDeleted");
+          socket.current.off("memberLeft");
+          socket.current.off("groupDeleted");
           socket.current.off("receiveMessage");
 
           // Disconnect socket

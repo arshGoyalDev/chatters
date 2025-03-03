@@ -18,8 +18,7 @@ const ChatInfo = ({
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
   const socket = useSocket();
-  const { chatData, messages, userInfo, } =
-    useAppStore();
+  const { chatData, messages, userInfo } = useAppStore();
   const [filesLength, setFilesLength] = useState(0);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ const ChatInfo = ({
 
   const leaveGroup = async () => {
     socket?.socket?.emit("leaveGroup", {
-      groupId: chatData?._id,
+      chatId: chatData?._id,
       leavingMember: userInfo,
     });
   };
@@ -150,7 +149,9 @@ const ChatInfo = ({
           </div>
           {chatData?.chatType === "personal" && (
             <div>
-              <h2 className="text-zinc-600 text-sm font-bold uppercase">Email</h2>
+              <h2 className="text-zinc-600 text-sm font-bold uppercase">
+                Email
+              </h2>
               <p className="font-semibold mt-1">
                 {chatData?.chatMembers[0].email}
               </p>
@@ -177,7 +178,9 @@ const ChatInfo = ({
         {chatData?.chatType === "group" && (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-zinc-600 text-sm font-bold uppercase">Group Admin</h2>
+              <h2 className="text-zinc-600 text-sm font-bold uppercase">
+                Group Admin
+              </h2>
               {chatData?.chatAdmin && (
                 <ChatMember
                   key={chatData?.chatAdmin?._id}
@@ -199,75 +202,77 @@ const ChatInfo = ({
           </div>
         )}
 
-        {chatData?.chatType === "group" && userInfo._id === chatData?.chatAdmin?._id && (
-          <button
-            onClick={deleteGroup}
-            className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
-          >
-            <span className="font-semibold text-primary">Delete Group</span>
-            <span className="stroke-primary">
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M19.97 10H3.96997V18C3.96997 21 4.96997 22 7.96997 22H15.97C18.97 22 19.97 21 19.97 18V10Z"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
-                  strokeWidth="1.5"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </button>
-        )}
+        {chatData?.chatType === "group" &&
+          userInfo._id === chatData?.chatAdmin?._id && (
+            <button
+              onClick={deleteGroup}
+              className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
+            >
+              <span className="font-semibold text-primary">Delete Group</span>
+              <span className="stroke-primary">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19.97 10H3.96997V18C3.96997 21 4.96997 22 7.96997 22H15.97C18.97 22 19.97 21 19.97 18V10Z"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+          )}
 
-        {chatData?.chatType === "group" && userInfo._id !== chatData?.chatAdmin?._id && (
-          <button
-            onClick={leaveGroup}
-            className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
-          >
-            <span className="font-semibold text-primary">Leave Group</span>
-            <span className="stroke-primary">
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M15 12H3.62"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </button>
-        )}
+        {chatData?.chatType === "group" &&
+          userInfo._id !== chatData?.chatAdmin?._id && (
+            <button
+              onClick={leaveGroup}
+              className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
+            >
+              <span className="font-semibold text-primary">Leave Group</span>
+              <span className="stroke-primary">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M15 12H3.62"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+          )}
       </div>
     </div>
   );

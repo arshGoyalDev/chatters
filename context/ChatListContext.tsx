@@ -4,9 +4,7 @@ import { apiClient } from "@/lib/api-client";
 
 import useAppStore from "@/store";
 
-import {
-  GET_CHATS_ROUTE,
-} from "@/utils/constants";
+import { GET_CHATS_ROUTE } from "@/utils/constants";
 
 import { Chat } from "@/utils/types";
 
@@ -19,16 +17,19 @@ import {
 } from "react";
 
 interface ChatListContextType {
-  chatsList: Chat[] | [];
+  chatsList: Chat[];
   getChats: () => void;
 }
 
-const ChatListContext = createContext<ChatListContextType | null>(null);
+const ChatListContext = createContext<ChatListContextType>({
+  chatsList: [],
+  getChats: () => {},
+});
 
 const useChatList = () => useContext(ChatListContext);
 
 const ChatListProvider = ({ children }: { children: ReactElement }) => {
-  const [chatsList, setChatsList] = useState<Chat[] | []>([]);
+  const [chatsList, setChatsList] = useState<Chat[]>([]);
   const { chatData, messages, userInfo } = useAppStore();
 
   const getChats = async () => {
@@ -53,9 +54,7 @@ const ChatListProvider = ({ children }: { children: ReactElement }) => {
   }, [chatData, messages, userInfo]);
 
   return (
-    <ChatListContext.Provider
-      value={{ chatsList, getChats }}
-    >
+    <ChatListContext.Provider value={{ chatsList, getChats }}>
       {children}
     </ChatListContext.Provider>
   );
