@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import useAppStore from "@/store";
 
-import { Input } from "@/components/inputs";
-
 import { apiClient } from "@/lib/api-client";
 import {
   ADD_PROFILE_PIC_ROUTE,
@@ -35,13 +33,13 @@ const ProfilePage = () => {
   const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const checkForErrors = () => {
-    if (!firstName && !lastName) {
-      setError("Either of firstName or lastName is required");
+    if (!firstName) {
+      setError("First name is required");
       return false;
-    } else {
-      setError("");
-      return true;
     }
+
+    setError("");
+    return true;
   };
 
   const updateProfile = async () => {
@@ -267,25 +265,47 @@ const ProfilePage = () => {
         <div className="flex flex-col gap-4 w-[80vw] max-w-[400px]">
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-bold">Name</h2>
-            <div className="flex flex-col gap-4">
-              <Input
+            <div className="relative flex flex-col gap-1">
+              <input
+                type="text"
                 value={firstName}
-                setValue={setFirstName}
-                type="first-name"
+                onChange={(e) => setFirstName(e.target.value)}
+                className={`py-4 px-4 w-full bg-transparent border-2 border-neutral-900 ${
+                  error
+                    ? "placeholder:text-red-600 text-red-600"
+                    : "placeholder:text-neutral-600 text-white"
+                } rounded-t-lg`}
+                autoComplete="off"
+                placeholder="first name"
               />
-
-              <Input
+              <input
+                type="text"
                 value={lastName}
-                setValue={setLastName}
-                type="last-name"
-                error={error}
+                onChange={(e) => setLastName(e.target.value)}
+                className="py-4 px-4 w-full bg-transparent border-2 border-neutral-900 rounded-b-lg placeholder:text-neutral-600 text-white"
+                autoComplete="off"
+                placeholder="last name"
               />
+              {error && (
+                <div className="absolute right-0 top-3 mt-4 flex items-center justify-center gap-2 text-sm text-center text-red-500">
+                  <div className="bg-neutral-900 py-1.5 pb-1 px-2 rounded-ss-lg">
+                    {error}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-bold">Status</h2>
-            <Input value={status} setValue={setStatus} type="status" />
+            <input
+              type="text"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="py-4 px-4 w-full bg-transparent border-2 border-neutral-900 placeholder:text-neutral-600 text-white rounded-lg"
+              autoComplete="off"
+              placeholder="status"
+            />{" "}
           </div>
           <button
             onClick={updateProfile}

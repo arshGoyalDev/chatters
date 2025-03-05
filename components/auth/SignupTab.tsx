@@ -61,9 +61,7 @@ const SignupTab = ({
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.status === 500) {
-        setErrorEmail("Internal Server Error");
-      }
+      setErrorEmail("Internal Server Error");
       setLoading(false);
     }
   };
@@ -130,7 +128,7 @@ const SignupTab = ({
           </button>
         </div>
 
-        <button className="py-4 px-4 font-bold w-full mt-1 text-black bg-neutral-100 rounded-b-lg">
+        <button className="py-4 px-4 font-bold w-full mt-1 text-black bg-primary rounded-b-lg">
           {loading ? (
             <span className="">signing up ...</span>
           ) : (

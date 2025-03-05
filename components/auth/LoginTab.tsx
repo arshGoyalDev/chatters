@@ -115,7 +115,7 @@ const LoginTab = ({
           </button>
         </div>
 
-        <button className="py-4 px-4 font-bold w-full mt-1 text-black bg-neutral-100 rounded-b-lg">
+        <button className="py-4 px-4 font-bold w-full mt-1 text-black bg-primary rounded-b-lg">
           {loading ? (
             <span className="">logging in...</span>
           ) : (
