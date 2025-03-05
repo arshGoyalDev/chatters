@@ -76,7 +76,7 @@ const SelectMultiContact = ({
 
   return (
     <div className="w-full py-6 px-6">
-      <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
+      <div className="flex gap-2 items-center border-2 border-zinc-800 rounded-lg px-3">
         <input
           type="text"
           name="search-people"
@@ -85,14 +85,14 @@ const SelectMultiContact = ({
           autoComplete="off"
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Search for people..."
-          className="w-full py-3 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
+          className="w-full py-2 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
         />
 
         <button className="p-1">
           <span className="stroke-white">
             <svg
-              width="22"
-              height="22"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

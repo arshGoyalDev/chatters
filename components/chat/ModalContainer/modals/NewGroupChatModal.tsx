@@ -128,7 +128,7 @@ const NewGroupChatModal = () => {
                 setGroupName(e.target.value);
               }}
               placeholder="Group Name..."
-              className="w-full bg-zinc-800 px-3 py-2.5 bg-transparent rounded-lg placeholder:text-zinc-600"
+              className="w-full bg-transparent px-3 py-2 border-2 border-zinc-800 rounded-md placeholder:text-zinc-600"
             />
           </div>
           <div>
@@ -145,7 +145,7 @@ const NewGroupChatModal = () => {
                 setGroupDescription(e.target.value);
               }}
               placeholder="Group Description..."
-              className="w-full bg-zinc-800 px-3 py-2.5 bg-transparent rounded-lg placeholder:text-zinc-600 resize-none"
+              className="w-full px-3 py-2 bg-transparent border-2 border-zinc-800 rounded-md placeholder:text-zinc-600 resize-none"
             />
           </div>
 
@@ -153,7 +153,7 @@ const NewGroupChatModal = () => {
             <h2 className="font-bold uppercase text-zinc-600 mb-2">
               Group Pic
             </h2>
-            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-800 rounded-xl overflow-hidden">
+            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-800 rounded-lg overflow-hidden">
               <div
                 onMouseEnter={() => setButtonHovered(true)}
                 onMouseLeave={() => setButtonHovered(false)}

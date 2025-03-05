@@ -16,7 +16,7 @@ const HomePage = () => {
       </div>
 
       <TransitionLink
-        href={"/sign-up"}
+        href={"/auth"}
         className="py-3 px-6 text-xl font-semibold bg-zinc-900 hover:bg-zinc-800 transition-all rounded-lg"
       >
         Get Started
