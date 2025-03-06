@@ -29,7 +29,6 @@ A Chat App for power users
 - Authentication using email and password
 
 - Realtime Chat
-- Message encryption
 - Send files as messages
 
 - ### Personal Chat
