@@ -1,4 +1,5 @@
-import SignupTab from "./SignupTab";
 import LoginTab from "./LoginTab";
+import SignupTab from "./SignupTab";
+import AuthCarousel from "./AuthCarousel";
 
-export { SignupTab, LoginTab };
+export { LoginTab, SignupTab, AuthCarousel };
