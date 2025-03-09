@@ -10,8 +10,8 @@ import ContextContainer from "@/context";
 import { HOST } from "@/utils/constants";
 
 const metadata: Metadata = {
-  title: "Chaters",
-  description: "Chaters - A Powerful online chat application",
+  title: "Chatters",
+  description: "Chatters - A Powerful online chat application",
   icons: {
     icon: `${HOST}/uploads/favicon.ico`
   }

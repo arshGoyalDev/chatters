@@ -1,4 +1,4 @@
-# Chaters
+# Chatters
 
 A Chat App for power users
 

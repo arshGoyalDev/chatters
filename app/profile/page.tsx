@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [status, setStatus] = useState("Hey, there I am using Chaters!");
+  const [status, setStatus] = useState("Hey, there I am using Chatters!");
 
   const [profilePic, setProfilePic] = useState("");
   const [error, setError] = useState("");

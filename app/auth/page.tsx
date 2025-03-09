@@ -27,8 +27,6 @@ const AuthPage = () => {
       </div>
 
       <div className="flex w-[85vw] max-w-[440px] xl:w-full xl:max-w-full mx-auto xl:mx-0 xl:pl-[20%] xl:pr-[30%] 2xl:pr-[35%] justify-center flex-col">
-        <h1 className="text-3xl sm:text-4xl">Welcome to Chatters</h1>
-
         {tab === "signup" && <SignupTab setTab={setTab} />}
         {tab === "login" && <LoginTab setTab={setTab} />}
       </div>

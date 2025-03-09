@@ -2,98 +2,59 @@
 
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/animations";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 
 const HomePage = () => {
-  const featuresRef = useRef(null);
-  const ctaRef = useRef(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth - 0.5,
-        y: e.clientY / window.innerHeight - 0.5,
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    gsap.fromTo(
-      ".feature-card",
-      { opacity: 0, y: 15 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.5,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: featuresRef.current,
-          start: "top 80%",
-        },
-      }
-    );
-
-    gsap.fromTo(
-      ".cta-content",
-      { opacity: 0, y: 15 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: ctaRef.current,
-          start: "top 80%",
-        },
-      }
-    );
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
   return (
-    <main className="min-h-screen bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white overflow-hidden">
-      <section
-        className="relative min-h-screen flex flex-col justify-center items-center px-4 md:px-20 lg:px-40 py-20"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(246,126,125,0.1),transparent_70%)]"></div>
-
-        {/* Subtle background elements with parallax effect */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
-            style={{
-              transform: `translate(${mousePosition.x * -8}px, ${
-                mousePosition.y * -8
-              }px)`,
-              transition: "transform 0.5s ease-out",
-            }}
-          ></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"
-            style={{
-              transform: `translate(${mousePosition.x * 8}px, ${
-                mousePosition.y * 8
-              }px)`,
-              transition: "transform 0.5s ease-out",
-            }}
-          ></div>
+    <main className="min-h-screen text-white">
+      <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-neutral-800 rounded-lg">
+        <div>
+          <span className="font-bold uppercase text-xl">Chatters</span>
         </div>
 
+        <div>
+          <TransitionLink
+            href="/auth"
+            className="flex items-center gap-2 bg-primary font-bold text-white py-2 px-4 rounded-lg"
+          >
+            <span>Get Started</span>
+            <span className="stroke-white">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.4301 5.92993L20.5001 11.9999L14.4301 18.0699"
+                  strokeWidth="3.0"
+                  strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M3.5 12H20.33"
+                  strokeWidth="3.0"
+                  strokeMiterlimit="10"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </TransitionLink>
+        </div>
+      </nav>
+
+      <section className="px-4 md:px-20 lg:px-40 py-16 xl:py-40">
         <div className="container mx-auto max-w-7xl z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="flex-1 text-center lg:text-left">
-              <h1 className="text-5xl md:text-7xl font-extrabold mb-6">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-primary">
-                  CHATTERS
+          <div className="flex flex-col  lg:flex-row items-center gap-12">
+            <div className="flex-1 text-center">
+              <h1 className="text-5xl md:text-7xl xl:text-8xl font-medium mb-10">
+                <span className="text-white from-white to-primary leading-[3.5rem] md:leading-[5rem] xl:leading-[7rem]">
+                  Welcome to a{" "}
+                  <span className="text-primary font-bold">relaxing</span>{" "}
+                  <br /> chat experience
                 </span>
               </h1>
 
@@ -117,7 +78,7 @@ const HomePage = () => {
                 .
               </p>
 
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+              <div className="flex flex-wrap gap-4 justify-center">
                 <TransitionLink
                   href="/auth"
                   className="py-3 px-8 text-lg font-semibold bg-primary hover:bg-primary/90 text-white rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
@@ -129,37 +90,18 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 flex justify-center">
-          <div className="animate-bounce">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-zinc-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </div>
+        <div className="w-full max-w-[1000px] mx-auto h-fit mt-20">
+          <img src={"/chat-app.png"} alt="chat app screenshot" />
         </div>
       </section>
 
-      <section
-        id="features"
-        ref={featuresRef}
-        className="py-20 px-4 bg-zinc-950/50"
-      >
+      <section id="features" className="py-20 px-4 bg-zinc-950/50">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 opacity-0 feature-card">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 feature-card">
               Awesome Features
             </h2>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto opacity-0 feature-card">
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto feature-card">
               Discover what makes Chatters the ultimate messaging platform
             </p>
           </div>
@@ -269,11 +211,9 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section ref={ctaRef} className="py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(246,126,125,0.15),transparent_70%)]"></div>
-
+      <section className="py-20 px-4 relative overflow-hidden">
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="cta-content bg-zinc-900/80 backdrop-blur-md p-8 md:p-12 rounded-2xl border border-zinc-800 text-center">
+          <div className="cta-content bg-zinc-900 p-8 md:p-12 rounded-2xl border border-zinc-800 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to start chatting?
             </h2>
@@ -292,13 +232,13 @@ const HomePage = () => {
         </div>
       </section>
 
-      <footer className="py-8 px-4 border-t border-zinc-800">
+      <footer className="py-8 px-4 bg-zinc-900">
         <div className="container mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-2xl font-bold">CHATTERS</div>
             <div className="text-zinc-500">
               {" "}
-              2024 Chatters. All rights reserved.
+              2025 Chatters. All rights reserved.
             </div>
           </div>
         </div>
