@@ -90,19 +90,30 @@ const ChatHeader = ({
           </div>
 
           <div>
-            <h2 className="font-bold text-2xl">
+            <h2 className="font-bold text-xl sm:text-2xl">
               {chatData?.chatType === "personal"
                 ? userInfo._id === chatData?.chatAdmin._id
                   ? `${chatData?.chatMembers[0].firstName} ${chatData?.chatMembers[0].lastName}`
                   : `${chatData?.chatAdmin.firstName} ${chatData?.chatAdmin.lastName}`
                 : chatData?.chatName}
             </h2>
-            <p>
+            <p className="sm:hidden">
               {chatData?.chatType === "personal" &&
                 (chatData?.chatMembers[0].userOnline
                   ? "Online"
+                  : chatData?.chatMembers[0].status.length > 15
+                  ? chatData?.chatMembers[0].status.slice(0, 15) + "..."
                   : chatData?.chatMembers[0].status)}
             </p>
+            <p className="hidden sm:block">
+              {chatData?.chatType === "personal" &&
+                (chatData?.chatMembers[0].userOnline
+                  ? "Online"
+                  : chatData?.chatMembers[0].status.length > 25
+                  ? chatData?.chatMembers[0].status.slice(0, 25) + "..."
+                  : chatData?.chatMembers[0].status)}
+            </p>
+
           </div>
         </div>
       </div>

@@ -37,14 +37,14 @@ const ChatsList = () => {
   }, [chatsList, tab]);
 
   return (
-    <div className="px-2 pt-2 pb-5">
-      <h2 className="text-zinc-700 uppercase font-bold px-2 pb-3">Chats</h2>
+    <div className="px-4 pt-2 pb-5">
+      <h2 className="text-zinc-700 uppercase font-bold pb-3">Chats</h2>
 
-      <div className="py-2 px-2 grid grid-cols-3 bg-zinc-950 rounded-md mb-4">
+      <div className="absolute md:static bottom-2 left-1/2 -translate-x-1/2 md:translate-x-0 py-2 px-2 w-[90%] md:w-full grid grid-cols-3 bg-zinc-900 md:bg-zinc-950 rounded-md mb-4">
         <button
           onClick={() => setTab("all")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "all" && "bg-zinc-900"
+            tab === "all" && "bg-zinc-950 md:bg-zinc-900"
           } rounded-md`}
         >
           All
@@ -52,7 +52,7 @@ const ChatsList = () => {
         <button
           onClick={() => setTab("personal")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "personal" && "bg-zinc-900"
+            tab === "personal" && "bg-zinc-950 md:bg-zinc-900"
           } rounded-md`}
         >
           Personal
@@ -60,7 +60,7 @@ const ChatsList = () => {
         <button
           onClick={() => setTab("group")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "group" && "bg-zinc-900"
+            tab === "group" && "bg-zinc-950 md:bg-zinc-900"
           } rounded-md`}
         >
           Groups
@@ -69,13 +69,16 @@ const ChatsList = () => {
 
       <div className="flex flex-col gap-2">
         {selectedChatList.length !== 0 ? (
-          selectedChatList.map((chat) => (
+          selectedChatList.map((chat, index) => (
             <div
               key={chat._id}
               onClick={() => openChat(chat)}
-              className={`flex justify-between gap-2 items-center hover:bg-zinc-800 ${
-                chatData?._id === chat._id && "bg-zinc-800"
-              } transition-all duration-300 py-2 pl-2 pr-4 rounded-lg hover:bg-opacity-40`}
+              className={`flex justify-between gap-2 items-center ${
+                chatData?._id === chat._id && "font-semibold"
+              } ${
+                index !== selectedChatList.length - 1 &&
+                "border-b-2 border-zinc-900 md:border-zinc-800"
+              } transition-all duration-300 py-3 pl-1 pr-2 hover:bg-opacity-40`}
             >
               <div className="flex gap-4 items-center">
                 <div className="w-9 h-9 rounded-lg bg-zinc-800">
@@ -125,7 +128,7 @@ const ChatsList = () => {
                     </div>
                   )}
                 </div>
-                <h2 className="font-semibold text-lg">
+                <h2 className="text-lg">
                   {chat.chatType === "personal"
                     ? userInfo._id === chat.chatAdmin._id
                       ? `${chat.chatMembers[0].firstName} ${chat.chatMembers[0].lastName}`
@@ -133,8 +136,7 @@ const ChatsList = () => {
                     : chat.chatName}
                 </h2>
               </div>
-              {/* )} */}
-              <div className="text-sm">
+              <div className="text-sm font-medium">
                 {moment(chat.updatedAt).format("LT")}
               </div>
             </div>

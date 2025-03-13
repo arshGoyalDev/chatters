@@ -58,7 +58,7 @@ const SettingsMenu = ({
   };
 
   return (
-    <div className="absolute top-[56px] -right-1 w-48 font-semibold flex flex-col rounded-lg bg-zinc-900 border-2 border-neutral-800 overflow-hidden">
+    <div className="z-10 absolute top-[56px] -right-1 w-48 font-semibold flex flex-col rounded-lg bg-zinc-900 border-2 border-neutral-800 overflow-hidden">
       <button
         onClick={() => handleLink("/chat?new-chat=true")}
         className="w-full flex items-center justify-between py-2.5 pl-4 pr-4 border-b-2 border-zinc-800 hover:bg-zinc-700 hover:bg-opacity-30"

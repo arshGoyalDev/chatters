@@ -91,7 +91,7 @@ const NewChatModal = () => {
         {searchedContacts ? (
           <div className="mt-4 h-[240px] lg:h-[320px] overflow-auto">
             {searchedContacts.map((contact: UserInfo) => (
-              <SearchedContact contact={contact} />
+              <SearchedContact key={contact._id} contact={contact} />
             ))}
           </div>
         ) : (
