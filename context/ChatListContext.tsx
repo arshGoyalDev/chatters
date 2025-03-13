@@ -42,8 +42,7 @@ const ChatListProvider = ({ children }: { children: ReactElement }) => {
         setChatsList(response.data.chats);
       }
     } catch (error) {
-      console.log(error);
-      console.error(error);
+      alert(error);
     }
   };
 

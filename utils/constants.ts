@@ -5,8 +5,8 @@ const SIGN_UP_ROUTE = `${AUTH_ROUTES}/sign-up`;
 const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
 const GET_USER_INFO_ROUTE = `${AUTH_ROUTES}/user-info`;
 const UPDATE_PROFILE_ROUTE = `${AUTH_ROUTES}/user-info`;
-const ADD_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-image`;
-const DELETE_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-image`;
+const ADD_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-pic`;
+const DELETE_PROFILE_PIC_ROUTE = `${AUTH_ROUTES}/profile-pic`;
 const LOGOUT_ROUTE = `${AUTH_ROUTES}/logout`;
 
 const CONTACT_ROUTES = "api/contact";

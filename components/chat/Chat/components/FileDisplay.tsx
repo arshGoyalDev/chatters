@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useState, useEffect, useRef } from "react";
-
 import { HOST } from "@/utils/constants";
+import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 
-const FileDisplay = ({ filePath }: { filePath: string }) => {
+const FileDisplay = ({ filePath, file }: { filePath: string; file?: File }) => {
   const currentAudio = useRef<HTMLAudioElement | null>(null);
 
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("file");
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
     setFileType("file");
@@ -16,26 +16,32 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
     checkForVideo();
     checkForAudio();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filePath]);
+  }, [fileName]);
+
+  useEffect(() => {
+    if (file) {
+      setFileName(file.name);
+    } else setFileName(filePath.split("/")[filePath.split("/").length - 1]);
+  }, [file]);
 
   const checkForImage = () => {
     const imageRegex =
       /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
-    if (imageRegex.test(filePath)) {
+    if (imageRegex.test(fileName)) {
       setFileType("image");
     }
   };
 
   const checkForVideo = () => {
     const videoRegex = /\.(mp4|ogg|webm)$/i;
-    if (videoRegex.test(filePath)) {
+    if (videoRegex.test(fileName)) {
       setFileType("video");
     }
   };
 
   const checkForAudio = () => {
     const audioRegex = /\.(mp3|wav|ogg)$/i;
-    if (audioRegex.test(filePath)) {
+    if (audioRegex.test(fileName)) {
       setFileType("audio");
     }
   };
@@ -93,7 +99,9 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
             </span>
           </div>
           <p className="font-semibold">
-            {filePath.split("/")[filePath.split("/").length - 1]}
+            {fileName.length > 30
+              ? fileName.substring(0, 30) + "..."
+              : fileName}
           </p>
         </div>
       )}
@@ -102,28 +110,24 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
         <div className="w-full h-fit rounded-lg">
           <div>
             <video
-              src={`${HOST}/${filePath}`}
+              src={`${file ? filePath : `${HOST}/${filePath}`}`}
               controls
               className="rounded-lg"
               controlsList="nodownload"
             />
           </div>
-          <h2 className="font-semibold px-2 pt-3 pb-1">
-            {filePath.split("/")[filePath.split("/").length - 1]}
-          </h2>
+          <h2 className="font-semibold px-2 pt-3 pb-1">{fileName}</h2>
         </div>
       )}
 
       {fileType === "image" && (
         <div className="w-full h-fit rounded-lg">
           <img
-            src={`${HOST}/${filePath}`}
+            src={`${file ? filePath : `${HOST}/${filePath}`}`}
             alt={filePath}
             className="w-full rounded-lg"
           />
-          <h2 className="font-semibold px-2 pt-3 pb-1">
-            {filePath.split("/")[filePath.split("/").length - 1]}
-          </h2>
+          <h2 className="font-semibold px-2 pt-3 pb-1">{fileName}</h2>
         </div>
       )}
 
@@ -167,13 +171,14 @@ const FileDisplay = ({ filePath }: { filePath: string }) => {
               </span>
             </div>
             <div>
-              <audio src={`${HOST}/${filePath}`} ref={currentAudio}></audio>
+              <audio
+                src={`${file ? filePath : `${HOST}/${filePath}`}`}
+                ref={currentAudio}
+              ></audio>
               <h2>
-                {filePath.split("/")[filePath.split("/").length - 1].length > 20
-                  ? filePath
-                      .split("/")
-                      [filePath.split("/").length - 1].substring(0, 20) + "..."
-                  : filePath.split("/")[filePath.split("/").length - 1]}
+                {fileName.length > 20
+                  ? fileName.substring(0, 20) + "..."
+                  : fileName}
               </h2>
               <div className="flex gap-3 items-center">
                 <span>

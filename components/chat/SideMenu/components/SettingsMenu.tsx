@@ -3,16 +3,22 @@
 import { useRouter } from "next/navigation";
 
 import { apiClient } from "@/lib/api-client";
+
 import { LOGOUT_ROUTE } from "@/utils/constants";
 
 import useAppStore from "@/store";
+
 import { Dispatch, SetStateAction } from "react";
+
+import { useError } from "@/context";
 
 const SettingsMenu = ({
   setMenuVisible,
 }: {
   setMenuVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const errorContext = useError();
+
   const router = useRouter();
   const { setUserInfo } = useAppStore();
 
@@ -42,7 +48,7 @@ const SettingsMenu = ({
         throw new Error("Internal Server Error");
       }
     } catch (error) {
-      console.error(error);
+      errorContext?.setErrorMessage("Failed to logout");
     }
   };
 

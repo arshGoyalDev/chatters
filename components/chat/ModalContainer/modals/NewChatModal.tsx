@@ -24,7 +24,6 @@ const NewChatModal = () => {
   useEffect(() => {
     const searchContacts = setTimeout(async () => {
       try {
-        console.log(searchValue);
         if (searchValue !== "") {
           const response = await apiClient.post(
             SEARCH_CONTACT_ROUTE,

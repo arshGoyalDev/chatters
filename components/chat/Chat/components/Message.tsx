@@ -11,10 +11,12 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
-import { useEffect } from "react";
+
+import { useError } from "@/context";
 
 const Message = ({ message }: { message: Message }) => {
   const { userInfo } = useAppStore();
+  const errorContext = useError();
 
   const downloadFile = async () => {
     try {
@@ -39,13 +41,9 @@ const Message = ({ message }: { message: Message }) => {
       link.remove();
       window.URL.revokeObjectURL(urlBlob);
     } catch (error) {
-      console.log(error);
+      errorContext?.setErrorMessage("Failed to download file");
     }
   };
-
-  useEffect(() => {
-    // console.log(message);
-  }, [])
 
   return (
     <div
@@ -56,7 +54,9 @@ const Message = ({ message }: { message: Message }) => {
       {message.fileUrl && (
         <div
           className={`flex gap-2 items-end ${
-            userInfo._id !== message.sender._id ? "flex-row" : "flex-row-reverse"
+            userInfo._id !== message.sender._id
+              ? "flex-row"
+              : "flex-row-reverse"
           }`}
         >
           <div

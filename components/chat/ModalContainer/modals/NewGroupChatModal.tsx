@@ -31,8 +31,10 @@ const NewGroupChatModal = () => {
   const [groupDescription, setGroupDescription] = useState("");
 
   const [groupPic, setGroupPic] = useState("");
-  const [buttonHovered, setButtonHovered] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const fileUploadRef = useRef<HTMLInputElement>(null);
+
+  const [buttonHovered, setButtonHovered] = useState(false);
 
   const handleFileInputClick = () => {
     if (!groupPic) {
@@ -40,11 +42,7 @@ const NewGroupChatModal = () => {
     }
   };
 
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files![0];
-
+  const addGroupPic = async () => {
     if (file) {
       const formData = new FormData();
       formData.append("chat-pic", file);
@@ -54,43 +52,29 @@ const NewGroupChatModal = () => {
           withCredentials: true,
         });
 
-        if (response.status === 200) {
-          setGroupPic(response.data.chatPic);
-        }
+        return response.data.chatPic;
       } catch (error) {
         errorContext?.setErrorMessage("Failed to update group picture");
+        return false;
       }
-    }
+    } else return false;
   };
 
   const deleteGroupPic = async () => {
-    try {
-      const response = await apiClient.post(
-        REMOVE_CHAT_PIC_ROUTE,
-        {
-          fileName: groupPic,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 200) {
-        setGroupPic("");
-      }
-    } catch (error) {
-      errorContext?.setErrorMessage("Failed to delete group picture");
-    }
+    setFile(null);
+    setGroupPic("");
   };
 
   const createGroup = async () => {
+    const uploadedGroupPic = await addGroupPic();
+
     try {
       const response = await apiClient.post(
         CREATE_GROUP_CHAT_ROUTE,
         {
           chatName: groupName,
           chatDescription: groupDescription,
-          chatPic: groupPic,
+          chatPic: uploadedGroupPic ?? "",
           chatMembers: selectedContacts,
         },
         { withCredentials: true }
@@ -191,19 +175,19 @@ const NewGroupChatModal = () => {
                     {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`${HOST}/${groupPic}`}
+                        src={groupPic}
                         alt={groupName}
                         className="w-full h-full"
                       />
                     }
                     <button
                       onClick={deleteGroupPic}
-                      className="absolute top-2 right-2 pt-1.5 p-2 bg-zinc-800 border-2 border-zinc-800 rounded-lg"
+                      className="absolute top-2 right-2 p-1 bg-zinc-800 border-2 border-zinc-800 rounded-lg"
                     >
                       <span className="stroke-white">
                         <svg
-                          width="24"
-                          height="24"
+                          width="18"
+                          height="18"
                           viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -289,7 +273,11 @@ const NewGroupChatModal = () => {
               <input
                 type="file"
                 ref={fileUploadRef}
-                onChange={handleImageChange}
+                onChange={(e) => {
+                  const file = e.target.files![0];
+                  setFile(file);
+                  setGroupPic(URL.createObjectURL(file));
+                }}
                 name="chat-pic"
                 accept=".png, .jpg, .svg, .jpeg, .webp"
                 className="absolute hidden top-0 left-0 w-full h-full"

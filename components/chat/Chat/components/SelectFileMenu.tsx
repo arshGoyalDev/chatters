@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
-import { ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "@/lib/api-client";
 import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
@@ -13,10 +20,14 @@ const SelectFileMenu = ({
   setFileMenu,
   filePath,
   setFilePath,
+  file,
+  setFile,
 }: {
   setFileMenu: Dispatch<SetStateAction<boolean>>;
   filePath: string;
   setFilePath: Dispatch<SetStateAction<string>>;
+  file: File | null;
+  setFile: Dispatch<SetStateAction<File | null>>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -25,29 +36,6 @@ const SelectFileMenu = ({
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
-    }
-  };
-
-  const handleAttachmentChange = async (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    try {
-      if (event.target.files) {
-        const file = event.target.files[0];
-
-        if (file) {
-          const formData = new FormData();
-          formData.append("file", file);
-
-          const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, {
-            withCredentials: true,
-          });
-
-          setFilePath(response.data.filePath);
-        }
-      }
-    } catch (error) {
-      errorContext?.setErrorMessage("Failed to upload file");
     }
   };
 
@@ -83,9 +71,9 @@ const SelectFileMenu = ({
       </div>
       <div className="px-4 pb-4 flex items-center justify-center">
         <div className="relative w-60 h-60 md:w-[400px] md:min-h-[400px] md:h-fit grid place-content-center bg-zinc-800 rounded-lg overflow-hidden">
-          {filePath !== "" ? (
+          {filePath && file ? (
             <div className="z-20 w-[60] md:w-[400px] px-3 pt-3">
-              <FileDisplay filePath={filePath} />
+              <FileDisplay filePath={filePath} file={file} />
 
               <button
                 onClick={() => setFilePath("")}
@@ -172,7 +160,11 @@ const SelectFileMenu = ({
             type="file"
             className="hidden"
             ref={fileInputRef}
-            onChange={handleAttachmentChange}
+            onChange={(e) => {
+              const file = e.target.files![0];
+              setFile(file);
+              setFilePath(file ? URL.createObjectURL(file) : "");
+            }}
           />
         </div>
       </div>

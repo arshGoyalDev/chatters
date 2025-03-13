@@ -15,14 +15,7 @@ import { io, Socket } from "socket.io-client";
 
 import { HOST } from "@/utils/constants";
 
-import {
-  Chat,
-  // ChatData,
-  // Group,
-  // GroupMessage,
-  Message,
-  SocketContextType,
-} from "@/utils/types";
+import { Chat, Message, SocketContextType } from "@/utils/types";
 
 import { useChatList } from "./ChatListContext";
 
@@ -37,7 +30,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   const { userInfo, addMessage } = useAppStore();
 
   useEffect(() => {
-    // Don't attempt to connect if user is not logged in
     if (userInfo.email === "") {
       return;
     }
@@ -49,7 +41,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       });
 
       socket.current.on("connect", () => {
-        console.log("Connected to socket server");
+        return true;
       });
 
       const handleReceiveMessage = (message: Message) => {
@@ -105,7 +97,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
-      // Register event handlers
       socket.current.on("memberLeft", handleMemberLeaving);
       socket.current.on("groupDeleted", handleGroupChatDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
@@ -113,7 +104,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       // Cleanup function
       return () => {
         if (socket.current) {
-          // Remove all event listeners
           socket.current.off("connect");
           socket.current.off("connect_error");
           socket.current.off("disconnect");
@@ -121,7 +111,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           socket.current.off("groupDeleted");
           socket.current.off("receiveMessage");
 
-          // Disconnect socket
           socket.current.disconnect();
         }
       };

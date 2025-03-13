@@ -16,8 +16,12 @@ import { apiClient } from "@/lib/api-client";
 
 import { GET_CHAT_MESSAGES_ROUTE } from "@/utils/constants";
 
+import { useError } from "@/context";
+
 const Chat = () => {
+  const errorContext = useError();
   const { messages, chatData, setMessages } = useAppStore();
+
   const [chatInfoVisible, setChatInfoVisible] = useState(false);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ const Chat = () => {
           setMessages(response.data.messages);
         }
       } catch (error) {
-        console.log({ error });
+        errorContext?.setErrorMessage("Failed to retrieve messages");
       }
     };
 

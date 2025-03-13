@@ -4,17 +4,25 @@ import { useEffect, useState } from "react";
 
 import useAppStore from "@/store";
 
-import { useSocket } from "@/context";
+import { useError, useSocket } from "@/context";
 
 import SelectFileMenu from "./SelectFileMenu";
 
+import { apiClient } from "@/lib/api-client";
+
+import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
+
 const MessageBar = () => {
   const socket = useSocket();
+  const errorContext = useError();
+
   const { chatData, userInfo, messages } = useAppStore();
 
   const [message, setMessage] = useState("");
+
   const [fileMenu, setFileMenu] = useState(false);
   const [filePath, setFilePath] = useState("");
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     setFilePath("");
@@ -22,17 +30,40 @@ const MessageBar = () => {
   }, [messages]);
 
   const sendMessage = async () => {
+    const uploadedFilePath = await uploadFile();
+
+    setFile(null);
+    setFilePath("");
+
     if (filePath !== "" || message !== "") {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
         content: message ? message : "",
         recipient: chatData?._id,
-        fileUrl: filePath !== "" ? filePath : "",
+        fileUrl: uploadedFilePath ? uploadedFilePath : "",
         messageType: filePath ? "file" : "text",
       });
     }
 
     setMessage("");
+  };
+
+  const uploadFile = async () => {
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, {
+          withCredentials: true,
+        });
+
+        return response.data.filePath;
+      } catch (error) {
+        errorContext?.setErrorMessage("Failed to upload file");
+        return false;
+      }
+    } else return false;
   };
 
   return (
@@ -78,6 +109,8 @@ const MessageBar = () => {
               setFileMenu={setFileMenu}
               filePath={filePath}
               setFilePath={setFilePath}
+              file={file}
+              setFile={setFile}
             />
           )}
           <button

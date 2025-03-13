@@ -26,42 +26,13 @@ const ProfilePage = () => {
   const [status, setStatus] = useState("Hey, there I am using Chatters!");
 
   const [profilePic, setProfilePic] = useState("");
+  const [pic, setPic] = useState<File | null>(null);
+
   const [error, setError] = useState("");
 
   const [buttonHovered, setButtonHovered] = useState(false);
 
   const fileUploadRef = useRef<HTMLInputElement>(null);
-
-  const checkForErrors = () => {
-    if (!firstName) {
-      setError("First name is required");
-      return false;
-    }
-
-    setError("");
-    return true;
-  };
-
-  const updateProfile = async () => {
-    if (checkForErrors()) {
-      try {
-        const response = await apiClient.patch(
-          UPDATE_PROFILE_ROUTE,
-          { firstName, lastName, status },
-          { withCredentials: true }
-        );
-
-        if (response.status === 200) {
-          setUserInfo(response.data.user);
-          router.push("/chat");
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setError(error.message);
-      }
-    }
-  };
 
   useEffect(() => {
     if (userInfo.email) {
@@ -86,14 +57,52 @@ const ProfilePage = () => {
     }
   };
 
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files![0];
+  const checkForErrors = () => {
+    if (!firstName) {
+      setError("First name is required");
+      return false;
+    }
 
-    if (file) {
+    setError("");
+    return true;
+  };
+
+  const updateProfile = async () => {
+    if (checkForErrors()) {
+      try {
+        const profilePicError = await addProfilePic();
+
+        if (!profilePicError) {
+          throw new Error("Internal Server Error");
+        }
+
+        const response = await apiClient.patch(
+          UPDATE_PROFILE_ROUTE,
+          {
+            firstName,
+            lastName,
+            status,
+            addProfilePic: pic ? true : false,
+          },
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          setUserInfo(response.data.user);
+          router.push("/chat");
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setError(error.message);
+      }
+    }
+  };
+
+  const addProfilePic = async () => {
+    if (pic) {
       const formData = new FormData();
-      formData.append("profile-image", file);
+      formData.append("profile-pic", pic);
 
       try {
         const response = await apiClient.post(ADD_PROFILE_PIC_ROUTE, formData, {
@@ -103,29 +112,35 @@ const ProfilePage = () => {
         if (response.status === 200) {
           setUserInfo(response.data.user);
           setProfilePic(response.data.user.profilePic);
+
+          return true;
         }
       } catch (error) {
         errorContext?.setErrorMessage("Failed to update profile picture");
+        return false;
       }
-    }
+    } else return true;
   };
 
   const deleteProfilePic = async () => {
-    try {
-      const response = await apiClient.delete(DELETE_PROFILE_PIC_ROUTE, {
-        withCredentials: true,
-      });
+    if (userInfo.profilePic) {
+      try {
+        const response = await apiClient.delete(DELETE_PROFILE_PIC_ROUTE, {
+          withCredentials: true,
+        });
 
-      if (response.status === 200) {
-        const newUserInfo = userInfo;
-        newUserInfo.profilePic = "";
+        if (response.status === 200) {
+          const newUserInfo = userInfo;
+          newUserInfo.profilePic = "";
 
-        setProfilePic("");
-        setUserInfo(newUserInfo);
+          setPic(null);
+          setProfilePic("");
+          setUserInfo(newUserInfo);
+        }
+      } catch (error) {
+        errorContext?.setErrorMessage("Failed to delete profile picture");
       }
-    } catch (error) {
-      errorContext?.setErrorMessage("Failed to delete profile picture");
-    }
+    } else setProfilePic("");
   };
 
   return (
@@ -255,8 +270,12 @@ const ProfilePage = () => {
             <input
               type="file"
               ref={fileUploadRef}
-              onChange={handleImageChange}
-              name="profile-image"
+              onChange={(e) => {
+                const file = e.target.files![0];
+                setPic(file);
+                setProfilePic(URL.createObjectURL(file));
+              }}
+              name="profile-pic"
               accept=".png, .jpg, .svg, .jpeg, .webp"
               className="absolute hidden top-0 left-0 w-full h-full"
             />
@@ -307,12 +326,27 @@ const ProfilePage = () => {
               placeholder="status"
             />{" "}
           </div>
-          <button
-            onClick={updateProfile}
-            className="font-bold mt-3 w-full py-[14px] text-black bg-primary rounded-xl hover:text-white hover:bg-zinc-800 hover:bg-opacity-10 transition-all duration-300"
-          >
-            Save Changes
-          </button>
+          <div className="flex gap-2 mt-3 ">
+            <button
+              onClick={() => router.push("/chat")}
+              className="py-[14px] w-full font-bold text-red-500 hover:text-red-700 border-2 border-red-500 hover:border-red-700 rounded-lg transition-all duration-300"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={updateProfile}
+              className={`font-bold w-full py-[14px] ${
+                userInfo.firstName === firstName &&
+                userInfo.lastName === lastName &&
+                userInfo.profilePic &&
+                userInfo.status === status
+                  ? "bg-zinc-700 pointer-events-none"
+                  : "bg-primary text-black hover:text-white hover:bg-zinc-800 hover:bg-opacity-10"
+              } rounded-lg transition-all duration-300`}
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </main>

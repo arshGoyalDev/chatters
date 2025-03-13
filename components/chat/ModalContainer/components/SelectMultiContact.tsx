@@ -7,6 +7,8 @@ import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
 
 import { UserInfo } from "@/utils/types";
 
+import { useError } from "@/context";
+
 const SelectMultiContact = ({
   selectedContacts,
   setSelectedContacts,
@@ -14,6 +16,8 @@ const SelectMultiContact = ({
   selectedContacts: UserInfo[] | null;
   setSelectedContacts: Dispatch<SetStateAction<UserInfo[] | null>>;
 }) => {
+  const errorContext = useError();
+
   const [searchValue, setSearchValue] = useState("");
   const [searchedContacts, setSearchedContacts] = useState<UserInfo[] | null>(
     null
@@ -36,7 +40,7 @@ const SelectMultiContact = ({
           }
         }
       } catch (error) {
-        console.error(error);
+        errorContext?.setErrorMessage("Failed to search contacts");
       }
     }, 500);
 

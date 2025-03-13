@@ -12,7 +12,10 @@ import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
 
+import { useError } from "@/context";
+
 const GroupMessage = ({ message }: { message: Message }) => {
+  const errorContext = useError();
   const { userInfo } = useAppStore();
 
   const downloadFile = async () => {
@@ -38,7 +41,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
       link.remove();
       window.URL.revokeObjectURL(urlBlob);
     } catch (error) {
-      console.log(error);
+      errorContext?.setErrorMessage("Failed to download file");
     }
   };
 
