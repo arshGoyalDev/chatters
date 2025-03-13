@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -23,6 +23,8 @@ const MessageBar = () => {
   const [fileMenu, setFileMenu] = useState(false);
   const [filePath, setFilePath] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     setFilePath("");
@@ -48,6 +50,15 @@ const MessageBar = () => {
     setMessage("");
   };
 
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "0px";
+      const scrollHeight = textAreaRef.current.scrollHeight;
+
+      textAreaRef.current.style.height = scrollHeight + "px";
+    }
+  }, [textAreaRef, message]);
+
   const uploadFile = async () => {
     if (file) {
       try {
@@ -67,10 +78,11 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center py-2 lg:pt-2 lg:pb-10 border-t-2 border-zinc-900 lg:border-0">
-      <div className=" flex items-center gap-3 md:gap-0 w-[95%] max-w-[800px] md:bg-zinc-900 md:pl-2 md:pr-4 rounded-xl">
+    <div className="flex justify-center pt-4">
+      <div className="flex items-center gap-3 md:gap-0 w-full max-w-[880px] bg-zinc-900 md:pl-2 pr-4 rounded-t-xl">
         <div className="pt-1 w-full">
           <textarea
+            ref={textAreaRef}
             name="message-input"
             id="message-input"
             value={message}
@@ -78,7 +90,7 @@ const MessageBar = () => {
             autoFocus={true}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type a message..."
-            className="scrollbar-invisible w-full py-2 px-3 h-12 md:h-10 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
+            className="scrollbar-invisible w-full py-4 pl-4 pr-2 min-h-16 max-h-28 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
           />
         </div>
 

@@ -179,7 +179,9 @@ const File = ({ filePath }: { filePath: string }) => {
         </div>
 
         <div className="text-sm font-semibold">
-          {filePath.split("/").at(-1)}
+          {filePath.split("/")[filePath.split("/").length - 1].length > 25
+            ? filePath.split("/").at(-1)?.substring(0, 25) + "..."
+            : filePath.split("/").at(-1)}
         </div>
       </div>
       <button onClick={downloadFile}>
