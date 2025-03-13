@@ -5,8 +5,8 @@ import {
   signup,
   getUserInfo,
   updateProfile,
-  addProfileImage,
-  removeProfileImage,
+  addProfilePic,
+  removeProfilePic,
   logout,
 } from "../controllers/AuthController.js";
 
@@ -25,12 +25,12 @@ authRoutes.get("/user-info", verifyToken, getUserInfo);
 authRoutes.patch("/user-info", verifyToken, updateProfile);
 
 authRoutes.post(
-  "/profile-image",
+  "/profile-pic",
   verifyToken,
-  upload.single("profile-image"),
-  addProfileImage
+  upload.single("profile-pic"),
+  addProfilePic
 );
-authRoutes.delete("/profile-image", verifyToken, removeProfileImage);
+authRoutes.delete("/profile-pic", verifyToken, removeProfilePic);
 
 
 export default authRoutes;

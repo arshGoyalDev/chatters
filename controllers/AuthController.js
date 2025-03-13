@@ -156,7 +156,7 @@ const updateProfile = async (request, response, next) => {
   }
 };
 
-const addProfileImage = async (request, response, next) => {
+const addProfilePic = async (request, response, next) => {
   try {
     const { userId, file } = request;
 
@@ -191,7 +191,7 @@ const addProfileImage = async (request, response, next) => {
   }
 };
 
-const removeProfileImage = async (request, response, next) => {
+const removeProfilePic = async (request, response, next) => {
   try {
     const { userId } = request;
 
@@ -230,7 +230,7 @@ export {
   login,
   getUserInfo,
   updateProfile,
-  addProfileImage,
-  removeProfileImage,
+  addProfilePic,
+  removeProfilePic,
   logout,
 };
