@@ -137,7 +137,8 @@ const getUserChats = async (request, response, next) => {
       $or: [{ chatAdmin: userId }, { chatMembers: userId }],
     })
       .populate("chatAdmin")
-      .populate("chatMembers");
+      .populate("chatMembers")
+      .sort([["updatedAt", -1]]);
 
     return response.status(200).json({ chats });
   } catch (error) {
