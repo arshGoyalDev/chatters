@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm";
 import useAppStore from "@/store";
 
 import { useError } from "@/context";
+import { useEffect } from "react";
 
 const Message = ({ message }: { message: Message }) => {
   const { userInfo } = useAppStore();
@@ -60,7 +61,7 @@ const Message = ({ message }: { message: Message }) => {
           }`}
         >
           <div
-            className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
+            className={`flex w-full h-fit max-w-96 rounded-lg p-2 border-2 ${
               userInfo._id === message.sender._id
                 ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
                 : "bg-primary bg-opacity-5 border-primary border-opacity-20"

@@ -46,10 +46,10 @@ const NewChatModal = () => {
   }, [searchValue]);
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-950 border-2 border-neutral-900 shadow-2xl">
       <ModalHeader title="New Chat" />
       <div className="py-4 px-4">
-        <div className="flex gap-2 items-center bg-zinc-800 rounded-lg px-3">
+        <div className="flex gap-2 items-center border-2 border-neutral-900 rounded-lg px-3">
           <input
             type="text"
             name="search-people"

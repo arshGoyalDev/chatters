@@ -107,7 +107,7 @@ const GroupMessage = ({ message }: { message: Message }) => {
                       }`}
                     >
                       <div
-                        className={`flex w-[100%] h-fit max-w-96 rounded-lg p-2 border-2 ${
+                        className={`flex w-full h-fit max-w-96 rounded-lg p-2 border-2 ${
                           userInfo._id === message.sender._id
                             ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
                             : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
@@ -195,9 +195,9 @@ const GroupMessage = ({ message }: { message: Message }) => {
         </>
       )}
       {(message.messageType === "leaving" ||
-        message.messageType === "create") && (
+        message.messageType === "create" || message.messageType === "add") && (
         <div className="flex justify-center w-full">
-          <div className="bg-zinc-900 bg-opacity-40 text-sm py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
+          <div className="bg-zinc-900 w-fit max-w-[400px] text-center bg-opacity-40 text-sm py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
             {message.content}
           </div>
         </div>

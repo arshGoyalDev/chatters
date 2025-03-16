@@ -3,20 +3,27 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { apiClient } from "@/lib/api-client";
-import { HOST, SEARCH_CONTACT_ROUTE } from "@/utils/constants";
 
+import { SEARCH_CONTACT_ROUTE } from "@/utils/constants";
 import { UserInfo } from "@/utils/types";
 
 import { useError } from "@/context";
+import SearchedContact from "./SearchedContact";
+
+import useAppStore from "@/store";
 
 const SelectMultiContact = ({
   selectedContacts,
   setSelectedContacts,
+  addMember = false,
 }: {
   selectedContacts: UserInfo[] | null;
   setSelectedContacts: Dispatch<SetStateAction<UserInfo[] | null>>;
+  addMember: boolean;
 }) => {
   const errorContext = useError();
+
+  const { chatData } = useAppStore();
 
   const [searchValue, setSearchValue] = useState("");
   const [searchedContacts, setSearchedContacts] = useState<UserInfo[] | null>(
@@ -34,8 +41,22 @@ const SelectMultiContact = ({
           );
 
           if (response.status === 200) {
-            if (response.data.contacts[0])
-              setSearchedContacts(response.data.contacts);
+            if (response.data.contacts.length !== 0)
+              if (addMember && chatData) {
+                const filteredContacts = response.data.contacts.filter(
+                  (contact: UserInfo) => {
+                    let alreadyMember = false;
+
+                    for (let chatMember of chatData.chatMembers) {
+                      if (chatMember._id === contact._id) alreadyMember = true;
+                    }
+
+                    if (!alreadyMember) return contact;
+                  }
+                );
+
+                setSearchedContacts(filteredContacts);
+              } else setSearchedContacts(response.data.contacts);
             else setSearchedContacts(null);
           }
         }
@@ -79,8 +100,8 @@ const SelectMultiContact = ({
   };
 
   return (
-    <div className="w-full py-6 px-6">
-      <div className="flex gap-2 items-center border-2 border-zinc-800 rounded-lg px-3">
+    <div className="w-full h-full py-4 px-4">
+      <div className="flex gap-2 items-center border-2 border-zinc-900 rounded-lg px-3">
         <input
           type="text"
           name="search-people"
@@ -118,99 +139,62 @@ const SelectMultiContact = ({
         </button>
       </div>
 
-      {selectedContacts?.length !== 0 && selectedContacts && (
-        <div className="flex flex-wrap gap-2 pt-4">
-          {selectedContacts.map((contact) => (
-            <div
-              key={contact._id}
-              className="flex items-center gap-1 pl-3 pr-2 py-1 rounded-md bg-zinc-800"
-            >
-              <div className="font-semibold">
-                {`${contact.firstName} ${contact.lastName}`}
-              </div>
-              <button
-                onClick={() => removeContact(contact)}
-                className="stroke-white rotate-45"
+      <div className="max-h-[360px] overflow-y-auto flex flex-col gap-2">
+        {selectedContacts?.length !== 0 && selectedContacts && (
+          <div className="flex flex-wrap gap-2 pt-4">
+            {selectedContacts.map((contact) => (
+              <div
+                key={contact._id}
+                className="flex items-center gap-1 pl-3 pr-2 py-1 rounded-md border-2 border-zinc-900"
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+                <div className="font-semibold">
+                  {`${contact.firstName} ${contact.lastName}`}
+                </div>
+                <button
+                  onClick={() => removeContact(contact)}
+                  className="stroke-white rotate-45"
                 >
-                  <path
-                    d="M6 12H18"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M12 18V6"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 12H18"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 18V6"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
-      {searchedContacts ? (
-        <div className="mt-3 h-[240px] lg:h-[360px] overflow-y-auto">
-          {searchedContacts.map((contact: UserInfo) => (
-            <div
-              onClick={() => selectContact(contact)}
-              key={contact.email}
-              className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
-            >
-              <div className="w-16 h-16 rounded-lg overflow-hidden">
-                {contact.profilePic ? (
-                  <img
-                    src={`${HOST}/${contact.profilePic}`}
-                    alt={contact.firstName + contact.lastName}
-                  />
-                ) : (
-                  <div className="grid place-content-center bg-zinc-800 h-full">
-                    <span className="fill-zinc-600">
-                      <svg
-                        width="60"
-                        height="40"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                )}
+        {searchedContacts ? (
+          <div>
+            {searchedContacts.map((contact: UserInfo) => (
+              <div key={contact._id} onClick={() => selectContact(contact)}>
+                <SearchedContact contact={contact} groupChat={true} />
               </div>
-              <div className="flex flex-col gap-0.5">
-                <p className="font-bold text-lg">{`${contact.firstName} ${contact.lastName}`}</p>
-                <p>{contact.userOnline ? "Online" : contact.status}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid place-content-center text-lg pt-12 pb-6 text-center">
-          Nothing to see here, <br />
-          Search people to start a new chat.
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="grid place-content-center text-lg pt-8 pb-6 text-center">
+            Nothing to see here, <br />
+            Search people to start a new chat.
+          </div>
+        )}
+      </div>
     </div>
   );
 };

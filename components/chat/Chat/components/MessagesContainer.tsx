@@ -17,6 +17,7 @@ const MessagesContainer = ({
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
+    console.log(messages);
   }, [messages]);
 
   return (

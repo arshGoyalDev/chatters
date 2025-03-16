@@ -15,7 +15,7 @@ import { io, Socket } from "socket.io-client";
 
 import { HOST } from "@/utils/constants";
 
-import { Chat, Message, SocketContextType } from "@/utils/types";
+import { Chat, Message, SocketContextType, UserInfo } from "@/utils/types";
 
 import { useChatList } from "./ChatListContext";
 
@@ -27,7 +27,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
   const { getChats } = useChatList();
   const socket = useRef<Socket | null>(null);
 
-  const { userInfo, addMessage } = useAppStore();
+  const { userInfo, addMessage, setChatData } = useAppStore();
 
   useEffect(() => {
     if (userInfo.email === "") {
@@ -97,15 +97,35 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
+      const handleMemberAdded = (data: {
+        chatId: string;
+        message: Message;
+        chatMembers: UserInfo[];
+      }) => {
+        const { chatId, message, chatMembers } = data;
+        const { chatData } = useAppStore.getState();
+        // const setChatData = useAppStore.setState();
+        
+        getChats();
+
+        if (chatId === chatData?._id) {
+          addMessage(message);
+          setChatData({
+            ...chatData,
+            chatMembers,
+          });
+        }
+      };
+
       socket.current.on("memberLeft", handleMemberLeaving);
       socket.current.on("groupDeleted", handleGroupChatDelete);
       socket.current.on("receiveMessage", handleReceiveMessage);
+      socket.current.on("memberAdded", handleMemberAdded);
 
       // Cleanup function
       return () => {
         if (socket.current) {
           socket.current.off("connect");
-          socket.current.off("connect_error");
           socket.current.off("disconnect");
           socket.current.off("memberLeft");
           socket.current.off("groupDeleted");

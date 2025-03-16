@@ -3,8 +3,8 @@ import Link from "next/link";
 const ModalHeader = ({ title }: { title: string }) => {
   return (
     <div className="w-full rounded-t-xl md:rounded-xl">
-      <div className="flex justify-between items-center py-3 px-4 border-b-2 border-zinc-800">
-        <h2 className="font-semibold text-xl">{title}</h2>
+      <div className="flex justify-between items-center py-3 pl-5 pr-4 border-b-2 border-zinc-900">
+        <h2 className="font-semibold text-lg">{title}</h2>
         <Link href="/chat">
           <div className="stroke-white rotate-45">
             <svg

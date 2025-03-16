@@ -11,6 +11,7 @@ import File from "./File";
 
 import { useSocket } from "@/context";
 import { HOST } from "@/utils/constants";
+import { useRouter } from "next/navigation";
 
 const ChatInfo = ({
   setChatInfoVisible,
@@ -18,6 +19,8 @@ const ChatInfo = ({
   setChatInfoVisible: Dispatch<SetStateAction<boolean>>;
 }) => {
   const socket = useSocket();
+  const router = useRouter();
+
   const { chatData, messages, userInfo } = useAppStore();
   const [filesLength, setFilesLength] = useState(0);
 
@@ -204,46 +207,91 @@ const ChatInfo = ({
 
         {chatData?.chatType === "group" &&
           userInfo._id === chatData?.chatAdmin?._id && (
-            <button
-              onClick={deleteGroup}
-              className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
-            >
-              <span className="font-semibold text-primary">Delete Group</span>
-              <span className="stroke-primary">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M19.97 10H3.96997V18C3.96997 21 4.96997 22 7.96997 22H15.97C18.97 22 19.97 21 19.97 18V10Z"
-                    strokeWidth="1.5"
-                    strokeMiterlimit="10"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
-                    strokeWidth="1.5"
-                    strokeMiterlimit="10"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </button>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  router.push("/chat?add-member=true");
+                }}
+                className="flex items-center justify-between py-3 px-3 border-2 border-zinc-700 border-opacity-40 rounded-lg"
+              >
+                <span className="font-semibold">Add Member/s</span>
+                <span className="stroke-white">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18.5 19.5H14.5"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M16.5 21.5V17.5"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12.16 10.87C12.06 10.86 11.94 10.86 11.83 10.87C9.44997 10.79 7.55997 8.84 7.55997 6.44C7.54997 3.99 9.53997 2 11.99 2C14.44 2 16.43 3.99 16.43 6.44C16.43 8.84 14.53 10.79 12.16 10.87Z"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M11.99 21.8101C10.17 21.8101 8.36004 21.3501 6.98004 20.4301C4.56004 18.8101 4.56004 16.1701 6.98004 14.5601C9.73004 12.7201 14.24 12.7201 16.99 14.5601"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+
+              <button
+                onClick={deleteGroup}
+                className="flex items-center justify-between bg-red-500 bg-opacity-5 py-3 px-3 border-2 border-red-500 border-opacity-40 rounded-lg"
+              >
+                <span className="font-semibold text-red-500">Delete Group</span>
+                <span className="stroke-red-500">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M19.97 10H3.96997V18C3.96997 21 4.96997 22 7.96997 22H15.97C18.97 22 19.97 21 19.97 18V10Z"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M21.5 7V8C21.5 9.1 20.97 10 19.5 10H4.5C2.97 10 2.5 9.1 2.5 8V7C2.5 5.9 2.97 5 4.5 5H19.5C20.97 5 21.5 5.9 21.5 7Z"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+            </div>
           )}
 
         {chatData?.chatType === "group" &&
           userInfo._id !== chatData?.chatAdmin?._id && (
             <button
               onClick={leaveGroup}
-              className="flex items-center justify-between bg-primary bg-opacity-5 py-3 px-3 border-2 border-primary border-opacity-40 rounded-lg"
+              className="flex items-center justify-between bg-red-500 bg-opacity-5 py-3 px-3 border-2 border-red-500 border-opacity-40 rounded-lg"
             >
-              <span className="font-semibold text-primary">Leave Group</span>
-              <span className="stroke-primary">
+              <span className="font-semibold text-red-500">Leave Group</span>
+              <span className="stroke-red-500">
                 <svg
                   width="22"
                   height="22"

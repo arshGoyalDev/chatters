@@ -13,8 +13,8 @@ const metadata: Metadata = {
   title: "Chatters",
   description: "Chatters - A Powerful online chat application",
   icons: {
-    icon: `${HOST}/uploads/favicon.ico`
-  }
+    icon: `${HOST}/uploads/favicon.ico`,
+  },
 };
 
 const quicksand = Quicksand({

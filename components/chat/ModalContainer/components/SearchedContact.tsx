@@ -15,7 +15,13 @@ import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
-const SearchedContact = ({ contact }: { contact: UserInfo }) => {
+const SearchedContact = ({
+  contact,
+  groupChat = false,
+}: {
+  contact: UserInfo;
+  groupChat?: boolean;
+}) => {
   const router = useRouter();
 
   const errorContext = useError();
@@ -74,13 +80,17 @@ const SearchedContact = ({ contact }: { contact: UserInfo }) => {
 
   return (
     <div
-      onClick={selectContact}
+      onClick={() => {
+        if (!groupChat) {
+          selectContact();
+        }
+      }}
       key={contact.email}
-      className="flex items-center gap-4 py-2 px-2 hover:bg-zinc-800 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
+      className="flex items-center gap-4 py-3 px-4 hover:bg-zinc-900 hover:bg-opacity-50 transition-all duration-100 rounded-lg cursor-pointer"
     >
-      <div className="w-12 h-12 rounded-lg overflow-hidden">
+      <div className="w-12 h-12 rounded overflow-hidden">
         {contact.profilePic ? (
-          <div className="w-full h-full rounded-lg overflow-hidden">
+          <div className="w-full h-full rounded overflow-hidden">
             <img
               src={`${HOST}/${contact.profilePic}`}
               alt={contact.firstName + contact.lastName}

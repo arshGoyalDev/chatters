@@ -78,7 +78,7 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center pt-4">
+    <div className="flex justify-center pt-4 md:mx-2">
       <div className="flex items-center gap-3 md:gap-0 w-full max-w-[880px] bg-zinc-900 md:pl-2 pr-4 rounded-t-xl">
         <div className="pt-1 w-full">
           <textarea

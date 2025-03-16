@@ -15,10 +15,10 @@ const HomePage = () => {
         <div>
           <TransitionLink
             href="/auth"
-            className="flex items-center gap-2 bg-primary font-bold text-white py-2 px-4 rounded-lg"
+            className="flex items-center gap-2 bg-primary font-bold text-black py-2 px-4 rounded-lg"
           >
             <span>Get Started</span>
-            <span className="stroke-white">
+            <span className="stroke-black">
               <svg
                 width="14"
                 height="14"
@@ -51,7 +51,7 @@ const HomePage = () => {
           <div className="flex flex-col  lg:flex-row items-center gap-12">
             <div className="flex-1 text-center">
               <h1 className="text-5xl md:text-7xl xl:text-8xl font-medium mb-10">
-                <span className="text-white from-white to-primary leading-[3.5rem] md:leading-[5rem] xl:leading-[7rem]">
+                <span className="from-white to-primary leading-[3.5rem] md:leading-[5rem] xl:leading-[7rem]">
                   Welcome to a{" "}
                   <span className="text-primary font-bold">relaxing</span>{" "}
                   <br /> chat experience
@@ -81,7 +81,7 @@ const HomePage = () => {
               <div className="flex flex-wrap gap-4 justify-center">
                 <TransitionLink
                   href="/auth"
-                  className="py-3 px-8 text-lg font-semibold bg-primary hover:bg-primary/90 text-white rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
+                  className="py-3 px-8 text-lg font-semibold bg-primary hover:bg-primary/90 text-black rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
                 >
                   Get Started
                 </TransitionLink>
@@ -224,7 +224,7 @@ const HomePage = () => {
 
             <TransitionLink
               href="/auth"
-              className="py-4 px-10 text-xl font-semibold bg-primary hover:bg-primary/90 text-white rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
+              className="py-4 px-10 text-xl font-semibold bg-primary hover:bg-primary/90 text-black rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
             >
               Get Started Now
             </TransitionLink>

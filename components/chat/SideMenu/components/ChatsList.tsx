@@ -40,11 +40,11 @@ const ChatsList = () => {
     <div className="px-4 pt-2 pb-5">
       <h2 className="text-zinc-700 uppercase font-bold pb-3">Chats</h2>
 
-      <div className="absolute md:static bottom-2 left-1/2 -translate-x-1/2 md:translate-x-0 py-2 px-2 w-[90%] md:w-full grid grid-cols-3 bg-zinc-900 md:bg-zinc-950 rounded-md mb-4">
+      <div className="absolute md:static bottom-0 left-0 md:translate-x-0 py-4 md:py-2 border-t-2 md:border-0 border-zinc-900 px-2 w-full grid grid-cols-3 bg-zinc-950 md:rounded-md md:mb-4">
         <button
           onClick={() => setTab("all")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "all" && "bg-zinc-950 md:bg-zinc-900"
+            tab === "all" && "bg-zinc-900"
           } rounded-md`}
         >
           All
@@ -52,7 +52,7 @@ const ChatsList = () => {
         <button
           onClick={() => setTab("personal")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "personal" && "bg-zinc-950 md:bg-zinc-900"
+            tab === "personal" && "bg-zinc-900"
           } rounded-md`}
         >
           Personal
@@ -60,7 +60,7 @@ const ChatsList = () => {
         <button
           onClick={() => setTab("group")}
           className={`font-semibold py-1.5 px-2 ${
-            tab === "group" && "bg-zinc-950 md:bg-zinc-900"
+            tab === "group" && "bg-zinc-900"
           } rounded-md`}
         >
           Groups

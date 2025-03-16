@@ -92,52 +92,42 @@ const NewGroupChatModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[1000px] max-h-[80vh] lg:h-fit overflow-y-auto rounded-xl bg-zinc-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[1000px] rounded-xl bg-zinc-950 border-2 border-neutral-900 shadow-2xl">
       <ModalHeader title="New Group Chat" />
 
-      <div className="flex flex-col lg:flex-row">
-        <div className="flex flex-col gap-3 w-full border-b-2 lg:border-b-0 lg:border-r-2 border-zinc-800 px-4 py-4">
-          <div>
-            <h2 className="font-bold uppercase text-zinc-600 mb-2">
-              Group Name
-            </h2>
-            <input
-              type="text"
-              name="group-name"
-              id="group-name"
-              value={groupName}
-              autoComplete="off"
-              autoFocus={true}
-              onChange={(e) => {
-                setGroupName(e.target.value);
-              }}
-              placeholder="Group Name..."
-              className="w-full bg-transparent px-3 py-2 border-2 border-zinc-800 rounded-md placeholder:text-zinc-600"
-            />
-          </div>
-          <div>
-            <h2 className="font-bold uppercase text-zinc-600 mb-2">
-              Group Status
-            </h2>
-            <textarea
-              name="group-status"
-              id="group-status"
-              value={groupDescription}
-              autoComplete="off"
-              rows={3}
-              onChange={(e) => {
-                setGroupDescription(e.target.value);
-              }}
-              placeholder="Group Description..."
-              className="w-full px-3 py-2 bg-transparent border-2 border-zinc-800 rounded-md placeholder:text-zinc-600 resize-none"
-            />
-          </div>
+      <div className="flex flex-col lg:flex-row max-h-[65vh] lg:h-fit overflow-y-auto">
+        <div className="flex flex-col gap-3 w-full border-b-2 lg:border-b-0 lg:border-r-2 border-zinc-900 px-4 py-4">
+          <input
+            type="text"
+            name="group-name"
+            id="group-name"
+            value={groupName}
+            autoComplete="off"
+            autoFocus={true}
+            onChange={(e) => {
+              setGroupName(e.target.value);
+            }}
+            placeholder="Group Name..."
+            className="w-full bg-transparent px-3 py-2 border-2 border-zinc-900 rounded-md placeholder:text-zinc-600"
+          />
+          <textarea
+            name="group-status"
+            id="group-status"
+            value={groupDescription}
+            autoComplete="off"
+            rows={3}
+            onChange={(e) => {
+              setGroupDescription(e.target.value);
+            }}
+            placeholder="Group Description..."
+            className="w-full px-3 py-2 bg-transparent border-2 border-zinc-900 rounded-md placeholder:text-zinc-600 resize-none"
+          />
 
           <div>
             <h2 className="font-bold uppercase text-zinc-600 mb-2">
               Group Pic
             </h2>
-            <div className="relative w-fit bg-zinc-900 border-2 border-zinc-800 rounded-lg overflow-hidden">
+            <div className="relative w-fit border-2 border-zinc-900 rounded-lg overflow-hidden">
               <div
                 onMouseEnter={() => setButtonHovered(true)}
                 onMouseLeave={() => setButtonHovered(false)}
@@ -182,7 +172,7 @@ const NewGroupChatModal = () => {
                     }
                     <button
                       onClick={deleteGroupPic}
-                      className="absolute top-2 right-2 p-1 bg-zinc-800 border-2 border-zinc-800 rounded-lg"
+                      className="absolute top-2 right-2 p-1 bg-zinc-800 border-2 border-zinc-900 rounded-lg"
                     >
                       <span className="stroke-white">
                         <svg
@@ -291,10 +281,11 @@ const NewGroupChatModal = () => {
           setSelectedContacts={setSelectedContacts}
         />
       </div>
-      <div className="flex justify-end border-t-2 border-zinc-800 px-4 py-4">
+
+      <div className="flex justify-end border-t-2 border-zinc-900 px-4 py-4">
         <button
           onClick={createGroup}
-          className="px-4 py-1.5 bg-primary rounded-lg font-bold text-lg hover:text-white hover:bg-zinc-800 hover:bg-opacity-80 transition-all duration-300"
+          className="px-4 py-1.5 text-black bg-primary rounded-md font-semibold"
         >
           Create Group
         </button>
