@@ -49,13 +49,15 @@ const setupSocket = (io) => {
 
     const chat = await Chat.findById(recipient).populate("chatMembers");
 
-    if (chat && chat.chatMembers) {
-      chat.chatMembers.forEach((member) => {
-        const memberSocketId = userSocketMap.get(member._id.toString());
-        if (memberSocketId) {
-          io.to(memberSocketId).emit("receiveMessage", messageData);
-        }
-      });
+    if (chat) {
+      if (chat.chatMembers) {
+        chat.chatMembers.forEach((member) => {
+          const memberSocketId = userSocketMap.get(member._id.toString());
+          if (memberSocketId) {
+            io.to(memberSocketId).emit("receiveMessage", messageData);
+          }
+        });
+      }
 
       const adminSocketId = userSocketMap.get(chat.chatAdmin.toString());
       if (adminSocketId) {
@@ -160,6 +162,68 @@ const setupSocket = (io) => {
     }
   };
 
+  const addMember = async (data) => {
+    const { chatId, newMembers } = data;
+
+    const chat = await Chat.findById(chatId).populate("chatAdmin");
+    const chatMembers = chat.chatMembers;
+    const messages = chat.messages;
+
+    const messageContent = () => {
+      const newMembersLength = newMembers.length;
+
+      if (newMembersLength >= 2) {
+        return newMembers.map((member, i) => {
+          if (i !== newMembersLength - 1)
+            return `${member.firstName} ${member.lastName}`;
+          else return ` and ${member.firstName} ${member.lastName}`;
+        });
+      } else return `${newMembers[0].firstName} ${newMembers[0].lastName}`;
+    };
+
+    const memberAddedMessage = await Message.create({
+      sender: chat.chatAdmin._id,
+      recipient: chatId,
+      content: `${chat.chatAdmin.firstName} ${
+        chat.chatAdmin.lastName
+      } added ${messageContent()}`,
+      messageType: "add",
+      timeStamp: new Date(),
+      fileUrl: null,
+    });
+
+    const newChat = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        messages: [...messages, memberAddedMessage._id],
+        chatMembers: [...chatMembers, ...newMembers],
+      },
+      { new: true, runValidators: true }
+    ).populate("chatMembers").populate("chatAdmin");
+
+    const returnData = {
+      chatId,
+      chatMembers: newChat.chatMembers,
+      message: memberAddedMessage,
+    }
+
+    if (newChat) {
+      if (newChat.chatMembers) {
+        chat.chatMembers.forEach((member) => {
+          const memberSocketId = userSocketMap.get(member._id.toString());
+          if (memberSocketId) {
+            io.to(memberSocketId).emit("memberAdded", returnData);
+          }
+        });
+      }
+
+      const adminSocketId = userSocketMap.get(newChat.chatAdmin._id.toString());
+      if (adminSocketId) {
+        io.to(adminSocketId).emit("memberAdded", returnData);
+      }
+    }
+  };
+
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
 
@@ -177,9 +241,10 @@ const setupSocket = (io) => {
       console.log("No userId provided");
     }
 
+    socket.on("sendMessage", sendMessage);
     socket.on("leaveGroup", leaveGroup);
     socket.on("deleteGroup", deleteGroup);
-    socket.on("sendMessage", sendMessage);
+    socket.on("addMember", addMember);
 
     socket.on("disconnect", () => disconnect(socket));
   });

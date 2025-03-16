@@ -1,8 +1,4 @@
-import mongoose from "mongoose";
-
 import User from "../models/UserModel.js";
-import Message from "../models/MessagesModel.js";
-import { decryptMessage } from "../cryptr/index.js";
 
 const searchContacts = async (request, response, next) => {
   try {

@@ -2,8 +2,6 @@ import Message from "../models/MessagesModel.js";
 
 import { mkdirSync, renameSync } from "fs";
 
-import { decryptMessage } from "../cryptr/index.js";
-
 const getMessages = async (request, response, next) => {
   try {
     const user1 = request.userId;
@@ -18,15 +16,8 @@ const getMessages = async (request, response, next) => {
         { sender: user2, recipient: user1 },
       ],
     }).sort({ timestamp: 1 });
-
-    const decryptedMessages = messages.map((message) => {
-      return {
-        ...message._doc,
-        content: decryptMessage(message._doc.content),
-      };
-    });
-
-    return response.status(200).json({ messages: decryptedMessages });
+    
+    return response.status(200).json({ messages: messages });
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Internal Server Error");
