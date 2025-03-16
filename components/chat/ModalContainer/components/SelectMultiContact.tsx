@@ -19,7 +19,7 @@ const SelectMultiContact = ({
 }: {
   selectedContacts: UserInfo[] | null;
   setSelectedContacts: Dispatch<SetStateAction<UserInfo[] | null>>;
-  addMember: boolean;
+  addMember?: boolean;
 }) => {
   const errorContext = useError();
 
