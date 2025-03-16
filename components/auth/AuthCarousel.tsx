@@ -55,7 +55,7 @@ const AuthCarousel = () => {
   return (
     <div className="h-full flex flex-col justify-center items-center relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black opacity-90"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(246,126,125,0.15),transparent_70%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(161,181,216,0.20),transparent_70%)]"></div>
       <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-6 md:px-12">
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-2">

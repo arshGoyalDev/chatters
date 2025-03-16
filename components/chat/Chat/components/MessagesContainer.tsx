@@ -2,10 +2,11 @@
 
 import useAppStore from "@/store";
 
-import { useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 import Message from "./Message";
-import GroupMessage from "./GroupMessage";
+import moment from "moment";
+import { Message as MessageType } from "@/utils/types";
 
 const MessagesContainer = ({
   chatInfoVisible,
@@ -17,8 +18,29 @@ const MessagesContainer = ({
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
-    console.log(messages);
   }, [messages]);
+
+  const renderMessages: () => ReactNode = () => {
+    let lastDate: string | null = null;
+    // return selectedChatMessages.map((message) => {
+    return messages.map((message: MessageType) => {
+      const messageDate = moment(message.timeStamp).format("LL");
+      const showDate = messageDate !== lastDate;
+      lastDate = messageDate;
+      return (
+        <>
+          {showDate && (
+            <div className="flex justify-center items-center gap-2 my-4 w-full">
+              <div className="w-full h-0.5 bg-zinc-800"></div>
+              <div className="w-fit text-nowrap text-sm text-zinc-500">{messageDate}</div>
+              <div className="w-full h-0.5 bg-zinc-800"></div>
+            </div>
+          )}
+          <Message key={message._id} message={message} />
+        </>
+      );
+    });
+  };
 
   return (
     <div id="messages-container" className={`flex-1 overflow-y-auto`}>
@@ -28,13 +50,7 @@ const MessagesContainer = ({
           chatInfoVisible ? "lg:px-10" : "px-0"
         } 2xl:px-0`}
       >
-        {messages.map((message) => {
-          return chatData?.chatType === "personal" ? (
-            <Message key={message._id} message={message} />
-          ) : (
-            <GroupMessage key={message._id} message={message} />
-          );
-        })}
+        {renderMessages()}
       </div>
       <div ref={scrollRef} />
     </div>

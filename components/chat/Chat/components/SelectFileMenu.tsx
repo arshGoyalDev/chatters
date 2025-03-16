@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
-  useEffect,
   useRef,
-  useState,
 } from "react";
-
-import { apiClient } from "@/lib/api-client";
-import { UPLOAD_FILE_ROUTE } from "@/utils/constants";
 
 import FileDisplay from "./FileDisplay";
 
@@ -31,8 +25,6 @@ const SelectFileMenu = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const errorContext = useError();
-
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -40,11 +32,15 @@ const SelectFileMenu = ({
   };
 
   return (
-    <div className="absolute bottom-16 -right-2 w-[85vw] max-w-[440px] bg-zinc-900 rounded-lg shadow-lg shadow-zinc-950">
+    <div className="absolute bottom-16 -right-2 w-[85vw] max-w-[400px] bg-zinc-900 rounded-lg shadow-lg shadow-zinc-950">
       <div className="flex items-center justify-between py-4 px-4">
         <h2 className="text-lg font-semibold">Select File</h2>
         <button
-          onClick={() => setFileMenu(false)}
+          onClick={() => {
+            setFilePath("");
+            setFile(null);
+            setFileMenu(false);
+          }}
           className="stroke-white rotate-45"
         >
           <svg
@@ -70,9 +66,9 @@ const SelectFileMenu = ({
         </button>
       </div>
       <div className="px-4 pb-4 flex items-center justify-center">
-        <div className="relative w-60 h-60 md:w-[400px] md:min-h-[400px] md:h-fit grid place-content-center bg-zinc-800 rounded-lg overflow-hidden">
+        <div className="relative w-60 min-h-60 md:w-[360px] md:min-h-[360px] md:h-fit grid place-content-center bg-zinc-800 rounded-lg overflow-hidden">
           {filePath && file ? (
-            <div className="z-20 w-[60] md:w-[400px] px-3 pt-3">
+            <div className="z-20 w-[60] md:w-[360px] px-3 pt-3 pb-2">
               <FileDisplay filePath={filePath} file={file} />
 
               <button
