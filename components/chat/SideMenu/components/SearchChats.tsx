@@ -1,4 +1,5 @@
 import { useChatList } from "@/context";
+
 import useAppStore from "@/store";
 
 import { Chat } from "@/utils/types";
@@ -19,7 +20,6 @@ const SearchChats = ({
     const searchTimeout = setTimeout(() => {
       if (searchValue !== "") {
         const searchedChatList = chatsList.filter((chat) => {
-          // console.log(searchValue, chat.chatName.toLowerCase());
           const chatName =
             chat.chatType === "personal"
               ? userInfo._id === chat.chatAdmin._id
