@@ -8,13 +8,16 @@ import { HOST } from "@/utils/constants";
 import Link from "next/link";
 
 import { useChatList } from "@/context";
+
 import { useEffect, useState } from "react";
+
+import SearchChats from "./SearchChats";
 
 const ChatsList = () => {
   const { chatsList } = useChatList();
   const { setChatData, userInfo, chatData } = useAppStore();
 
-  const [selectedChatList, setSelectedChatList] = useState<Chat[]>([]);
+  const [searchedChatList, setSearchedChatList] = useState<Chat[]>([]);
   const [tab, setTab] = useState<"all" | "group" | "personal">("all");
 
   const openChat = (chat: Chat) => {
@@ -22,63 +25,24 @@ const ChatsList = () => {
   };
 
   useEffect(() => {
-    if (tab === "all") setSelectedChatList(chatsList);
-    if (tab === "personal") {
-      const newChatList = chatsList.filter(
-        (chat) => chat.chatType === "personal"
-      );
-      setSelectedChatList(newChatList);
-    }
-
-    if (tab === "group") {
-      const newChatList = chatsList.filter((chat) => chat.chatType === "group");
-      setSelectedChatList(newChatList);
-    }
-  }, [chatsList, tab]);
+    setSearchedChatList(chatsList);
+  }, [chatsList]);
 
   return (
     <div className="px-4 pt-2 pb-5">
       <h2 className="text-zinc-700 uppercase font-bold pb-3">Chats</h2>
 
-      <div className="absolute md:static bottom-0 left-0 md:translate-x-0 py-4 md:py-2 border-t-2 md:border-0 border-zinc-900 px-2 w-full grid grid-cols-3 bg-zinc-950 md:rounded-md md:mb-4">
-        <button
-          onClick={() => setTab("all")}
-          className={`font-semibold py-1.5 px-2 ${
-            tab === "all" && "bg-zinc-900"
-          } rounded-md`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setTab("personal")}
-          className={`font-semibold py-1.5 px-2 ${
-            tab === "personal" && "bg-zinc-900"
-          } rounded-md`}
-        >
-          Personal
-        </button>
-        <button
-          onClick={() => setTab("group")}
-          className={`font-semibold py-1.5 px-2 ${
-            tab === "group" && "bg-zinc-900"
-          } rounded-md`}
-        >
-          Groups
-        </button>
-      </div>
+      <SearchChats setSearchedChatList={setSearchedChatList} />
 
       <div className="flex flex-col gap-2">
-        {selectedChatList.length !== 0 ? (
-          selectedChatList.map((chat, index) => (
+        {searchedChatList.length !== 0 ? (
+          searchedChatList.map((chat, index) => (
             <div
               key={chat._id}
               onClick={() => openChat(chat)}
               className={`flex justify-between gap-2 items-center ${
-                chatData?._id === chat._id && "font-semibold"
-              } ${
-                index !== selectedChatList.length - 1 &&
-                "border-b-2 border-zinc-900 md:border-zinc-800"
-              } transition-all duration-300 py-3 pl-1 pr-2 hover:bg-opacity-40`}
+                chatData?._id === chat._id && "bg-zinc-950 bg-opacity-35"
+              } transition-all duration-300 py-3 pl-2 pr-4 hover:bg-opacity-40 rounded-lg`}
             >
               <div className="flex gap-4 items-center">
                 <div className="w-9 h-9 rounded-lg bg-zinc-800">
@@ -136,7 +100,7 @@ const ChatsList = () => {
                     : chat.chatName}
                 </h2>
               </div>
-              <div className="text-sm font-medium">
+              <div className="text-sm text-zinc-300 font-medium">
                 {moment(chat.updatedAt).format("LT")}
               </div>
             </div>

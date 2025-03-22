@@ -14,7 +14,13 @@ import useAppStore from "@/store";
 
 import { useError } from "@/context";
 
-const Message = ({ message }: { message: Message }) => {
+const Message = ({
+  message,
+  showSender,
+}: {
+  message: Message;
+  showSender: boolean;
+}) => {
   const { userInfo, chatData } = useAppStore();
   const errorContext = useError();
 
@@ -49,49 +55,75 @@ const Message = ({ message }: { message: Message }) => {
     <>
       {(message.messageType === "file" || message.messageType === "text") && (
         <div
-          className={`flex flex-col gap-2 ${
+          className={`flex flex-col gap-2 ${showSender ? "mt-4" : "mt-2"} ${
             userInfo._id === message.sender._id ? "items-end" : "items-start"
           }`}
         >
-          <div className={`flex items-end gap-3 max-w-[80%] lg:max-w-[60%]`}>
-            {chatData?.chatType === "group" && userInfo._id !== message.sender._id &&
-              (message.sender.profilePic ? (
-                <div className="min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
-                  <img
-                    src={`${HOST}/${message.sender.profilePic}`}
-                    alt={`${message.sender.firstName} ${message.sender.lastName}`}
-                  />
-                </div>
-              ) : (
-                <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
-                  <span className="fill-zinc-700">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+          <div className={`flex gap-2 max-w-[80%] lg:max-w-[60%]`}>
+            {showSender ? (
+              <>
+                {chatData?.chatType === "group" &&
+                  userInfo._id !== message.sender._id &&
+                  (message.sender.profilePic ? (
+                    <div className="min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
+                      <img
+                        src={`${HOST}/${message.sender.profilePic}`}
+                        alt={`${message.sender.firstName} ${message.sender.lastName}`}
                       />
-                      <path
-                        d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              ))}
+                    </div>
+                  ) : (
+                    <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                      <span className="fill-zinc-700">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  ))}
+              </>
+            ) : (
+              <>
+                {chatData?.chatType === "group" && (
+                  <div className="min-w-8 w-8 h-8"></div>
+                )}
+              </>
+            )}
+
             <div
               className={`flex flex-col ${
                 userInfo._id === message.sender._id && "items-end"
               } gap-1`}
             >
+              {showSender && (
+                <div
+                  className={`flex gap-2 ${
+                    userInfo._id === message.sender._id && "justify-end"
+                  }`}
+                >
+                  {chatData?.chatType === "group" &&
+                    userInfo._id !== message.sender._id && (
+                      <div className="font-bold">
+                        {`${message.sender.firstName} ${message.sender.lastName}`}
+                      </div>
+                    )}
+                </div>
+              )}
               {message.fileUrl && (
                 <div
                   className={`flex gap-2 items-end ${
@@ -157,7 +189,7 @@ const Message = ({ message }: { message: Message }) => {
 
               {message.content && (
                 <div
-                  className={`relative w-fit leading-6 ${
+                  className={`relative pr-16 w-fit leading-6 ${
                     userInfo._id !== message.sender._id
                       ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
                       : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
@@ -166,22 +198,11 @@ const Message = ({ message }: { message: Message }) => {
                   <Markdown remarkPlugins={[remarkGfm]}>
                     {message.content}
                   </Markdown>
+                  <div className="absolute bottom-2 right-2 text-xs font-semibold text-zinc-500">
+                    {moment(message.timeStamp).format("LT")}
+                  </div>
                 </div>
               )}
-              <div
-                className={`flex gap-2 ${
-                  userInfo._id === message.sender._id && "justify-end"
-                }`}
-              >
-                {chatData?.chatType === "group" && userInfo._id !== message.sender._id && (
-                  <div className="font-bold">
-                    {`${message.sender.firstName} ${message.sender.lastName}`}
-                  </div>
-                )}
-                <div className="text-xs pt-1.5 font-semibold text-zinc-500">
-                  {moment(message.timeStamp).fromNow()}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -189,7 +210,7 @@ const Message = ({ message }: { message: Message }) => {
       {(message.messageType === "leaving" ||
         message.messageType === "create" ||
         message.messageType === "add") && (
-        <div className="flex justify-center w-full">
+        <div className="flex justify-center my-1 w-full">
           <div className="bg-zinc-900 w-fit max-w-[400px] text-center bg-opacity-40 text-sm py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
             {message.content}
           </div>
