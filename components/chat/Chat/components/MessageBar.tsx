@@ -21,29 +21,29 @@ const MessageBar = () => {
   const [message, setMessage] = useState("");
 
   const [fileMenu, setFileMenu] = useState(false);
-  const [filePath, setFilePath] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [filePaths, setFilePaths] = useState<string[] | null>(null);
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    setFilePath("");
+    setFilePaths(null);
     setFileMenu(false);
   }, [messages]);
 
   const sendMessage = async () => {
-    const uploadedFilePath = await uploadFile();
+    const uploadedFilePaths = await uploadFiles();
 
-    setFile(null);
-    setFilePath("");
+    setFiles(null);
+    setFilePaths(null);
 
-    if (filePath !== "" || message !== "") {
+    if (files || message) {
       socket?.socket?.emit("sendMessage", {
         sender: userInfo._id,
         content: message ? message : "",
         recipient: chatData?._id,
-        fileUrl: uploadedFilePath ? uploadedFilePath : "",
-        messageType: filePath ? "file" : "text",
+        fileUrls: uploadedFilePaths.length !== 0 ? uploadedFilePaths : [],
+        messageType: filePaths ? "file" : "text",
       });
     }
 
@@ -59,17 +59,20 @@ const MessageBar = () => {
     }
   }, [textAreaRef, message]);
 
-  const uploadFile = async () => {
-    if (file) {
+  const uploadFiles = async () => {
+    if (files) {
       try {
         const formData = new FormData();
-        formData.append("file", file);
+
+        for (let i = 0; i < files!.length; i++) {
+          formData.append("files", files![i]);
+        }
 
         const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, {
           withCredentials: true,
         });
 
-        return response.data.filePath;
+        return response.data.filePaths;
       } catch (error) {
         errorContext?.setErrorMessage("Failed to upload file");
         return false;
@@ -78,7 +81,7 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center pt-4">
+    <div className="flex justify-center pt-4 mx-2">
       <div className="flex items-center gap-3 md:gap-0 w-full max-w-[880px] bg-zinc-900 md:pl-2 pr-4 rounded-t-xl">
         <div className="pt-1 w-full">
           <textarea
@@ -119,10 +122,10 @@ const MessageBar = () => {
           {fileMenu && (
             <SelectFileMenu
               setFileMenu={setFileMenu}
-              filePath={filePath}
-              setFilePath={setFilePath}
-              file={file}
-              setFile={setFile}
+              filePaths={filePaths}
+              setFilePaths={setFilePaths}
+              files={files}
+              setFiles={setFiles}
             />
           )}
           <button

@@ -1,4 +1,4 @@
-import { Chat, ModalContainer, SideMenu } from "@/components/chat";
+import { Chat, LightBox, ModalContainer, SideMenu } from "@/components/chat";
 
 const ChatPage = () => {
   return (
@@ -6,7 +6,9 @@ const ChatPage = () => {
       <SideMenu />
       <Chat />
       <ModalContainer />
+      <LightBox />
     </main>
   );
 };
+
 export default ChatPage;

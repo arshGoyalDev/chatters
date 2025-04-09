@@ -41,12 +41,12 @@ const MessagesContainer = ({
       return (
         <Fragment key={message._id}>
           {showDate && (
-            <div className="flex justify-center items-center gap-2 my-4 w-full">
-              <div className="w-full h-0.5 bg-zinc-800"></div>
+            <div className="flex justify-center items-center gap-2 mt-4 mb-1 w-full">
+              <div className="w-full h-0.5 bg-zinc-900"></div>
               <div className="w-fit text-nowrap text-sm text-zinc-500">
                 {messageDate}
               </div>
-              <div className="w-full h-0.5 bg-zinc-800"></div>
+              <div className="w-full h-0.5 bg-zinc-900"></div>
             </div>
           )}
           <Message message={message} showSender={chatData?.chatType === "group" ? showDate ? true : showSender : false} />

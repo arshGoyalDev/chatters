@@ -7,8 +7,8 @@ const AudioPlayer = ({
   fileName,
 }: {
   fileName: string;
-  filePath: string;
-  file: File | undefined;
+  filePath?: string;
+  file?: File;
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -19,7 +19,7 @@ const AudioPlayer = ({
   const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
-    audioRef.current = new Audio(`${file ? filePath : `${HOST}/${filePath}`}`);
+    audioRef.current = new Audio(`${file ? URL.createObjectURL(file) : `${HOST}/${filePath}`}`);
 
     audioRef.current.onloadedmetadata = () => {
       if (audioRef.current?.duration) setDuration(audioRef?.current?.duration);
@@ -81,7 +81,7 @@ const AudioPlayer = ({
   );
 
   return (
-    <div className="flex items-center gap-4 bg-black text-white py-2 px-2 sm:py-3 sm:px-4 rounded-md">
+    <div className="w-full flex items-center gap-4 bg-black text-white py-2 px-2 sm:py-3 sm:px-4 rounded-md">
       <button
         className="flex items-center justify-center p-1.5 bg-neutral-900 stroke-white rounded-md"
         onClick={togglePlayPause1}

@@ -110,7 +110,7 @@ const SelectMultiContact = ({
           autoComplete="off"
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Search for people..."
-          className="w-full py-2 px-1 bg-transparent rounded-lg placeholder:text-zinc-400"
+          className="w-full py-2 px-1 bg-transparent rounded-lg placeholder:text-zinc-600"
         />
 
         <button className="p-1">

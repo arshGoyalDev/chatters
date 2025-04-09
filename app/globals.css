@@ -10,7 +10,7 @@ input:focus,
 input:active,
 textarea:focus,
 textarea:active {
-  @apply outline-none border-zinc-500;
+  @apply outline-none border-zinc-700;
 }
 
 button:focus,

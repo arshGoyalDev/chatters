@@ -14,7 +14,7 @@ const SEARCH_CONTACT_ROUTE = `${CONTACT_ROUTES}/search-contact`;
 
 const MESSAGE_ROUTES = "api/message";
 const GET_MESSAGES_ROUTE = `${MESSAGE_ROUTES}/messages`;
-const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/file`;
+const UPLOAD_FILE_ROUTE = `${MESSAGE_ROUTES}/files`;
 
 const CHAT_ROUTES = "api/chat";
 const CREATE_PERSONAL_CHAT_ROUTE = `${CHAT_ROUTES}/personal-chat`;

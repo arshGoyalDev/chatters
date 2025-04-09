@@ -1,7 +1,7 @@
 import { UserInfo } from "./authTypes";
 interface Message {
   content: string;
-  fileUrl: string;
+  fileUrls: string[] | null;
   messageType: string;
   recipient: string;
   sender: UserInfo;

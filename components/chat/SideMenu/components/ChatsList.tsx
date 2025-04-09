@@ -42,7 +42,7 @@ const ChatsList = () => {
               onClick={() => openChat(chat)}
               className={`flex justify-between gap-2 items-center ${
                 chatData?._id === chat._id && "bg-zinc-950 bg-opacity-35"
-              } transition-all duration-300 py-3 pl-2 pr-4 hover:bg-opacity-40 rounded-lg`}
+              } transition-all duration-300 py-2 pl-2 pr-4 hover:bg-opacity-40 rounded-lg`}
             >
               <div className="flex gap-4 items-center">
                 <div className="w-9 h-9 rounded-lg bg-zinc-800">

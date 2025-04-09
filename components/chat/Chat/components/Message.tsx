@@ -2,17 +2,13 @@ import type { Message } from "@/utils/types";
 
 import moment from "moment";
 
-import FileDisplay from "./FileDisplay";
-
-import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
 
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
-
-import { useError } from "@/context";
+import DisplayFiles from "./DisplayFiles";
 
 const Message = ({
   message,
@@ -22,40 +18,18 @@ const Message = ({
   showSender: boolean;
 }) => {
   const { userInfo, chatData } = useAppStore();
-  const errorContext = useError();
-
-  const downloadFile = async () => {
-    try {
-      const response = await apiClient.get(`${HOST}/${message.fileUrl}`, {
-        responseType: "blob",
-      });
-
-      const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-
-      link.href = urlBlob;
-      link.setAttribute(
-        "download",
-        message.fileUrl
-          ? message.fileUrl.split("/")[message.fileUrl.split("/").length - 1]
-          : ""
-      );
-
-      document.body.appendChild(link);
-
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(urlBlob);
-    } catch (error) {
-      errorContext?.setErrorMessage("Failed to download file");
-    }
-  };
 
   return (
     <>
       {(message.messageType === "file" || message.messageType === "text") && (
         <div
-          className={`flex flex-col gap-2 ${showSender ? "mt-4" : "mt-2"} ${
+          className={`flex flex-col gap-2 ${
+            chatData?.chatType === "group"
+              ? showSender
+                ? "mt-4"
+                : "mt-2"
+              : "mt-3"
+          } ${
             userInfo._id === message.sender._id ? "items-end" : "items-start"
           }`}
         >
@@ -106,7 +80,7 @@ const Message = ({
             )}
 
             <div
-              className={`flex flex-col ${
+              className={`relative flex flex-col ${
                 userInfo._id === message.sender._id && "items-end"
               } gap-1`}
             >
@@ -124,67 +98,11 @@ const Message = ({
                     )}
                 </div>
               )}
-              {message.fileUrl && (
-                <div
-                  className={`flex gap-2 items-end ${
-                    userInfo._id !== message.sender._id
-                      ? "flex-row"
-                      : "flex-row-reverse"
-                  }`}
-                >
-                  <div
-                    className={`flex w-full h-fit max-w-96 rounded-lg p-2 border-2 ${
-                      userInfo._id === message.sender._id
-                        ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
-                        : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
-                    }`}
-                  >
-                    <FileDisplay filePath={message.fileUrl} />
-                  </div>
-                  <button
-                    onClick={downloadFile}
-                    className={`p-0.5 rounded-lg border-2 ${
-                      userInfo._id === message.sender._id
-                        ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
-                        : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
-                    }`}
-                  >
-                    <span
-                      className={`${
-                        userInfo._id === message.sender._id
-                          ? "stroke-white"
-                          : "stroke-primary"
-                      }`}
-                    >
-                      <svg
-                        width="36"
-                        height="36"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9 11.51L12 14.51L15 11.51"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 14.51V6.51001"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M6 16.51C9.89 17.81 14.11 17.81 18 16.51"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </button>
-                </div>
+              {message.fileUrls && (
+                <DisplayFiles
+                  fileUrls={message.fileUrls}
+                  sender={message.sender._id === userInfo._id}
+                />
               )}
 
               {message.content && (
@@ -198,7 +116,13 @@ const Message = ({
                   <Markdown remarkPlugins={[remarkGfm]}>
                     {message.content}
                   </Markdown>
-                  <div className="absolute bottom-2 right-2 text-xs font-semibold text-zinc-500">
+                  <div
+                    className={`absolute bottom-2 right-2 text-xs font-semibold ${
+                      userInfo._id !== message.sender._id
+                        ? "text-primary/40"
+                        : "text-white/30"
+                    }`}
+                  >
                     {moment(message.timeStamp).format("LT")}
                   </div>
                 </div>
@@ -210,8 +134,8 @@ const Message = ({
       {(message.messageType === "leaving" ||
         message.messageType === "create" ||
         message.messageType === "add") && (
-        <div className="flex justify-center my-1 w-full">
-          <div className="bg-zinc-900 w-fit max-w-[400px] text-center bg-opacity-40 text-sm py-2 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
+        <div className="flex justify-center my-1.5 w-full">
+          <div className="bg-zinc-900 w-fit max-w-[400px] text-center bg-opacity-40 text-sm py-1.5 px-3 border-2 border-zinc-800 text-zinc-400 rounded-lg">
             {message.content}
           </div>
         </div>
