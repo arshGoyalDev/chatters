@@ -3,8 +3,7 @@
 
 import { useEffect, useState } from "react";
 
-import { ModalHeader } from "../components";
-import SearchedContact from "../components/SearchedContact";
+import { ModalHeader, SearchedContact } from "./";
 
 import { apiClient } from "@/lib/api-client";
 

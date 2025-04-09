@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatsList, UserMenu } from "./components";
+import { ChatsList, UserMenu } from "./ui";
 
 const SideMenu = () => {
   return (

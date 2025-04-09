@@ -6,7 +6,7 @@ import useAppStore from "@/store";
 
 import { useError, useSocket } from "@/context";
 
-import SelectFileMenu from "./SelectFileMenu";
+import { SelectFileMenu } from "../message";
 
 import { apiClient } from "@/lib/api-client";
 

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRef, useState } from "react";
 
-import { ModalHeader, SelectMultiContact } from "../components";
+import { ModalHeader, SelectMultiContact } from "./";
 
 import { UserInfo } from "@/utils/types";
 import {

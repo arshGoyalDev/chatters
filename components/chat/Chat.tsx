@@ -8,7 +8,7 @@ import {
   ChatHeader,
   ChatInfo,
   MessagesContainer,
-} from "./components";
+} from "./ui";
 
 import useAppStore from "@/store";
 

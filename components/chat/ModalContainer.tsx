@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect } from "react";
 
-import { AddMemberModal, NewChatModal, NewGroupChatModal } from "./modals";
+import { AddMemberModal, NewChatModal, NewGroupChatModal } from "./ui";
 
 import useAppStore from "@/store";
 

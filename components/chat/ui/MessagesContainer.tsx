@@ -4,7 +4,7 @@ import useAppStore from "@/store";
 
 import { Fragment, ReactNode, useEffect, useRef } from "react";
 
-import Message from "./Message";
+import Message from "../message";
 
 import moment from "moment";
 
