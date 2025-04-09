@@ -25,7 +25,9 @@ const setupSocket = (io) => {
   };
 
   const sendMessage = async (message) => {
-    const { recipient, content, messageType, fileUrl, sender } = message;
+    const { recipient, content, messageType, fileUrls, sender } = message;
+
+    console.log("hello");
 
     const createdMessage = await Message.create({
       sender,
@@ -33,7 +35,7 @@ const setupSocket = (io) => {
       content: content,
       messageType,
       timeStamp: new Date(),
-      fileUrl,
+      fileUrls: fileUrls ? fileUrls : null,
     });
 
     let messageData = await Message.findById(createdMessage._id)

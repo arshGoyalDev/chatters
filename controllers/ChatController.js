@@ -157,7 +157,7 @@ const getChatMessages = async (request, response, next) => {
       $or: [{ _id: chat.messages }],
     })
       .populate("sender")
-      .sort({ timestamp: 1 });
+      .sort({ timeStamp: 1 });
 
     return response.status(200).json({ messages });
   } catch (error) {

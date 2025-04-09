@@ -16,7 +16,7 @@ const getMessages = async (request, response, next) => {
         { sender: user2, recipient: user1 },
       ],
     }).sort({ timestamp: 1 });
-    
+
     return response.status(200).json({ messages: messages });
   } catch (error) {
     console.log({ error });
@@ -24,26 +24,32 @@ const getMessages = async (request, response, next) => {
   }
 };
 
-const uploadFile = async (request, response, next) => {
+const uploadFiles = async (request, response, next) => {
   try {
-    if (!request.file) {
-      return response.status(400).send("File is required");
+    const files = request.files;
+    let filePaths = [];
+
+    if (!request.files) {
+      return response.status(400).send("Files is/are required");
     }
 
     const date = Date.now();
+    const fileDir = `uploads/files/${date}`;
 
-    let fileDir = `uploads/files/${date}`;
-    let fileName = `${fileDir}/${request.file.originalname}`;
+    files.forEach((file) => {
+      const fileName = `${fileDir}/${file.originalname}`;
 
-    mkdirSync(fileDir, { recursive: true });
+      mkdirSync(fileDir, { recursive: true });
+      renameSync(file.path, fileName);
 
-    renameSync(request.file.path, fileName);
+      filePaths.push(fileName);
+    });
 
-    return response.status(200).json({ filePath: fileName });
+    return response.status(200).json({ filePaths });
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
 
-export { getMessages, uploadFile };
+export { getMessages, uploadFiles };

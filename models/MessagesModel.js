@@ -20,8 +20,8 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  fileUrl: {
-    type: String,
+  fileUrls: {
+    type: [String],
     required: false,
   },
   timeStamp: {
