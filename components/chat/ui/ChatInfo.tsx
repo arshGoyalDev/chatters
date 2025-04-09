@@ -170,8 +170,13 @@ const ChatInfo = ({
             <div className="flex flex-col gap-2">
               {messages.map(
                 (message) =>
-                  message.messageType === "file" && (
-                    <File key={message._id} filePath={message.fileUrl} />
+                  message.messageType === "file" &&
+                  message.fileUrls && (
+                    <>
+                      {message.fileUrls.map((fileUrl) => (
+                        <File key={fileUrl} filePath={fileUrl} />
+                      ))}
+                    </>
                   )
               )}
             </div>
