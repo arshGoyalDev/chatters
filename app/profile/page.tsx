@@ -289,10 +289,10 @@ const ProfilePage = () => {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className={`py-4 px-4 w-full bg-transparent border-2 border-neutral-900 ${
+                className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 ${
                   error
                     ? "placeholder:text-red-600 text-red-600"
-                    : "placeholder:text-neutral-600 text-white"
+                    : "placeholder:text-zinc-600 text-white"
                 } rounded-t-lg`}
                 autoComplete="off"
                 placeholder="first name"
@@ -301,13 +301,13 @@ const ProfilePage = () => {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="py-4 px-4 w-full bg-transparent border-2 border-neutral-900 rounded-b-lg placeholder:text-neutral-600 text-white"
+                className="py-4 px-4 w-full bg-transparent border-2 border-zinc-900 rounded-b-lg placeholder:text-zinc-600 text-white"
                 autoComplete="off"
                 placeholder="last name"
               />
               {error && (
                 <div className="absolute right-0 top-3 mt-4 flex items-center justify-center gap-2 text-sm text-center text-red-500">
-                  <div className="bg-neutral-900 py-1.5 pb-1 px-2 rounded-ss-lg">
+                  <div className="bg-zinc-900 py-1.5 pb-1 px-2 rounded-ss-lg">
                     {error}
                   </div>
                 </div>
@@ -321,7 +321,7 @@ const ProfilePage = () => {
               type="text"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="py-4 px-4 w-full bg-transparent border-2 border-neutral-900 placeholder:text-neutral-600 text-white rounded-lg"
+              className="py-4 px-4 w-full bg-transparent border-2 border-zinc-900 placeholder:text-zinc-600 text-white rounded-lg"
               autoComplete="off"
               placeholder="status"
             />{" "}

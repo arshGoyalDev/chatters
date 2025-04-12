@@ -92,7 +92,7 @@ const NewGroupChatModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] rounded-xl bg-zinc-950 border-2 border-neutral-900 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] max-w-[800px] rounded-xl bg-zinc-950 border-2 border-zinc-900 shadow-2xl">
       <ModalHeader title="New Group Chat" />
 
       <div className="flex flex-col lg:flex-row max-h-[65vh] lg:h-fit overflow-y-auto">

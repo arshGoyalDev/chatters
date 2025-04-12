@@ -85,10 +85,10 @@ const SignupTab = ({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className={`py-4 px-4 w-full bg-transparent border-2 border-neutral-900 ${
+          className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 ${
             errorName
               ? "placeholder:text-red-600 text-red-600"
-              : "placeholder:text-neutral-600 text-white"
+              : "placeholder:text-zinc-600 text-white"
           } rounded-t-lg`}
           autoComplete="off"
           placeholder="full name"
@@ -97,10 +97,10 @@ const SignupTab = ({
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={`py-4 px-4 w-full bg-transparent border-2 border-neutral-900 mt-1 ${
+          className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 mt-1 ${
             errorEmail
               ? "placeholder:text-red-600 text-red-600"
-              : "placeholder:text-neutral-600 text-white"
+              : "placeholder:text-zinc-600 text-white"
           }`}
           autoComplete="off"
           placeholder="email"
@@ -110,10 +110,10 @@ const SignupTab = ({
             type={passwordVisible ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={`py-4 px-4 w-full bg-transparent border-2 border-neutral-900 ${
+            className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 ${
               errorPassword
                 ? "placeholder:text-red-600 text-red-600"
-                : "placeholder:text-neutral-600 text-white"
+                : "placeholder:text-zinc-600 text-white"
             }`}
             autoComplete="off"
             placeholder="password..."
@@ -122,7 +122,7 @@ const SignupTab = ({
           <button
             type="button"
             onClick={() => setPasswordVisible(!passwordVisible)}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-neutral-300"
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-zinc-300"
           >
             {passwordVisible ? "Hide" : "Show"}
           </button>
@@ -139,10 +139,10 @@ const SignupTab = ({
 
       {(errorEmail || errorPassword) && (
         <div className="mt-4 flex items-center justify-center gap-2 text-sm text-center text-red-500">
-          <div className="bg-neutral-900 py-1.5 pb-1 px-2 rounded-lg">
+          <div className="bg-zinc-900 py-1.5 pb-1 px-2 rounded-lg">
             {errorEmail}
           </div>
-          <div className="bg-neutral-900 py-1.5 pb-1 px-2 rounded-lg">
+          <div className="bg-zinc-900 py-1.5 pb-1 px-2 rounded-lg">
             {errorPassword}
           </div>
         </div>

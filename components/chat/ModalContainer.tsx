@@ -25,7 +25,7 @@ const ModalContainerFunc = () => {
   return (
     <>
       {chatModal || groupChatModal || addMemberModal ? (
-        <div className="z-[2000] fixed top-0 left-0 flex justify-center items-end md:items-center w-full h-full bg-neutral-950 bg-opacity-30">
+        <div className="z-[2000] fixed top-0 left-0 flex justify-center items-end md:items-center w-full h-full bg-zinc-950 bg-opacity-30">
           <div
             onClick={() => {
               router.push("/chat");

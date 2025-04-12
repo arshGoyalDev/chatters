@@ -4,9 +4,9 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 const AudioPlayer = ({
   filePath,
   file,
-  fileName,
+  filename,
 }: {
-  fileName: string;
+  filename: string;
   filePath?: string;
   file?: File;
 }) => {
@@ -83,7 +83,7 @@ const AudioPlayer = ({
   return (
     <div className="w-full flex items-center gap-4 bg-black text-white py-2 px-2 sm:py-3 sm:px-4 rounded-md">
       <button
-        className="flex items-center justify-center p-1.5 bg-neutral-900 stroke-white rounded-md"
+        className="flex items-center justify-center p-1.5 bg-zinc-900 stroke-white rounded-md"
         onClick={togglePlayPause1}
       >
         {isPlaying ? (
@@ -128,14 +128,14 @@ const AudioPlayer = ({
 
       <div className="flex flex-col-reverse gap-1">
         <p className="md:text-sm font-semibold">
-          {fileName.length > 20 ? fileName.substring(0, 20) + "..." : fileName}
+          {filename.length > 20 ? filename.substring(0, 20) + "..." : filename}
         </p>
         <div className="flex items-center h-4 md:h-5 gap-0.5 flex-grow">
           {audioData.map((height, index) => (
             <div
               key={index}
               className={`rounded-sm md:h-5 ${
-                index < activeCount1 ? "bg-white" : "bg-neutral-700"
+                index < activeCount1 ? "bg-white" : "bg-zinc-700"
               }`}
               style={{
                 height: `${height}px`,

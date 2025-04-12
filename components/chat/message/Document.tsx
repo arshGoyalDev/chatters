@@ -1,11 +1,17 @@
-const Document = ({ filePath, filename }: { filename: string; filePath: string }) => {
+const Document = ({
+  filePath,
+  filename,
+}: {
+  filename: string;
+  filePath: string;
+}) => {
   return (
-    <div className="w-full flex items-center gap-4 bg-zinc-950 px-4 py-4 rounded-lg">
-      <div className="bg-zinc-900 p-3 rounded-lg">
+    <div className="flex items-center gap-2 w-full overflow-hidden md:gap-4 bg-zinc-950 py-2 px-2 md:px-4 md:py-4 rounded-lg">
+      <div className="bg-zinc-900 p-2 rounded-lg">
         <span className="stroke-white">
           <svg
-            width="28"
-            height="28"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +44,12 @@ const Document = ({ filePath, filename }: { filename: string; filePath: string }
         </span>
       </div>
       <p className="font-semibold">
-        {filename.length > 30 ? filename.substring(0, 30) + "..." : filename}
+        <span className="sm:hidden">
+          {filename.length > 10 ? filename.substring(0, 10) + "..." : filename}
+        </span>
+        <span className="hidden sm:inline">
+          {filename.length > 30 ? filename.substring(0, 30) + "..." : filename}
+        </span>
       </p>
     </div>
   );

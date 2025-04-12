@@ -7,7 +7,7 @@ import Image from "next/image";
 const HomePage = () => {
   return (
     <main className="min-h-screen text-white">
-      <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-neutral-800 rounded-lg">
+      <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-zinc-800 rounded-lg">
         <div>
           <span className="font-bold uppercase text-xl">Chatters</span>
         </div>

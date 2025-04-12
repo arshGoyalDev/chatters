@@ -22,7 +22,7 @@ const AuthPage = () => {
 
   return (
     <main className="h-screen grid xl:grid-cols-2">
-      <div className="bg-neutral-900 w-full h-full hidden md:block">
+      <div className="bg-zinc-900 w-full h-full hidden xl:block">
         <AuthCarousel />
       </div>
 
@@ -33,4 +33,5 @@ const AuthPage = () => {
     </main>
   );
 };
+
 export default AuthPage;

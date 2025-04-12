@@ -25,8 +25,8 @@ const DisplayFiles = ({
     let tempDocuments: string[] = [];
 
     fileUrls.forEach((fileUrl) => {
-      const fileName = fileUrl.split("/").pop();
-      const fileType = checkForFileType(fileName ?? "");
+      const filename = fileUrl.split("/").pop();
+      const fileType = checkForFileType(filename ?? "");
 
       if (fileType === "image" || fileType === "video") {
         tempImagesOrVideo.push({ url: fileUrl, type: fileType });
@@ -42,24 +42,20 @@ const DisplayFiles = ({
     setDocuments(tempDocuments);
   }, []);
 
-  useEffect(() => {
-    console.log(imagesOrVideo, audioFiles, documents);
-  }, [imagesOrVideo, audioFiles, documents]);
-
   const checkForFileType = (
-    fileName: string
+    filename: string
   ): "image" | "video" | "audio" | "file" => {
     const imageRegex =
       /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
-    if (imageRegex.test(fileName)) {
+    if (imageRegex.test(filename)) {
       return "image";
     }
     const videoRegex = /\.(mp4|ogg|webm)$/i;
-    if (videoRegex.test(fileName)) {
+    if (videoRegex.test(filename)) {
       return "video";
     }
     const audioRegex = /\.(mp3|wav|ogg)$/i;
-    if (audioRegex.test(fileName)) {
+    if (audioRegex.test(filename)) {
       return "audio";
     }
     return "file";
@@ -102,7 +98,7 @@ const DisplayFiles = ({
                     className="rounded-lg"
                   />
                 </div>
-                <div className="absolute top-0 left-0 flex items-center justify-center gap-2 w-full h-full bg-zinc-950/80 stroke-neutral-200">
+                <div className="absolute top-0 left-0 flex items-center justify-center gap-2 w-full h-full bg-zinc-950/80 stroke-zinc-200">
                   <svg
                     width="36"
                     height="36"
@@ -175,14 +171,14 @@ const DisplayFiles = ({
         >
           <AudioPlayer
             filePath={audio}
-            fileName={audio.split("/").pop() ?? ""}
+            filename={audio.split("/").pop() ?? ""}
           />
         </div>
       ))}
       {documents?.map((document) => (
         <div
           key={document}
-          className={`w-fit  h-fit overflow-hidden rounded-lg p-2 border-2 ${
+          className={`w-fit h-fit overflow-hidden rounded-lg p-2 border-2 ${
             sender
               ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
               : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"

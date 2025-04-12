@@ -32,7 +32,7 @@ const AddMemberModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] flex flex-col max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-950 border-2 border-neutral-800 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] flex flex-col max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-950 border-2 border-zinc-800 shadow-2xl">
       <ModalHeader title="Add Member/s" />
       <div className="flex flex-col h-full">
         <SelectMultiContact
