@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 import AudioPlayer from "./AudioPlayer";
 import Document from "./Document";
@@ -8,9 +8,12 @@ const FilesViewer = ({
   setFiles,
 }: {
   files: File[];
-  setFiles: Dispatch<SetStateAction<File[] | null>>;
+  setFiles: Dispatch<SetStateAction<FileList | null>>;
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [addedFiles, setAddedFiles] = useState<FileList | null>(null);
 
   const checkForFileType = (
     filename: string
@@ -49,6 +52,31 @@ const FilesViewer = ({
     );
   };
 
+  useEffect(() => {
+    if (addedFiles) {
+      const newFiles = files;
+
+      Array.from(addedFiles).forEach((file) => {
+        let matchFound = false;
+
+        newFiles.forEach((f) => {
+          if (file.name === f.name) {
+            matchFound = true;
+          }
+        });
+
+        if (!matchFound) newFiles.push(file);
+      });
+
+      const newFileList = new DataTransfer();
+      newFiles.forEach((file) => {
+        newFileList.items.add(file);
+      });
+
+      setFiles(newFileList.files);
+    }
+  }, [addedFiles]);
+
   const removeFile = () => {
     if (files.length === 1) {
       setFiles(null);
@@ -56,59 +84,108 @@ const FilesViewer = ({
     }
 
     const newFiles = files.filter((_, index) => index !== activeIndex);
-    setFiles(newFiles);
     if (newFiles.length > 0) setActiveIndex(0);
+
+    const newFileList = new DataTransfer();
+    newFiles.forEach((file) => {
+      newFileList.items.add(file);
+    });
+
+    setFiles(newFileList.files);
   };
 
   return (
     <>
       <div className="relative w-full flex h-full flex-1 items-center justify-between gap-2 md:gap-8 py-4 px-2 md:px-8">
-        <button
-          onClick={removeFile}
-          className="z-20 absolute top-2 right-2 p-1 bg-zinc-950 border-2 border-zinc-800 rounded-md"
-        >
-          <span className="stroke-white">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+        <div className="z-20 absolute top-2 right-2 flex items-center gap-2">
+          <button
+            onClick={removeFile}
+            className="p-1 bg-zinc-950 border-2 border-zinc-800 rounded-md"
+          >
+            <span className="stroke-white">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="0.5" y="0.5" width="23" height="23" stroke="black" />
+                <path
+                  d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M18.85 9.14001L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79002C6.00002 22 5.91002 20.78 5.80002 19.21L5.15002 9.14001"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M10.33 16.5H13.66"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M9.5 12.5H14.5"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+          <div>
+            <button
+              onClick={() => {
+                if (fileInputRef.current) {
+                  fileInputRef.current.click();
+                }
+              }}
+              className="p-1 bg-primary border-2 border-zinc-800 rounded-md"
             >
-              <rect x="0.5" y="0.5" width="23" height="23" stroke="black" />
-              <path
-                d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M18.85 9.14001L18.2 19.21C18.09 20.78 18 22 15.21 22H8.79002C6.00002 22 5.91002 20.78 5.80002 19.21L5.15002 9.14001"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10.33 16.5H13.66"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M9.5 12.5H14.5"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-        </button>
+              <span className="stroke-black">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6 12H18"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 18V6"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+            <input
+              type="file"
+              name="files"
+              className="hidden"
+              multiple
+              ref={fileInputRef}
+              onChange={(e) => setAddedFiles(e.target.files)}
+            />
+          </div>
+        </div>
         <button
           onClick={() => {
             if (activeIndex !== 0) setActiveIndex((prev) => prev - 1);

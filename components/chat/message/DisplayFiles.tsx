@@ -81,8 +81,8 @@ const DisplayFiles = ({
                 {file.type === "image" ? (
                   <img
                     src={`${HOST}/${file.url}`}
-                    alt="image"
-                    className="rounded-lg"
+                    alt={file.url.split("/").pop() ?? "image"}
+                    className="rounded-lg aspect-square"
                   />
                 ) : (
                   <VideoPlayer url={file.url} />
@@ -94,8 +94,8 @@ const DisplayFiles = ({
                 <div>
                   <img
                     src={`${HOST}/${imagesOrVideo[3].url}`}
-                    alt="image"
-                    className="rounded-lg"
+                    alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
+                    className="rounded-lg aspect-square"
                   />
                 </div>
                 <div className="absolute top-0 left-0 flex items-center justify-center gap-2 w-full h-full bg-zinc-950/80 stroke-zinc-200">
@@ -131,8 +131,8 @@ const DisplayFiles = ({
                     {imagesOrVideo[3].type === "image" ? (
                       <img
                         src={`${HOST}/${imagesOrVideo[3].url}`}
-                        alt="image"
-                        className="rounded-lg"
+                        alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
+                        className="rounded-lg aspect-square"
                       />
                     ) : (
                       <VideoPlayer url={imagesOrVideo[3].url} />
@@ -149,8 +149,8 @@ const DisplayFiles = ({
                 {imagesOrVideo[0].type === "image" ? (
                   <img
                     src={`${HOST}/${imagesOrVideo[0].url}`}
-                    alt="image"
-                    className="rounded-lg"
+                    alt={imagesOrVideo[0].url.split("/").pop() ?? "image"}
+                    className="rounded-lg aspect-square"
                   />
                 ) : (
                   <VideoPlayer url={imagesOrVideo[0].url} />
