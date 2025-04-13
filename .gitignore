@@ -1,5 +1,12 @@
+# dependencies
 /node_modules
 
+# files from frontend
 /uploads
 
+# local variable
 *.env
+
+# Docker
+Dockerfile
+.dockerignore

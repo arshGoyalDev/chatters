@@ -6,6 +6,11 @@ const setupSocket = (io) => {
   const userSocketMap = new Map();
 
   const disconnect = async (socket) => {
+    if (!socket.handshake.query.userId) {
+      console.warn("User ID missing during disconnect.");
+      return;
+    }
+
     console.log(`${socket.handshake.query.userId} is offline`);
 
     await User.findByIdAndUpdate(
@@ -26,8 +31,6 @@ const setupSocket = (io) => {
 
   const sendMessage = async (message) => {
     const { recipient, content, messageType, fileUrls, sender } = message;
-
-    console.log("hello");
 
     const createdMessage = await Message.create({
       sender,

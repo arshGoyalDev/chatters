@@ -4,7 +4,7 @@ import { compare } from "bcrypt";
 
 import User from "../models/UserModel.js";
 
-import { renameSync, unlinkSync } from "fs";
+import { renameSync, unlinkSync, existsSync } from "fs";
 
 const maxAge = 7 * 24 * 60 * 60 * 1000;
 
@@ -43,7 +43,6 @@ const signup = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -87,7 +86,6 @@ const login = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -113,7 +111,6 @@ const getUserInfo = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -151,7 +148,6 @@ const updateProfile = async (request, response, next) => {
       },
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -202,7 +198,11 @@ const removeProfilePic = async (request, response, next) => {
     }
 
     if (user.profilePic) {
-      unlinkSync(user.profilePic);
+      if (existsSync(user.profilePic)) {
+        unlinkSync(user.profilePic);
+      } else {
+        console.warn("File not found:", user.profilePic);
+      }
     }
 
     user.profilePic = "";
@@ -210,7 +210,6 @@ const removeProfilePic = async (request, response, next) => {
 
     return response.status(200).send("Profile Pic deleted successfully");
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -220,7 +219,6 @@ const logout = async (request, response, next) => {
     response.cookie("jwt", "", {maxAge: 1, secure:true, sameSite:"None"});
     response.status(200).send("Logged out successfully");
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };

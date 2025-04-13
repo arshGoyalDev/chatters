@@ -24,7 +24,6 @@ const searchContacts = async (request, response, next) => {
 
     return response.status(200).json({ contacts });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };

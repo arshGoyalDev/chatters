@@ -1,4 +1,4 @@
-import { renameSync, unlinkSync } from "fs";
+import { renameSync, unlinkSync, existsSync } from "fs";
 
 import Chat from "../models/ChatModel.js";
 import Message from "../models/MessagesModel.js";
@@ -30,7 +30,6 @@ const createPersonalChat = async (request, response, next) => {
 
     return response.status(201).json({ chat: updatedChatData });
   } catch (error) {
-    console.log(error);
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -52,7 +51,6 @@ const addChatPic = async (request, response, next) => {
       chatPic: fileName,
     });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -65,7 +63,11 @@ const removeChatPic = async (request, response, next) => {
       return response.status(404).send("File Not found");
     }
 
-    unlinkSync(fileName);
+    if (existsSync(fileName)) {
+      unlinkSync(fileName);
+    } else {
+      console.warn("File not found:", fileName);
+    }
     return response.status(200).send("Group Pic deleted successfully");
   } catch (error) {
     return response.status(500).send("Internal Server Error");
@@ -124,7 +126,6 @@ const createGroupChat = async (request, response, next) => {
 
     return response.status(201).json({ chat: updatedChat });
   } catch (error) {
-    console.log({ error });
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -142,7 +143,6 @@ const getUserChats = async (request, response, next) => {
 
     return response.status(200).json({ chats });
   } catch (error) {
-    console.log(error);
     return response.status(500).send("Internal Server Error");
   }
 };
@@ -161,7 +161,6 @@ const getChatMessages = async (request, response, next) => {
 
     return response.status(200).json({ messages });
   } catch (error) {
-    console.log(error);
     return response.status(500).send("Internal Server Error");
   }
 };
