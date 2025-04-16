@@ -15,6 +15,8 @@ import ModalHeader from "./ModalHeader";
 import SelectMultiContact from "./SelectMultiContact"; 
 import SearchedContact from "./SearchedContact";
 
+import MediaGallery from "./MediaGallery";
+
 export {
   ChatHeader,
   ChatInfo,
@@ -29,4 +31,5 @@ export {
   ModalHeader,
   SelectMultiContact,
   SearchedContact,
+  MediaGallery,
 };

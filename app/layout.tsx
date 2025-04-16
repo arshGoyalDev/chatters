@@ -29,7 +29,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`${quicksand.className} bg-zinc-950 text-white`}>
+      <body className={`${quicksand.className} relative bg-zinc-950 text-white`}>
         <ContextContainer>{children}</ContextContainer>
       </body>
     </html>

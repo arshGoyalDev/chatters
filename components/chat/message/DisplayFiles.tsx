@@ -6,6 +6,8 @@ import AudioPlayer from "./AudioPlayer";
 import Document from "./Document";
 import VideoPlayer from "./VideoPlayer";
 
+import { useLightbox } from "@/context";
+
 const DisplayFiles = ({
   fileUrls,
   sender,
@@ -13,6 +15,8 @@ const DisplayFiles = ({
   fileUrls: string[];
   sender: boolean;
 }) => {
+  const { setPath } = useLightbox();
+
   const [imagesOrVideo, setImagesOrVideo] = useState<
     { url: string; type: string }[]
   >([]);
@@ -77,7 +81,7 @@ const DisplayFiles = ({
         {imagesOrVideo.length >= 2 ? (
           <>
             {imagesOrVideo.slice(0, 3).map((file) => (
-              <div key={file.url} className="rounded-lg">
+              <div onClick={() => setPath(file.url)} key={file.url} className="rounded-lg">
                 {file.type === "image" ? (
                   <img
                     src={`${HOST}/${file.url}`}
@@ -90,7 +94,7 @@ const DisplayFiles = ({
               </div>
             ))}
             {imagesOrVideo.length > 4 ? (
-              <button className={`relative rounded-lg`}>
+              <button onClick={() => setPath(imagesOrVideo[3].url)} className={`relative rounded-lg`}>
                 <div>
                   <img
                     src={`${HOST}/${imagesOrVideo[3].url}`}
@@ -127,7 +131,7 @@ const DisplayFiles = ({
             ) : (
               <>
                 {imagesOrVideo[3] && (
-                  <div key={imagesOrVideo[3].url} className="rounded-lg">
+                  <div onClick={() => setPath(imagesOrVideo[3].url)} key={imagesOrVideo[3].url} className="rounded-lg">
                     {imagesOrVideo[3].type === "image" ? (
                       <img
                         src={`${HOST}/${imagesOrVideo[3].url}`}
@@ -145,7 +149,7 @@ const DisplayFiles = ({
         ) : (
           <>
             {imagesOrVideo[0] && (
-              <div key={imagesOrVideo[0].url} className="rounded-lg">
+              <div onClick={() => setPath(imagesOrVideo[0].url)} key={imagesOrVideo[0].url} className="rounded-lg">
                 {imagesOrVideo[0].type === "image" ? (
                   <img
                     src={`${HOST}/${imagesOrVideo[0].url}`}

@@ -43,7 +43,7 @@ const MessageBar = () => {
         content: message ? message : "",
         recipient: chatData?._id,
         fileUrls: uploadedFilePaths.length !== 0 ? uploadedFilePaths : [],
-        messageType: filePaths ? "file" : "text",
+        messageType: files ? "file" : "text",
       });
     }
 

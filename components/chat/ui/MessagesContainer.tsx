@@ -41,7 +41,7 @@ const MessagesContainer = ({
       return (
         <Fragment key={message._id}>
           {showDate && (
-            <div className="flex justify-center items-center gap-2 mt-4 mb-1 w-full">
+            <div className="flex justify-center items-center gap-2 mt-4 mb-1.5 w-full">
               <div className="w-full h-0.5 bg-zinc-900"></div>
               <div className="w-fit text-nowrap text-sm text-zinc-500">
                 {messageDate}
@@ -49,7 +49,16 @@ const MessagesContainer = ({
               <div className="w-full h-0.5 bg-zinc-900"></div>
             </div>
           )}
-          <Message message={message} showSender={chatData?.chatType === "group" ? showDate ? true : showSender : false} />
+          <Message
+            message={message}
+            showSender={
+              chatData?.chatType === "group"
+                ? showDate
+                  ? true
+                  : showSender
+                : false
+            }
+          />
         </Fragment>
       );
     });
@@ -59,7 +68,7 @@ const MessagesContainer = ({
     <div id="messages-container" className={`flex-1 overflow-y-auto`}>
       <div
         id="messages"
-        className={`flex flex-col w-[90%] max-w-[1000px] mx-auto p-6 lg:py-10 ${
+        className={`flex flex-col w-[90%] max-w-[1000px] mx-auto p-6 pt-4 lg:pb-10 lg:pt-6 ${
           chatInfoVisible ? "lg:px-10" : "px-0"
         } 2xl:px-0`}
       >
