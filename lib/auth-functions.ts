@@ -22,7 +22,9 @@ const getUserInfo = async (
     }
   } catch (error) {
     if (error) {
-      router.push("/auth");
+      if (pathname !== "/") {
+        router.push("/auth");
+      }
     }
   }
 };

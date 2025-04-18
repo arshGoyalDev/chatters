@@ -3,50 +3,68 @@
 import { useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/animations";
 import Image from "next/image";
+import useAppStore from "@/store";
+import FeatureAnimations from "@/components/FeatureAnimations";
 
 const HomePage = () => {
+  const { userInfo } = useAppStore();
+  const featureItemsRef = useRef<HTMLDivElement[]>([]);
+
+  const addToRefs = (el: HTMLDivElement | null) => {
+    if (el && !featureItemsRef.current.includes(el)) {
+      featureItemsRef.current.push(el);
+    }
+  };
+
   return (
     <main className="min-h-screen text-white">
+      <FeatureAnimations featureItemsRef={featureItemsRef} />
       <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-zinc-800 rounded-lg">
         <div>
           <span className="font-bold uppercase text-xl">Chatters</span>
         </div>
 
         <div>
-          <TransitionLink
-            href="/auth"
-            className="flex items-center gap-2 bg-primary font-bold text-black py-2 px-4 rounded-lg"
-          >
-            <span>Get Started</span>
-            <span className="stroke-black">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14.4301 5.92993L20.5001 11.9999L14.4301 18.0699"
-                  strokeWidth="3.0"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M3.5 12H20.33"
-                  strokeWidth="3.0"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </TransitionLink>
+         {userInfo.email ? (
+           <TransitionLink href="/chat" className="bg-primary font-semibold text-black py-1 px-3 rounded-lg">
+             <span>Chat</span>
+           </TransitionLink>
+         ) : (
+         <TransitionLink
+           href="/auth"
+           className="flex items-center gap-2 bg-primary font-semibold text-black py-1 px-3 rounded-lg"
+         >
+           <span>Get Started</span>
+           <span className="stroke-black">
+             <svg
+               width="14"
+               height="14"
+               viewBox="0 0 24 24"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+             >
+               <path
+                 d="M14.4301 5.92993L20.5001 11.9999L14.4301 18.0699"
+                 strokeWidth="2.0"
+                 strokeMiterlimit="10"
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+               />
+               <path
+                 d="M3.5 12H20.33"
+                 strokeWidth="2.0"
+                 strokeMiterlimit="10"
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+               />
+             </svg>
+           </span>
+         </TransitionLink>
+         )}
         </div>
       </nav>
 
-      <section className="px-4 md:px-20 lg:px-40 py-16 xl:py-40">
+      <section className="px-4 md:px-20 lg:px-40 py-16 xl:py-32">
         <div className="container mx-auto max-w-7xl z-10">
           <div className="flex flex-col  lg:flex-row items-center gap-12">
             <div className="flex-1 text-center">
@@ -91,120 +109,116 @@ const HomePage = () => {
         </div>
 
         <div className="w-full max-w-[1000px] mx-auto h-fit mt-20">
-          <img src={"/chat-app.png"} alt="chat app screenshot" />
+          <img src={"/group-chat.png"} alt="chat app screenshot" className="rounded-xl" />
         </div>
       </section>
 
-      <section id="features" className="py-20 px-4 bg-zinc-950/50">
+      <section className="py-20 px-4 relative overflow-hidden">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 feature-card">
-              Awesome Features
-            </h2>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto feature-card">
-              Discover what makes Chatters the ultimate messaging platform
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Real-time Messaging</h3>
-              <p className="text-zinc-400 mb-4">
-                Send and receive messages instantly with our lightning-fast
-                infrastructure.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/chat.png"
-                  alt="Real-time Messaging"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
+            <span className="text-primary">Features</span> that make chatting better
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">  
+                <div className="relative h-64 rounded-xl overflow-hidden">
+                  <Image
+                    src="/new-chat.png"
+                    alt="New Chat"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">Instant Connections</h3>
+                <p className="text-zinc-400 text-lg">Start new conversations with anyone, anywhere, instantly. Our lightning-fast connection system ensures you're always just a click away from your next great conversation.</p>
               </div>
             </div>
 
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Share Files</h3>
-              <p className="text-zinc-400 mb-4">
-                Share documents, images, audios and more relevant to your chats.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/chat-2.png"
-                  alt="Share Files"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">
+                <div className="relative h-64 rounded-xl">
+                  <Image
+                    src="/group-chat.png"
+                    alt="Group Chat"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">Group Chats</h3>
+                <p className="text-zinc-400 text-lg">Create and manage group conversations with ease. Whether it's for work, friends, or family, our group chat feature makes staying connected simple and fun.</p>
               </div>
             </div>
 
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Blazing Fast</h3>
-              <p className="text-zinc-400 mb-4">
-                Optimized for speed and performance, ensuring smooth
-                communication.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/chat-3.png"
-                  alt="Blazing Fast"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">
+                <div className="relative h-64 rounded-xl">
+                  <Image
+                    src="/send-files.png"
+                    alt="Send Files"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">File Sharing</h3>
+                <p className="text-zinc-400 text-lg">Share files and media seamlessly with your contacts. From documents to photos, our platform makes sharing quick and secure.</p>
               </div>
             </div>
 
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Group Chats</h3>
-              <p className="text-zinc-400 mb-4">
-                Create and manage group conversations with friends, family, or
-                colleagues with ease.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/new-group-chat.png"
-                  alt="Group Chats"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">
+                <div className="relative h-64 rounded-xl">
+                  <Image
+                    src="/chat-info.png"
+                    alt="Chat Info"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">Detailed Chat Info</h3>
+                <p className="text-zinc-400 text-lg">Access comprehensive information about your conversations. Stay organized with detailed chat history and participant information.</p>
               </div>
             </div>
 
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Cross-Platform</h3>
-              <p className="text-zinc-400 mb-4">
-                Access your chats from any device with our seamless
-                cross-platform experience.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/chat-4.png"
-                  alt="Cross-Platform"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">
+                <div className="relative h-64 rounded-xl">
+                  <Image
+                    src="/add-members.png"
+                    alt="Add Members"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">Easy Member Management</h3>
+                <p className="text-zinc-400 text-lg">Add and manage group members with a simple interface. Control who's in your conversations with intuitive member management tools.</p>
               </div>
             </div>
 
-            <div className="feature-card bg-zinc-800/50 backdrop-blur-sm p-6 rounded-xl border border-zinc-700 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-default hover:translate-y-[-5px]">
-              <h3 className="text-xl font-bold mb-2">Custom Profiles</h3>
-              <p className="text-zinc-400 mb-4">
-                Personalize your profile with custom avatars, statuses, and
-                themes to express your unique style.
-              </p>
-              <div className="mt-4 overflow-hidden rounded-lg">
-                <Image
-                  src="/profile.png"
-                  alt="Custom Profiles"
-                  width={300}
-                  height={200}
-                  className="w-full h-auto object-cover transition-transform hover:scale-105 duration-500"
-                />
+            <div className="feature-item flex flex-col items-center bg-zinc-900 rounded-xl">
+              <div className="w-full">
+                <div className="relative h-64 rounded-xl">
+                  <Image
+                    src="/personal-chat.png"
+                    alt="Personal Chat"
+                    fill
+                    className="object-cover rounded-t-xl rounded-b-md"
+                  />
+                </div>
+              </div>
+              <div className="w-full px-4 py-4">
+                <h3 className="text-2xl font-semibold mb-2">Personal Chats</h3>
+                <p className="text-zinc-400 text-lg">Enjoy private, one-on-one conversations with friends. Our personal chat feature ensures your private conversations stay just that - private.</p>
               </div>
             </div>
           </div>
@@ -234,7 +248,7 @@ const HomePage = () => {
 
       <footer className="py-8 px-4 bg-zinc-900">
         <div className="container mx-auto max-w-7xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col justify-between items-center gap-4">
             <div className="text-2xl font-bold">CHATTERS</div>
             <div className="text-zinc-500">
               {" "}

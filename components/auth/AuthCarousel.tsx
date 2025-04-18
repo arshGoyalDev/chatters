@@ -57,60 +57,16 @@ const AuthCarousel = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black opacity-90"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(161,181,216,0.20),transparent_70%)]"></div>
       <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-6 md:px-12">
-        <div className="mb-12 text-center">
+        <div className="text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-2">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-primary">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary/80 to-primary">
               CHATTERS
             </span>
           </h2>
           <p className="text-zinc-400">Connect with the world</p>
         </div>
 
-        <div className="w-full max-w-lg relative">
-          <div className="relative aspect-[17/10] w-full overflow-hidden rounded-xl border border-zinc-800 shadow-xl shadow-black/30">
-            {carouselItems.map((item, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  index === currentIndex
-                    ? "opacity-100"
-                    : "opacity-0 pointer-events-none"
-                }`}
-              >
-                <div className="relative w-full h-full">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                    <h3 className="text-xl md:text-2xl font-bold mb-2 text-white">
-                      {item.title}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center mt-4 gap-2">
-            {carouselItems.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-10 h-2 rounded-full transition-all ${
-                  index === currentIndex
-                    ? "w-8 bg-primary"
-                    : "bg-zinc-600 hover:bg-zinc-500"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-12 text-center">
+        <div className="text-center mt-5">
           <p className="text-zinc-300 text-lg mb-2">
             Join thousands of users already enjoying Chatters
           </p>
