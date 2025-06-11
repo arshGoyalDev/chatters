@@ -6,7 +6,3 @@
 
 # local variable
 *.env
-
-# Docker
-Dockerfile
-.dockerignore
