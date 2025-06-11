@@ -47,9 +47,9 @@ const ChatInfo = ({
   };
 
   return (
-    <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900 border-l-2 border-zinc-950 overflow-y-auto">
+    <div className="w-full xl:min-w-[400px] xl:w-[30vw] h-screen flex flex-col items-center py-7 bg-zinc-900/60 border-l-2 border-zinc-950 overflow-y-auto">
       <div className="flex justify-end w-full mb-8 px-10">
-        <div className="bg-zinc-800 rounded-lg">
+        <div className="bg-zinc-900 rounded-lg">
           <button
             onClick={() => setChatInfoVisible(false)}
             className="p-1.5 stroke-white rotate-45"
@@ -177,7 +177,7 @@ const ChatInfo = ({
                         <File key={fileUrl} filePath={fileUrl} />
                       ))}
                     </>
-                  )
+                  ),
               )}
             </div>
           </div>

@@ -10,56 +10,71 @@ input:focus,
 input:active,
 textarea:focus,
 textarea:active {
-  @apply outline-none border-zinc-700;
+    @apply outline-none border-zinc-700;
 }
 
 button:focus,
 button:active {
-  @apply outline-none;
+    @apply outline-none;
 }
 
 /* img */
 img {
-  @apply w-full h-full object-cover
+    @apply w-full h-full object-cover;
 }
-
 
 /* scrollbar */
 
 /* firebox based browsers */
 
 @supports not selector(::-webkit-scrollbar) {
-  html * {
-    scrollbar-color: #3f3f46 transparent;
-  }
+    html * {
+        scrollbar-color: #3f3f46 transparent;
+    }
 }
 
 /* chromium based browsers */
 
 *::-webkit-scrollbar {
-  width: 4px;
+    width: 4px;
 }
 
 html *::-webkit-scrollbar-thumb {
-  @apply bg-zinc-800 rounded-lg;
+    @apply bg-zinc-800 rounded-lg;
 }
 
 .scrollbar-invisible::-webkit-scrollbar-thumb {
-  @apply bg-transparent;
+    @apply bg-transparent;
 }
 
 /* Message */
 
 .message-receiver a {
-  @apply text-primary;
+    @apply text-primary;
 }
 
 .message-sender a {
-  @apply text-white;
+    @apply text-white;
 }
 
 /* Chat Info */
 
 a {
-  @apply text-primary;
+    @apply text-primary;
+}
+
+.animate-enlarge {
+    animation: enlarge 2s;
+    animation-iteration-count: infinite;
+    transform-origin: bottom;
+}
+
+@keyframes enlarge {
+    0%,
+    100% {
+        transform: scaleY(100%);
+    }
+    50% {
+        transform: scaleY(120%);
+    }
 }

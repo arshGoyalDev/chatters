@@ -35,7 +35,3 @@ next-env.d.ts
 # local variable
 .env
 .env.*
-
-# Docker
-Dockerfile
-.dockerignore

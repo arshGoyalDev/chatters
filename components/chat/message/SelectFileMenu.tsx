@@ -31,7 +31,7 @@ const SelectFileMenu = ({
   };
 
   return (
-    <div className="z-30 absolute bottom-16 -right-2 w-[90vw] md:min-w-[400px] max-w-[540px] bg-zinc-900 rounded-lg shadow-lg shadow-zinc-950">
+    <div className="z-30 absolute bottom-16 -right-2 w-[90vw] md:min-w-[400px] max-w-[540px] bg-[#121214] border-2 border-zinc-900 rounded-lg shadow-lg shadow-zinc-950">
       <div className="flex items-center justify-between py-2  md:py-4 px-4">
         <h2 className="text-lg font-semibold">Select File</h2>
         <button
@@ -65,12 +65,14 @@ const SelectFileMenu = ({
         </button>
       </div>
       <div className="px-2 pb-4 md:px-4 md:pb-4 flex items-center justify-center">
-        <div className={`relative w-full min-h-60 md:min-w-[360px] max-w-[500px] md:min-h-[360px] md:h-fit flex flex-col ${files ? "justify-between" : "justify-center"} bg-zinc-800/40 rounded-lg overflow-hidden`}>
+        <div
+          className={`relative w-full min-h-60 md:min-w-[360px] max-w-[500px] md:min-h-[360px] md:h-fit flex flex-col ${files ? "justify-between" : "justify-center"} bg-zinc-900/80 rounded-lg overflow-hidden`}
+        >
           {files ? (
             <FilesViewer files={Array.from(files)} setFiles={setFiles} />
           ) : (
             <div className="grid place-content-center h-full">
-              <span className="stroke-zinc-600">
+              <span className="stroke-zinc-700">
                 <svg
                   width="60"
                   height="60"
@@ -94,7 +96,7 @@ const SelectFileMenu = ({
               </span>
               <button
                 onClick={handleAttachmentClick}
-                className="absolute w-full h-full"
+                className="absolute top-0 w-full h-full"
               ></button>
               <input
                 type="file"

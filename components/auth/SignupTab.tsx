@@ -67,7 +67,7 @@ const SignupTab = ({
   };
 
   return (
-    <div className="flex flex-col mt-4">
+    <div className="flex flex-col mt-4 w-[85vw] max-w-[400px]">
       <h2 className="text-3xl sm:text-4xl font-medium">Sign up to Continue</h2>
 
       <div className="mt-8 mb-12 flex gap-2">

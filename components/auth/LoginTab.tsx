@@ -66,7 +66,7 @@ const LoginTab = ({
   };
 
   return (
-    <div className="flex flex-col mt-4">
+    <div className="flex flex-col mt-4 w-[85vw] max-w-[400px]">
       <h2 className="text-3xl sm:text-4xl">Login to Continue</h2>
 
       <div className="mt-8 mb-12 flex gap-2">
@@ -79,7 +79,7 @@ const LoginTab = ({
         </button>
       </div>
 
-      <form onSubmit={handleLogin} className="">
+      <form onSubmit={handleLogin}>
         <input
           type="email"
           value={email}

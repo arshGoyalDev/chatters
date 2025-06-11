@@ -81,8 +81,8 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="flex justify-center pt-4 pb-2 mx-2">
-      <div className="flex items-center gap-3 md:gap-0 w-full max-w-[880px] bg-zinc-900 md:pl-2 pr-4 rounded-xl">
+    <div className="flex justify-center pt-4 mx-2">
+      <div className="flex items-center gap-3 md:gap-0 w-full max-w-[880px] bg-zinc-900/60 md:pl-2 pr-4 rounded-t-xl border-2 border-zinc-900">
         <div className="pt-1 w-full">
           <textarea
             ref={textAreaRef}
@@ -99,7 +99,7 @@ const MessageBar = () => {
               }
             }}
             placeholder="Type a message..."
-            className="scrollbar-invisible w-full py-4 pl-4 pr-2 min-h-16 max-h-32 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-zinc-900 rounded-lg resize-none"
+            className="scrollbar-invisible w-full py-4 pl-4 pr-2 min-h-16 max-h-32 md:pl-4 md:pr-2 placeholder:text-zinc-500 bg-transparent rounded-lg resize-none"
           />
         </div>
 

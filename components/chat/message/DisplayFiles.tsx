@@ -47,7 +47,7 @@ const DisplayFiles = ({
   }, []);
 
   const checkForFileType = (
-    filename: string
+    filename: string,
   ): "image" | "video" | "audio" | "file" => {
     const imageRegex =
       /\.(jpg|jpeg|png|gif|bmp|tiff|tif|webp|svg|ico|heic|heif)$/i;
@@ -69,101 +69,118 @@ const DisplayFiles = ({
     <div
       className={`flex gap-2 flex-col ${sender ? "items-end" : "items-start"}`}
     >
-      <div
-        className={`grid ${
-          imagesOrVideo.length >= 2 && "grid-cols-2"
-        } gap-2 w-40 sm:w-full sm:max-w-96 h-fit overflow-hidden rounded-lg p-2 border-2 ${
-          sender
-            ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
-            : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
-        }`}
-      >
-        {imagesOrVideo.length >= 2 ? (
-          <>
-            {imagesOrVideo.slice(0, 3).map((file) => (
-              <div onClick={() => setPath(file.url)} key={file.url} className="rounded-lg">
-                {file.type === "image" ? (
-                  <img
-                    src={`${HOST}/${file.url}`}
-                    alt={file.url.split("/").pop() ?? "image"}
-                    className="rounded-lg aspect-square"
-                  />
-                ) : (
-                  <VideoPlayer url={file.url} />
-                )}
-              </div>
-            ))}
-            {imagesOrVideo.length > 4 ? (
-              <button onClick={() => setPath(imagesOrVideo[3].url)} className={`relative rounded-lg`}>
-                <div>
-                  <img
-                    src={`${HOST}/${imagesOrVideo[3].url}`}
-                    alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
-                    className="rounded-lg aspect-square"
-                  />
-                </div>
-                <div className="absolute top-0 left-0 flex items-center justify-center gap-2 w-full h-full bg-zinc-950/80 stroke-zinc-200">
-                  <svg
-                    width="36"
-                    height="36"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M6 12H18"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+      {imagesOrVideo.length !== 0 && (
+        <div
+          className={`grid ${
+            imagesOrVideo.length >= 2 && "grid-cols-2"
+          } gap-2 w-40 sm:w-full sm:max-w-96 h-fit overflow-hidden rounded-lg p-2 border-2 ${
+            sender
+              ? "bg-zinc-900 bg-opacity-40 border-zinc-800"
+              : "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary"
+          }`}
+        >
+          {imagesOrVideo.length >= 2 ? (
+            <>
+              {imagesOrVideo.slice(0, 3).map((file) => (
+                <div
+                  onClick={() => setPath(file.url)}
+                  key={file.url}
+                  className="rounded-lg"
+                >
+                  {file.type === "image" ? (
+                    <img
+                      src={`${HOST}/${file.url}`}
+                      alt={file.url.split("/").pop() ?? "image"}
+                      className="rounded-lg aspect-square"
                     />
-                    <path
-                      d="M12 18V6"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="font-bold text-3xl text-white">
-                    {imagesOrVideo.length - 3}
-                  </span>
+                  ) : (
+                    <VideoPlayer url={file.url} />
+                  )}
                 </div>
-              </button>
-            ) : (
-              <>
-                {imagesOrVideo[3] && (
-                  <div onClick={() => setPath(imagesOrVideo[3].url)} key={imagesOrVideo[3].url} className="rounded-lg">
-                    {imagesOrVideo[3].type === "image" ? (
-                      <img
-                        src={`${HOST}/${imagesOrVideo[3].url}`}
-                        alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
-                        className="rounded-lg aspect-square"
-                      />
-                    ) : (
-                      <VideoPlayer url={imagesOrVideo[3].url} />
-                    )}
+              ))}
+              {imagesOrVideo.length > 4 ? (
+                <button
+                  onClick={() => setPath(imagesOrVideo[3].url)}
+                  className={`relative rounded-lg`}
+                >
+                  <div>
+                    <img
+                      src={`${HOST}/${imagesOrVideo[3].url}`}
+                      alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
+                      className="rounded-lg aspect-square"
+                    />
                   </div>
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {imagesOrVideo[0] && (
-              <div onClick={() => setPath(imagesOrVideo[0].url)} key={imagesOrVideo[0].url} className="rounded-lg">
-                {imagesOrVideo[0].type === "image" ? (
-                  <img
-                    src={`${HOST}/${imagesOrVideo[0].url}`}
-                    alt={imagesOrVideo[0].url.split("/").pop() ?? "image"}
-                    className="rounded-lg aspect-square"
-                  />
-                ) : (
-                  <VideoPlayer url={imagesOrVideo[0].url} />
-                )}
-              </div>
-            )}
-          </>
-        )}
-      </div>
+                  <div className="absolute top-0 left-0 flex items-center justify-center gap-2 w-full h-full bg-zinc-950/80 stroke-zinc-200">
+                    <svg
+                      width="36"
+                      height="36"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 12H18"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M12 18V6"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span className="font-bold text-3xl text-white">
+                      {imagesOrVideo.length - 3}
+                    </span>
+                  </div>
+                </button>
+              ) : (
+                <>
+                  {imagesOrVideo[3] && (
+                    <div
+                      onClick={() => setPath(imagesOrVideo[3].url)}
+                      key={imagesOrVideo[3].url}
+                      className="rounded-lg"
+                    >
+                      {imagesOrVideo[3].type === "image" ? (
+                        <img
+                          src={`${HOST}/${imagesOrVideo[3].url}`}
+                          alt={imagesOrVideo[3].url.split("/").pop() ?? "image"}
+                          className="rounded-lg aspect-square"
+                        />
+                      ) : (
+                        <VideoPlayer url={imagesOrVideo[3].url} />
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {imagesOrVideo[0] && (
+                <div
+                  onClick={() => setPath(imagesOrVideo[0].url)}
+                  key={imagesOrVideo[0].url}
+                  className="rounded-lg"
+                >
+                  {imagesOrVideo[0].type === "image" ? (
+                    <img
+                      src={`${HOST}/${imagesOrVideo[0].url}`}
+                      alt={imagesOrVideo[0].url.split("/").pop() ?? "image"}
+                      className="rounded-lg aspect-square"
+                    />
+                  ) : (
+                    <VideoPlayer url={imagesOrVideo[0].url} />
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
       {audioFiles?.map((audio) => (
         <div
           key={audio}
