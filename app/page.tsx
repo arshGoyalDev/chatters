@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { TransitionLink } from "@/components/animations";
 import Image from "next/image";
 import useAppStore from "@/store";
@@ -17,20 +17,20 @@ const HomePage = () => {
 
   return (
     <main className="min-h-screen text-white">
-      <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-zinc-800 rounded-lg">
+      <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1400px] py-8 px-6 mx-auto">
         <div>
           <span className="font-bold uppercase text-xl">Chatters</span>
         </div>
 
         <div>
          {userInfo.email ? (
-           <TransitionLink href="/chat" className="bg-primary font-semibold text-black py-1 px-3 rounded-lg">
+           <TransitionLink href="/chat" className="bg-primary font-semibold text-black py-2 px-4 rounded-md">
              <span>Chat</span>
            </TransitionLink>
          ) : (
          <TransitionLink
            href="/auth"
-           className="flex items-center gap-2 bg-primary font-semibold text-black py-1 px-3 rounded-lg"
+           className="flex items-center gap-2 bg-primary font-semibold text-black py-2 px-4 rounded-md"
          >
            <span>Get Started</span>
            <span className="stroke-black">
