@@ -1,7 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import useAppStore from "@/store";
 
 import { HOST } from "@/utils/constants";
+import Image from "next/image";
 
 import { Dispatch, SetStateAction } from "react";
 
@@ -50,18 +50,15 @@ const ChatHeader = ({
                   : chatData.chatAdmin.profilePic
                 : chatData?.chatPic
             ) ? (
-              <img
-                src={
-                  chatData?.chatType === "personal"
-                    ? `${HOST}/${
-                        userInfo._id === chatData.chatAdmin._id
-                          ? chatData.chatMembers[0].profilePic
-                          : chatData.chatAdmin.profilePic
-                      }`
-                    : `${HOST}/${chatData?.chatPic}`
-                }
-                alt={chatData?.chatName}
-              />
+              <div className="relative w-12 md:w-[52px] aspect-square">
+                <Image src={chatData?.chatType === "personal"
+                  ? `${HOST}/${userInfo._id === chatData.chatAdmin._id
+                    ? chatData.chatMembers[0].profilePic
+                    : chatData.chatAdmin.profilePic
+                  }`
+                  : `${HOST}/${chatData?.chatPic}`} fill sizes="100%"
+                  alt={chatData?.chatName || ""} className="w-full h-full" priority />
+              </div>
             ) : (
               <div className="grid place-content-center bg-zinc-900 h-full">
                 <span className="fill-zinc-700">
@@ -102,16 +99,16 @@ const ChatHeader = ({
                 (chatData?.chatMembers[0].userOnline
                   ? "Online"
                   : chatData?.chatMembers[0].status.length > 15
-                  ? chatData?.chatMembers[0].status.slice(0, 15) + "..."
-                  : chatData?.chatMembers[0].status)}
+                    ? chatData?.chatMembers[0].status.slice(0, 15) + "..."
+                    : chatData?.chatMembers[0].status)}
             </p>
             <p className="hidden sm:block">
               {chatData?.chatType === "personal" &&
                 (chatData?.chatMembers[0].userOnline
                   ? "Online"
                   : chatData?.chatMembers[0].status.length > 25
-                  ? chatData?.chatMembers[0].status.slice(0, 25) + "..."
-                  : chatData?.chatMembers[0].status)}
+                    ? chatData?.chatMembers[0].status.slice(0, 25) + "..."
+                    : chatData?.chatMembers[0].status)}
             </p>
 
           </div>

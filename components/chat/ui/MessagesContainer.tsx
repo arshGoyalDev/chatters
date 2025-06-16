@@ -6,7 +6,7 @@ import { Fragment, ReactNode, useEffect, useRef } from "react";
 
 import Message from "../message";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { Message as MessageType } from "@/utils/types";
 
@@ -27,7 +27,7 @@ const MessagesContainer = ({
     let lastSender: string | null = null;
 
     return messages.map((message: MessageType) => {
-      const messageDate = moment(message.timeStamp).format("LL");
+      const messageDate = dayjs(message.timeStamp).format('MMM D, YYYY');
       const messageSender = message.sender._id;
 
       const showDate = messageDate !== lastDate;

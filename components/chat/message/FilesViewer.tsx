@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 import AudioPlayer from "./AudioPlayer";
 import Document from "./Document";
+import Image from "next/image";
 
 const FilesViewer = ({
   files,
@@ -214,11 +215,13 @@ const FilesViewer = ({
         </button>
         <div className="overflow-hidden rounded-lg w-fit">
           {checkForFileType(files[activeIndex].name) === "image" && (
-            <img
-              src={URL.createObjectURL(files[activeIndex])}
-              alt={files[activeIndex].name}
-              className="w-fit rounded-lg max-w-[240px] max-h-[240px]"
-            />
+            <div className="relative max-w-[240px] max-h-[240px] rounded-md overflow-hidden">
+              <img
+                src={URL.createObjectURL(files[activeIndex])}
+                alt={files[activeIndex].name}
+                className="max-h-[240px]"
+              />
+            </div>
           )}
           {checkForFileType(files[activeIndex].name) === "video" && (
             <VideoPlayer
@@ -282,11 +285,16 @@ const FilesViewer = ({
                   } rounded-md overflow-hidden h-10 w-10 flex items-center justify-center`}
                 >
                   {checkForFileType(files[fileIndex].name) === "image" && (
-                    <img
-                      src={URL.createObjectURL(files[fileIndex])}
-                      alt={files[fileIndex].name}
-                      className="h-full w-full object-cover"
-                    />
+                    <div className="relative w-10 aspect-square rounded-md overflow-hidden">
+                      <Image
+                        src={URL.createObjectURL(files[fileIndex])}
+                        fill
+                        sizes="100%"
+                        alt={files[fileIndex].name}
+                        className="w-full h-full"
+                        priority
+                      />
+                    </div>
                   )}
                   {checkForFileType(files[fileIndex].name) === "video" && (
                     <div className="bg-zinc-950 stroke-white h-full w-full flex items-center justify-center">

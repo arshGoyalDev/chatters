@@ -3,6 +3,8 @@ import { useError } from "@/context";
 import { apiClient } from "@/lib/api-client";
 import { HOST } from "@/utils/constants";
 
+import Image from "next/image";
+
 import { useEffect, useState } from "react";
 
 const File = ({ filePath }: { filePath: string }) => {
@@ -69,7 +71,12 @@ const File = ({ filePath }: { filePath: string }) => {
       <div className="flex items-center gap-2">
         <div className="grid place-content-center w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
           {fileType === "image" && (
-            <img src={`${HOST}/${filePath}`} alt={filePath.split("/").at(-1)} />
+            <div className="relative w-8 aspect-square rounded-md overflow-hidden">
+              <Image src={`${HOST}/${filePath}`}
+                fill sizes="100%"
+                alt={filePath.split("/").at(-1) || ""}
+                className="w-full h-full" priority />
+            </div>
           )}
           {fileType === "audio" && (
             <span className="stroke-white">

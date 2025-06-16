@@ -12,6 +12,7 @@ import {
 import useAppStore from "@/store";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { useEffect, useState } from "react";
 
@@ -90,11 +91,11 @@ const SearchedContact = ({
     >
       <div className="w-12 h-12 rounded overflow-hidden">
         {contact.profilePic ? (
-          <div className="w-full h-full rounded overflow-hidden">
-            <img
-              src={`${HOST}/${contact.profilePic}`}
+          <div className="relative w-12 aspect-square rounded-md overflow-hidden">
+            <Image src={`${HOST}/${contact.profilePic}`}
+              fill sizes="100%"
               alt={contact.firstName + contact.lastName}
-            />
+              className="w-full h-full" priority />
           </div>
         ) : (
           <div className="grid place-content-center bg-zinc-800 h-full">

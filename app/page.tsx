@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { TransitionLink } from "@/components/animations";
 import Image from "next/image";
 import useAppStore from "@/store";
-import FeatureAnimations from "@/components/FeatureAnimations";
 
 const HomePage = () => {
   const { userInfo } = useAppStore();
@@ -18,7 +17,6 @@ const HomePage = () => {
 
   return (
     <main className="min-h-screen text-white">
-      <FeatureAnimations featureItemsRef={featureItemsRef} />
       <nav className="flex flex-wrap gap-4 justify-between items-center w-[90vw] max-w-[1000px] py-4 px-6 mx-auto my-10 border-2 border-zinc-800 rounded-lg">
         <div>
           <span className="font-bold uppercase text-xl">Chatters</span>

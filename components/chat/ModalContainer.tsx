@@ -4,9 +4,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Suspense, useEffect } from "react";
 
-import { AddMemberModal, NewChatModal, NewGroupChatModal } from "./ui";
-
 import useAppStore from "@/store";
+import dynamic from "next/dynamic";
+
+const AddMemberModal = dynamic(() => import("./ui/AddMemberModal"), { ssr: false });
+const NewChatModal = dynamic(() => import("./ui/NewChatModal"), { ssr: false });
+const NewGroupChatModal = dynamic(() => import("./ui/NewGroupChatModal"), { ssr: false });
 
 const ModalContainerFunc = () => {
   const searchParams = useSearchParams();

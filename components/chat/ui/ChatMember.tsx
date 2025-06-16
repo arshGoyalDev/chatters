@@ -13,6 +13,7 @@ import useAppStore from "@/store";
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const ChatMember = ({
   member,
@@ -80,11 +81,10 @@ const ChatMember = ({
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 rounded-md">
           {member.profilePic ? (
-            <div className="w-full h-full rounded-md overflow-hidden">
-              <img
-                src={`${HOST}/${member.profilePic}`}
-                alt={member.firstName}
-              />
+            <div className="relative w-8 h-8 rounded-md overflow-hidden">
+              <Image src={`${HOST}/${member.profilePic}`}
+                fill sizes="100%"
+                alt={member.firstName} className="w-full h-full" priority />
             </div>
           ) : (
             <div className="grid place-content-center w-full h-full border-2 border-zinc-800 rounded-md">

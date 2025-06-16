@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { useRef, useState } from "react";
 
 import { ModalHeader, SelectMultiContact } from "./";
@@ -7,8 +6,6 @@ import { UserInfo } from "@/utils/types";
 import {
   ADD_CHAT_PIC_ROUTE,
   CREATE_GROUP_CHAT_ROUTE,
-  HOST,
-  REMOVE_CHAT_PIC_ROUTE,
 } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
 
@@ -17,6 +14,8 @@ import { useRouter } from "next/navigation";
 import useAppStore from "@/store";
 
 import { useError } from "@/context";
+
+import Image from "next/image";
 
 const NewGroupChatModal = () => {
   const router = useRouter();
@@ -137,12 +136,11 @@ const NewGroupChatModal = () => {
                 {groupPic ? (
                   <div>
                     {
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={groupPic}
-                        alt={groupName}
-                        className="w-full h-full"
-                      />
+                      <div className="relative w-32 aspect-square rounded-md overflow-hidden">
+                        <Image src={groupPic}
+                          fill sizes="100%"
+                          alt={groupName} className="w-full h-full" priority />
+                      </div>
                     }
                     <button
                       onClick={deleteGroupPic}

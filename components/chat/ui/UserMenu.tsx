@@ -6,7 +6,10 @@ import useAppStore from "@/store";
 
 import { HOST } from "@/utils/constants";
 
-import SettingsMenu from "./SettingsMenu";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const SettingsMenu = dynamic(() => import("./SettingsMenu"), { ssr: false });
 
 const UserMenu = () => {
   const { userInfo } = useAppStore();
@@ -17,12 +20,11 @@ const UserMenu = () => {
       <div className="flex items-center justify-center gap-4">
         <div className="w-[52px] aspect-square rounded-lg bg-zinc-800">
           {userInfo.profilePic ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <div className="w-full h-full overflow-hidden rounded-lg">
-              <img
-                src={`${HOST}/${userInfo.profilePic}`}
-                alt={userInfo.firstName}
-              />
+            <div className="relative w-12 aspect-square rounded-md overflow-hidden">
+              <Image src={`${HOST}/${userInfo.profilePic}`}
+                fill sizes="100%"
+                alt={userInfo.firstName + userInfo.lastName}
+                className="w-full h-full" priority />
             </div>
           ) : (
             <div className="grid place-content-center w-full h-full">

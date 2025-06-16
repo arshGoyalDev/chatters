@@ -1,6 +1,6 @@
 import type { Message } from "@/utils/types";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { HOST } from "@/utils/constants";
 
@@ -9,6 +9,8 @@ import remarkGfm from "remark-gfm";
 
 import useAppStore from "@/store";
 import DisplayFiles from "./DisplayFiles";
+
+import Image from "next/image";
 
 const Message = ({
   message,
@@ -39,10 +41,14 @@ const Message = ({
                 {chatData?.chatType === "group" &&
                   userInfo._id !== message.sender._id &&
                   (message.sender.profilePic ? (
-                    <div className="min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
-                      <img
+                    <div className="relative min-w-8 w-8 h-8 rounded-md overflow-hidden border-2 border-zinc-800">
+                      <Image
                         src={`${HOST}/${message.sender.profilePic}`}
+                        fill
+                        sizes="100%"
                         alt={`${message.sender.firstName} ${message.sender.lastName}`}
+                        className="w-full h-full"
+                        priority
                       />
                     </div>
                   ) : (
@@ -123,7 +129,7 @@ const Message = ({
                         : "text-white/30"
                     }`}
                   >
-                    {moment(message.timeStamp).format("LT")}
+                    {dayjs(message.timeStamp).format("h:mm A  ")}
                   </div>
                 </div>
               )}

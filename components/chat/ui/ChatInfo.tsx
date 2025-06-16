@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import useAppStore from "@/store";
@@ -12,6 +11,7 @@ import File from "./File";
 import { useSocket } from "@/context";
 import { HOST } from "@/utils/constants";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const ChatInfo = ({
   setChatInfoVisible,
@@ -87,18 +87,15 @@ const ChatInfo = ({
                   : chatData.chatAdmin.profilePic
                 : chatData?.chatPic
             ) ? (
-              <img
-                src={
-                  chatData?.chatType === "personal"
-                    ? `${HOST}/${
-                        userInfo._id === chatData.chatAdmin._id
-                          ? chatData.chatMembers[0].profilePic
-                          : chatData.chatAdmin.profilePic
-                      }`
-                    : `${HOST}/${chatData?.chatPic}`
-                }
-                alt={chatData?.chatName}
-              />
+              <div className="relative w-40 h-40">
+                <Image src={chatData?.chatType === "personal"
+                  ? `${HOST}/${userInfo._id === chatData.chatAdmin._id
+                    ? chatData.chatMembers[0].profilePic
+                    : chatData.chatAdmin.profilePic
+                  }`
+                  : `${HOST}/${chatData?.chatPic}`} fill sizes="100%"
+                  alt={chatData?.chatName || ""} className="w-full h-full" priority />
+              </div>
             ) : (
               <div className="grid place-content-center bg-zinc-800 h-full">
                 <span className="fill-zinc-700">
@@ -171,13 +168,11 @@ const ChatInfo = ({
               {messages.map(
                 (message) =>
                   message.messageType === "file" &&
-                  message.fileUrls && (
-                    <>
-                      {message.fileUrls.map((fileUrl) => (
-                        <File key={fileUrl} filePath={fileUrl} />
-                      ))}
-                    </>
-                  ),
+                  message.fileUrls &&
+                  message.fileUrls.map((fileUrl, index) => (
+                    <File key={index} filePath={fileUrl} />
+                  ))
+                ,
               )}
             </div>
           </div>

@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { apiClient } from "@/lib/api-client";

@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { useError } from "@/context";
+import Image from "next/image";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -111,7 +112,6 @@ const ProfilePage = () => {
 
         if (response.status === 200) {
           setUserInfo(response.data.user);
-          setProfilePic(response.data.user.profilePic);
 
           return true;
         }
@@ -144,7 +144,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <main className="min-h-screen xl:p-8 grid place-content-center">
+    <main className="min-h-screen xl:p-8 grid place-content-center py-20">
       <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
         <div>
           <div className="relative bg-zinc-900 border-2 border-zinc-700 rounded-2xl overflow-hidden">
@@ -152,7 +152,7 @@ const ProfilePage = () => {
               onMouseEnter={() => setButtonHovered(true)}
               onMouseLeave={() => setButtonHovered(false)}
               onClick={handleFileInputClick}
-              className="relative w-[80vw] h-[80vw] max-w-[360px] max-h-[360px] grid place-content-center"
+              className="relative w-[80vw] h-[80vw] max-w-[200px] max-h-[200px] xl:max-w-[360px] xl:max-h-[360px] grid place-content-center"
             >
               {buttonHovered && !profilePic && (
                 <div className="grid place-content-center absolute z-20 top-0 left-0 w-full h-full bg-zinc-950 bg-opacity-90 transition-all duration-300 cursor-pointer">
@@ -183,12 +183,10 @@ const ProfilePage = () => {
               {profilePic ? (
                 <div>
                   {
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={profilePic}
-                      alt={firstName}
-                      className="w-full h-full"
-                    />
+                    <div className="relative w-[80vw] h-[80vw] max-w-[200px] max-h-[200px] xl:max-w-[360px] xl:max-h-[360px]">
+                      <Image src={profilePic} fill sizes="100%"
+                        alt={firstName} className="w-full h-full" priority />
+                    </div>
                   }
                   <button
                     onClick={deleteProfilePic}
@@ -289,11 +287,10 @@ const ProfilePage = () => {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 ${
-                  error
-                    ? "placeholder:text-red-600 text-red-600"
-                    : "placeholder:text-zinc-600 text-white"
-                } rounded-t-lg`}
+                className={`py-4 px-4 w-full bg-transparent border-2 border-zinc-900 ${error
+                  ? "placeholder:text-red-600 text-red-600"
+                  : "placeholder:text-zinc-600 text-white"
+                  } rounded-t-lg`}
                 autoComplete="off"
                 placeholder="first name"
               />
@@ -335,14 +332,13 @@ const ProfilePage = () => {
             </button>
             <button
               onClick={updateProfile}
-              className={`font-bold w-full py-[14px] ${
-                userInfo.firstName === firstName &&
+              className={`font-bold w-full py-[14px] ${userInfo.firstName === firstName &&
                 userInfo.lastName === lastName &&
                 userInfo.profilePic &&
                 userInfo.status === status
-                  ? "bg-zinc-700 pointer-events-none"
-                  : "bg-primary text-black hover:text-white hover:bg-zinc-800 hover:bg-opacity-10"
-              } rounded-lg transition-all duration-300`}
+                ? "bg-zinc-700 pointer-events-none"
+                : "bg-primary text-black hover:text-white hover:bg-zinc-800 hover:bg-opacity-10"
+                } rounded-lg transition-all duration-300`}
             >
               Save Changes
             </button>

@@ -1,5 +1,6 @@
 import { useLightbox } from "@/context";
 import { HOST } from "@/utils/constants";
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 const MediaGallery = () => {
@@ -31,11 +32,16 @@ const MediaGallery = () => {
             }`}
           >
             {item.type === "image" ? (
-              <img
-                src={`${HOST}/${item.url}`}
-                alt={`Thumbnail ${index + 1}`}
-                className="w-16 min-w-16 h-16 object-cover"
-              />
+              <div className="relative w-16 aspect-square rounded-md overflow-hidden">
+                <Image
+                  src={`${HOST}/${item.url}`}
+                  fill
+                  sizes="100%"
+                  alt={`Thumbnail ${index + 1}`}
+                  className="w-full h-full"
+                  priority
+                />
+              </div>
             ) : (
               <div className="relative w-full h-full rounded-lg">
                 <video

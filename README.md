@@ -11,7 +11,7 @@ A Chat App for power users
 - Tailwind CSS - CSS Utility Framework
 - GSAP - Animations
 - Zustand - React State Management Library
-- Moment
+- dayjs
 - Iconsax - Icon Library
 - React Markdown
 - Remark GFM

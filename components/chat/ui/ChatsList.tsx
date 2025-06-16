@@ -1,6 +1,6 @@
 import useAppStore from "@/store";
 
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { Chat } from "@/utils/types";
 import { HOST } from "@/utils/constants";
@@ -12,6 +12,7 @@ import { useChatList } from "@/context";
 import { useEffect, useState } from "react";
 
 import SearchChats from "./SearchChats";
+import Image from "next/image";
 
 const ChatsList = () => {
   const { chatsList } = useChatList();
@@ -40,9 +41,8 @@ const ChatsList = () => {
             <div
               key={chat._id}
               onClick={() => openChat(chat)}
-              className={`flex justify-between gap-2 items-center ${
-                chatData?._id === chat._id && "bg-zinc-950 bg-opacity-35"
-              } transition-all duration-300 py-2 pl-2 pr-4 hover:bg-opacity-40 rounded-lg`}
+              className={`flex justify-between gap-2 items-center ${chatData?._id === chat._id && "bg-zinc-950 bg-opacity-35"
+                } transition-all duration-300 py-2 pl-2 pr-4 hover:bg-opacity-40 rounded-lg`}
             >
               <div className="flex gap-4 items-center">
                 <div className="w-9 h-9 rounded-lg bg-zinc-800">
@@ -53,18 +53,14 @@ const ChatsList = () => {
                         : chat.chatAdmin.profilePic
                       : chat?.chatPic
                   ) ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <div className="w-full h-full overflow-hidden rounded-lg">
-                      <img
-                        src={`${HOST}/${
-                          chat.chatType === "personal"
-                            ? userInfo._id === chat.chatAdmin._id
-                              ? chat.chatMembers[0].profilePic
-                              : chat.chatAdmin.profilePic
-                            : chat.chatPic
-                        }`}
-                        alt={chat.chatName}
-                      />
+                    <div className="relative w-9 h-9 overflow-hidden rounded-lg">
+                      <Image src={`${HOST}/${chat.chatType === "personal"
+                        ? userInfo._id === chat.chatAdmin._id
+                          ? chat.chatMembers[0].profilePic
+                          : chat.chatAdmin.profilePic
+                        : chat.chatPic
+                        }`} fill sizes="100%"
+                        alt={chatData?.chatName || ""} className="w-full h-full" priority />
                     </div>
                   ) : (
                     <div className="w-full h-full grid place-content-center">
@@ -101,7 +97,7 @@ const ChatsList = () => {
                 </h2>
               </div>
               <div className="text-sm text-zinc-300 font-medium">
-                {moment(chat.updatedAt).format("LT")}
+                {dayjs(chat.updatedAt).format('h:mm A  ')}
               </div>
             </div>
           ))
