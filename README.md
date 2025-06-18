@@ -1,55 +1,103 @@
 # Chatters
 
-A Chat App for power users
+A full-stack chat application with Nextjs frontend and Node.js backend.
 
-## Tech Stack
+## 🏗️ Project Structure
 
-### Frontend
+```
+chat-app/
+├── client/          # React/Next.js frontend
+├── server/          # Node.js/Express backend
+├── docker-compose.yml
+├── package.json     # Root package.json for monorepo management
+└── README.md
+```
 
-- React - JavaScript Framework
-- Next.js - React Framework
-- Tailwind CSS - CSS Utility Framework
-- GSAP - Animations
-- Zustand - React State Management Library
-- dayjs
-- Iconsax - Icon Library
-- React Markdown
-- Remark GFM
+## 🛠️ Setup Instructions
 
-### Backend
+### Prerequisites
+- Redis Server Running (Not required for Docker setup)
+- Docker and Docker Compose (for Docker setup)
 
-- Node.js - Runtime for JavaScript
-- Express.js - Framework of Node.js
-- Sockets.io
-- MongoDB
-- Multer
+### Initial Setup
 
-## Features
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd chat-app
+   ```
 
-- Authentication using email and password
+2. **Or install manually**
+   ```bash
+   npm run install:all
+   ```
 
-- Realtime Chat
-- Send files as messages
+4. **Start development**
+   ```bash
+   npm run dev
+   ```
 
-- ### Personal Chat
-    - User Online Status
+### Environment Variables
 
-- ### Group Chat
-    - Group Chat
-    - Leave Group as a member
-    - Delete Group as a Admin of the Group
+Create `.env` files in both client and server directories:
 
-- ### Chat Info
-    - View Group Members
-    - View files send in the chat
+**server/.env**
+```env
+PORT=8080
+JWT_KEY=your-jwt-secret
+DATABASE_URL=mongodb://localhost:27017/chat-app
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
 
-## Run Locally
+**client/.env.local**
+```env
+NEXT_PUBLIC_SERVER_URL=http://localhost:8080
+```
 
-- `
-npm install
-`
-- Create .env.local file
+## 🐳 Docker Setup
 
-- Add `NEXT_PUBLIC_SERVER_URL` with value of locally hosted server url
+The application includes Docker configuration for easy deployment:
 
-- `npm run dev`
+```bash
+# Start all services (MongoDB, Redis, Server, Client)
+docker-compose up --build
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend: http://localhost:8080
+# MongoDB: localhost:27017
+# Redis: localhost:6379
+```
+
+## 🔧 Development Workflow
+
+1. **Start development servers**
+   ```bash
+   npm run dev
+   ```
+
+2. **Make changes** to client or server code
+
+3. **Test changes** - both servers will auto-reload
+
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
+
+## 📝 Notes
+
+- The client runs on http://localhost:3000
+- The server runs on http://localhost:8080
+- MongoDB runs on localhost:27017
+- Redis runs on localhost:6379
+- All services are configured to work together automatically
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with `npm run dev`
+5. Submit a pull request
