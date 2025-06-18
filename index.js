@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 
 import { Server as SocketIoServer } from "socket.io";
 
-import setupSocket from "./socket.js";
+import setupSocket from "./services/socket.js";
 
 import {
   authRoutes,
@@ -21,7 +21,7 @@ dotenv.config();
 
 const app = express();
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 8000;
 const databaseURL = process.env.DATABASE_URL;
 
 app.use(

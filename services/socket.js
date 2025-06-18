@@ -1,6 +1,8 @@
-import Message from "./models/MessagesModel.js";
-import Chat from "./models/ChatModel.js";
-import User from "./models/UserModel.js";
+import Message from "../models/MessagesModel.js";
+import Chat from "../models/ChatModel.js";
+import User from "../models/UserModel.js";
+
+import { pub, sub } from "./redis.js";
 
 const setupSocket = (io) => {
   const userSocketMap = new Map();
@@ -29,7 +31,7 @@ const setupSocket = (io) => {
     }
   };
 
-  const sendMessage = async (message) => {
+  const receiveMessageFromClient = async (message) => {
     const { recipient, content, messageType, fileUrls, sender } = message;
 
     const createdMessage = await Message.create({
@@ -41,37 +43,46 @@ const setupSocket = (io) => {
       fileUrls: fileUrls ? fileUrls : null,
     });
 
-    let messageData = await Message.findById(createdMessage._id)
+    await Chat.findByIdAndUpdate(recipient, {
+      $push: { messages: createdMessage._id },
+    });
+
+    const pubMessage = {
+      messageId: createdMessage._id,
+      event: "send",
+    };
+
+    await pub.publish(`CHAT:${recipient}`, JSON.stringify(pubMessage));
+  };
+
+  const sendMessageToClient = async (messageId, chatId) => {
+    const messageData = await Message.findById(messageId)
       .populate(
         "sender",
         "id email profilePic firstName lastName status userOnline"
       )
       .exec();
 
-    await Chat.findByIdAndUpdate(recipient, {
-      $push: { messages: createdMessage._id },
-    });
-
-    const chat = await Chat.findById(recipient).populate("chatMembers");
+    const chat = await Chat.findById(chatId).populate("chatMembers");
 
     if (chat) {
       if (chat.chatMembers) {
         chat.chatMembers.forEach((member) => {
           const memberSocketId = userSocketMap.get(member._id.toString());
           if (memberSocketId) {
-            io.to(memberSocketId).emit("receiveMessage", messageData);
+            io.to(memberSocketId).emit("event:chat:receive", messageData);
           }
         });
       }
 
       const adminSocketId = userSocketMap.get(chat.chatAdmin.toString());
       if (adminSocketId) {
-        io.to(adminSocketId).emit("receiveMessage", messageData);
+        io.to(adminSocketId).emit("event:chat:receive", messageData);
       }
     }
   };
 
-  const deleteGroup = async (chatId) => {
+  const processDeleteRequest = async (chatId) => {
     const chat = await Chat.findById(chatId).populate("chatAdmin");
 
     if (chat.messages & (chat.messages.length > 0)) {
@@ -79,6 +90,17 @@ const setupSocket = (io) => {
         _id: { $in: chat.messages },
       });
     }
+
+    const pubMessage = {
+      messageId: "",
+      event: "delete-request",
+    };
+
+    await pub.publish(`CHAT:${chatId}`, JSON.stringify(pubMessage));
+  };
+
+  const confirmDeleteRequest = async (chatId) => {
+    const chat = await Chat.findById(chatId).populate("chatAdmin");
 
     const finalData = {
       chatId: chat._id,
@@ -95,26 +117,18 @@ const setupSocket = (io) => {
       chat.chatMembers.forEach((memberId) => {
         const memberSocketId = userSocketMap.get(memberId.toString());
         if (memberSocketId) {
-          io.to(memberSocketId).emit("groupDeleted", finalData);
+          io.to(memberSocketId).emit("event:chat:deleted", finalData);
         }
       });
     }
 
     const adminSocketId = userSocketMap.get(chat.chatAdmin._id.toString());
     if (adminSocketId) {
-      io.to(adminSocketId).emit("groupDeleted", finalData);
+      io.to(adminSocketId).emit("event:chat:deleted", finalData);
     }
   };
 
-  const leaveGroup = async (data) => {
-    const { chatId, leavingMember } = data;
-
-    const chat = await Chat.findById(chatId).populate("chatMembers");
-
-    const chatMembers = chat.chatMembers.filter(
-      (member) => member._id.toString() !== leavingMember._id
-    );
-
+  const processLeaveRequest = async ({ chatId, leavingMember }) => {
     const leavingMessage = await Message.create({
       sender: leavingMember._id,
       recipient: chatId,
@@ -124,13 +138,25 @@ const setupSocket = (io) => {
       fileUrl: null,
     });
 
-    const messageData = await Message.findById(leavingMessage._id)
-      .populate("sender")
-      .exec();
+    const pubMessage = {
+      messageId: leavingMessage._id,
+      event: "leave-request",
+    };
+
+    await pub.publish(`CHAT:${chatId}`, JSON.stringify(pubMessage));
+  };
+
+  const confirmLeaveRequest = async (messageId, chatId) => {
+    const chat = await Chat.findById(chatId);
+    const message = await Message.findById(messageId);
+
+    const chatMembers = chat.chatMembers.filter(
+      (memberId) => memberId.toString() !== message.sender.toString()
+    );
 
     await Chat.findByIdAndUpdate(chatId, {
       chatMembers,
-      $push: { messages: leavingMessage._id },
+      $push: { messages: messageId },
     });
 
     const newChat = await Chat.findById(chatId)
@@ -138,16 +164,16 @@ const setupSocket = (io) => {
       .populate("chatAdmin");
 
     const finalData = {
-      messageData,
+      message,
       newChat,
-      leavingMemberId: leavingMember._id,
+      leavingMemberId: message.sender,
     };
 
     if (chatMembers) {
-      newChat.chatMembers.forEach((member) => {
-        const memberSocketId = userSocketMap.get(member._id.toString());
+      newChat.chatMembers.forEach((memberId) => {
+        const memberSocketId = userSocketMap.get(memberId.toString());
         if (memberSocketId) {
-          io.to(memberSocketId).emit("memberLeft", finalData);
+          io.to(memberSocketId).emit("event:chat:left", finalData);
         }
       });
     }
@@ -155,24 +181,22 @@ const setupSocket = (io) => {
     const adminSocketId = userSocketMap.get(newChat.chatAdmin._id.toString());
 
     if (adminSocketId) {
-      io.to(adminSocketId).emit("memberLeft", finalData);
+      io.to(adminSocketId).emit("event:chat:left", finalData);
     }
 
     const leavingMemberSocketId = userSocketMap.get(
-      leavingMember._id.toString()
+      message.sender._id.toString()
     );
 
     if (leavingMemberSocketId) {
-      io.to(leavingMemberSocketId).emit("memberLeft", finalData);
+      io.to(leavingMemberSocketId).emit("event:chat:left", finalData);
     }
   };
 
-  const addMember = async (data) => {
-    const { chatId, newMembers } = data;
-
+  const processAddRequest = async ({ chatId, newMembers }) => {
     const chat = await Chat.findById(chatId).populate("chatAdmin");
-    const chatMembers = chat.chatMembers;
     const messages = chat.messages;
+    const chatMembers = chat.chatMembers;
 
     const messageContent = () => {
       const newMembersLength = newMembers.length;
@@ -186,7 +210,7 @@ const setupSocket = (io) => {
       } else return `${newMembers[0].firstName} ${newMembers[0].lastName}`;
     };
 
-    const memberAddedMessage = await Message.create({
+    const membersAddedMessage = await Message.create({
       sender: chat.chatAdmin._id,
       recipient: chatId,
       content: `${chat.chatAdmin.firstName} ${
@@ -197,37 +221,78 @@ const setupSocket = (io) => {
       fileUrl: null,
     });
 
-    const newChat = await Chat.findByIdAndUpdate(
+    await Chat.findByIdAndUpdate(
       chatId,
       {
-        messages: [...messages, memberAddedMessage._id],
+        messages: [...messages, membersAddedMessage._id],
         chatMembers: [...chatMembers, ...newMembers],
       },
       { new: true, runValidators: true }
-    ).populate("chatMembers").populate("chatAdmin");
+    );
+
+    const pubMessage = {
+      messageId: membersAddedMessage._id,
+      event: "add-request",
+    };
+
+    await pub.publish(`CHAT:${chatId}`, JSON.stringify(pubMessage));
+  };
+
+  const confirmAddRequest = async (messageId, chatId) => {
+    const chat = await Chat.findById(chatId).populate("chatMembers");
+    const chatMembers = chat.chatMembers;
+
+    const message = await Message.findById(messageId).populate("sender");
 
     const returnData = {
       chatId,
-      chatMembers: newChat.chatMembers,
-      message: memberAddedMessage,
-    }
+      chatMembers: chatMembers,
+      message: message,
+    };
 
-    if (newChat) {
-      if (newChat.chatMembers) {
-        chat.chatMembers.forEach((member) => {
+    if (chat) {
+      if (chatMembers) {
+        chatMembers.forEach((member) => {
           const memberSocketId = userSocketMap.get(member._id.toString());
           if (memberSocketId) {
-            io.to(memberSocketId).emit("memberAdded", returnData);
+            io.to(memberSocketId).emit("event:chat:added", returnData);
           }
         });
       }
 
-      const adminSocketId = userSocketMap.get(newChat.chatAdmin._id.toString());
+      const adminSocketId = userSocketMap.get(
+        chat.chatAdmin._id.toString()
+      );
       if (adminSocketId) {
-        io.to(adminSocketId).emit("memberAdded", returnData);
+        io.to(adminSocketId).emit("event:chat:added", returnData);
       }
     }
   };
+
+  sub.on("pmessage", async (pattern, channel, message) => {
+    const { messageId, event } = JSON.parse(message);
+    const chatId = channel.split(":")[1];
+
+    switch (event) {
+      case "send":
+        sendMessageToClient(messageId, chatId);
+        break;
+      case "delete-request":
+        confirmDeleteRequest(chatId);
+        break;
+
+      case "leave-request":
+        confirmLeaveRequest(messageId, chatId);
+        break;
+
+      case "add-request":
+        confirmAddRequest(messageId, chatId);
+        break;
+
+      default:
+        break;
+    }
+  });
 
   io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
@@ -242,14 +307,16 @@ const setupSocket = (io) => {
       );
 
       userSocketMap.set(userId, socket.id);
+
+      sub.psubscribe(`CHAT:*`);
     } else {
       console.log("No userId provided");
     }
 
-    socket.on("sendMessage", sendMessage);
-    socket.on("leaveGroup", leaveGroup);
-    socket.on("deleteGroup", deleteGroup);
-    socket.on("addMember", addMember);
+    socket.on("event:chat:send", receiveMessageFromClient);
+    socket.on("event:chat:leave", processLeaveRequest);
+    socket.on("event:chat:delete", processDeleteRequest);
+    socket.on("event:chat:add", processAddRequest);
 
     socket.on("disconnect", () => disconnect(socket));
   });

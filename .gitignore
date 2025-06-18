@@ -1,7 +1,7 @@
 # dependencies
 /node_modules
 
-# files from frontend
+# client assets
 /uploads
 
 # local variable
