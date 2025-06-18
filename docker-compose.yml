@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - chat-app
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass redispassword
+    networks:
+      - chat-app
+
+  server:
+    build:
+      context: ./server
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - JWT_KEY={*^*{&(*)^(&*^*&^@()&@!LDHUJDHGYDGUDVH467468TRGF7)}}
+      - ORIGIN=http://localhost:3000
+      - DATABASE_URL=mongodb://admin:admin@mongodb:27017/chat-app?authSource=admin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redispassword
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - chat-app
+
+  client:
+    build:
+      context: ./client
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SERVER_URL=http://localhost:8080
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    networks:
+      - chat-app
+
+networks:
+  chat-app:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  redis-data:
