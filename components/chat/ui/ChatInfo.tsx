@@ -36,11 +36,11 @@ const ChatInfo = ({
   }, [messages]);
 
   const deleteGroup = async () => {
-    socket?.socket?.emit("deleteGroup", chatData?._id);
+    socket?.socket?.emit("event:chat:delete", chatData?._id);
   };
 
   const leaveGroup = async () => {
-    socket?.socket?.emit("leaveGroup", {
+    socket?.socket?.emit("event:chat:leave", {
       chatId: chatData?._id,
       leavingMember: userInfo,
     });

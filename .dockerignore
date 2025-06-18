@@ -50,3 +50,7 @@ public/mockServiceWorker.js
 # Package manager files
 yarn.lock
 package-lock.json
+
+# editor
+.vscode
+.zed

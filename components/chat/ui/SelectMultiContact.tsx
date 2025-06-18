@@ -137,7 +137,7 @@ const SelectMultiContact = ({
         </button>
       </div>
 
-      <div className="max-h-[360px] overflow-y-auto flex flex-col gap-2">
+      <div className="max-h-[320px] overflow-y-auto flex flex-col gap-2">
         {selectedContacts?.length !== 0 && selectedContacts && (
           <div className="flex flex-wrap gap-2 pt-4">
             {selectedContacts.map((contact) => (

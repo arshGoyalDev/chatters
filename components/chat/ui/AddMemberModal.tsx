@@ -22,7 +22,7 @@ const AddMemberModal = () => {
 
   const addMembers = () => {
     if (selectedMembers?.length !== 0) {
-      socket?.socket?.emit("addMember", {
+      socket?.socket?.emit("event:chat:add", {
         chatId: chatData?._id,
         newMembers: selectedMembers,
       });
@@ -32,9 +32,9 @@ const AddMemberModal = () => {
   };
 
   return (
-    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] flex flex-col max-w-[500px] h-[400px] lg:h-[440px] rounded-xl bg-zinc-950 border-2 border-zinc-800 shadow-2xl">
+    <div className="fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90vw] flex flex-col max-w-[500px] h-[440px] lg:h-[440px] rounded-xl bg-zinc-950 border-2 border-zinc-800 shadow-2xl">
       <ModalHeader title="Add Member/s" />
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full overflow-auto pb-4">
         <SelectMultiContact
           addMember={true}
           selectedContacts={selectedMembers}
@@ -53,4 +53,5 @@ const AddMemberModal = () => {
     </div>
   );
 };
+
 export default AddMemberModal;

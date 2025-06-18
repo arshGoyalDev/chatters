@@ -20,7 +20,7 @@ const UserMenu = () => {
       <div className="flex items-center justify-center gap-4">
         <div className="w-[52px] aspect-square rounded-lg bg-zinc-800">
           {userInfo.profilePic ? (
-            <div className="relative w-12 aspect-square rounded-md overflow-hidden">
+            <div className="relative w-[52px] aspect-square rounded-md overflow-hidden">
               <Image src={`${HOST}/${userInfo.profilePic}`}
                 fill sizes="100%"
                 alt={userInfo.firstName + userInfo.lastName}

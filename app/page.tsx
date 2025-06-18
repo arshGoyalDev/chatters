@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { TransitionLink } from "@/components/animations";
 import Image from "next/image";
 import useAppStore from "@/store";
+import Link from "next/link";
 
 const HomePage = () => {
   const { userInfo } = useAppStore();
@@ -24,11 +24,11 @@ const HomePage = () => {
 
         <div>
          {userInfo.email ? (
-           <TransitionLink href="/chat" className="bg-primary font-semibold text-black py-2 px-4 rounded-md">
+           <Link href="/chat" className="bg-primary font-semibold text-black py-2 px-4 rounded-md">
              <span>Chat</span>
-           </TransitionLink>
+           </Link>
          ) : (
-         <TransitionLink
+         <Link
            href="/auth"
            className="flex items-center gap-2 bg-primary font-semibold text-black py-2 px-4 rounded-md"
          >
@@ -57,7 +57,7 @@ const HomePage = () => {
                />
              </svg>
            </span>
-         </TransitionLink>
+         </Link>
          )}
         </div>
       </nav>
@@ -95,12 +95,12 @@ const HomePage = () => {
               </p>
 
               <div className="flex flex-wrap gap-4 justify-center">
-                <TransitionLink
+                <Link
                   href="/auth"
                   className="py-3 px-8 text-lg font-semibold bg-primary hover:bg-primary/90 text-black rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
                 >
                   Get Started
-                </TransitionLink>
+                </Link>
               </div>
             </div>
           </div>
@@ -234,12 +234,12 @@ const HomePage = () => {
               Sign up today and connect with the world.
             </p>
 
-            <TransitionLink
+            <Link
               href="/auth"
               className="py-4 px-10 text-xl font-semibold bg-primary hover:bg-primary/90 text-black rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 duration-300"
             >
               Get Started Now
-            </TransitionLink>
+            </Link>
           </div>
         </div>
       </section>

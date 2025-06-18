@@ -79,11 +79,11 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
 
       const handleMemberLeaving = (data: {
         leavingMemberId: string;
-        messageData: Message;
+        message: Message;
         newChat: Chat;
       }) => {
         const { chatData, setChatData } = useAppStore.getState();
-        const { leavingMemberId, messageData, newChat } = data;
+        const { leavingMemberId, message, newChat } = data;
 
         getChats();
 
@@ -92,7 +92,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
             setChatData(null);
           } else {
             setChatData(newChat);
-            addMessage(messageData);
+            addMessage(message);
           }
         }
       };
@@ -104,7 +104,6 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       }) => {
         const { chatId, message, chatMembers } = data;
         const { chatData } = useAppStore.getState();
-        // const setChatData = useAppStore.setState();
         
         getChats();
 
@@ -117,19 +116,18 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
         }
       };
 
-      socket.current.on("memberLeft", handleMemberLeaving);
-      socket.current.on("groupDeleted", handleGroupChatDelete);
-      socket.current.on("receiveMessage", handleReceiveMessage);
-      socket.current.on("memberAdded", handleMemberAdded);
+      socket.current.on("event:chat:left", handleMemberLeaving);
+      socket.current.on("event:chat:deleted", handleGroupChatDelete);
+      socket.current.on("event:chat:receive", handleReceiveMessage);
+      socket.current.on("event:chat:added", handleMemberAdded);
 
       // Cleanup function
       return () => {
         if (socket.current) {
-          socket.current.off("connect");
-          socket.current.off("disconnect");
-          socket.current.off("memberLeft");
-          socket.current.off("groupDeleted");
-          socket.current.off("receiveMessage");
+          socket.current.off("event:chat:receive");
+          socket.current.off("event:chat:left");
+          socket.current.off("event:chat:deleted");
+          socket.current.off("event:chat:added");
 
           socket.current.disconnect();
         }

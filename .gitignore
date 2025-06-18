@@ -35,3 +35,7 @@ next-env.d.ts
 # local variable
 .env
 .env.*
+
+# editor
+.vscode
+.zed

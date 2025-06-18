@@ -38,7 +38,7 @@ const MessageBar = () => {
     setFilePaths(null);
 
     if (files || message) {
-      socket?.socket?.emit("sendMessage", {
+      socket?.socket?.emit("event:chat:send", {
         sender: userInfo._id,
         content: message ? message : "",
         recipient: chatData?._id,

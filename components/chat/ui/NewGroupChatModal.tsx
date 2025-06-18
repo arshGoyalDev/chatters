@@ -73,7 +73,7 @@ const NewGroupChatModal = () => {
         {
           chatName: groupName,
           chatDescription: groupDescription,
-          chatPic: uploadedGroupPic ?? "",
+          chatPic: uploadedGroupPic ? uploadedGroupPic : "",
           chatMembers: selectedContacts,
         },
         { withCredentials: true }
