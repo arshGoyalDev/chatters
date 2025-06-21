@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
     networks:
-      - chat-app
+      - chatters
 
   redis:
     image: redis:7-alpine
@@ -23,8 +23,9 @@ services:
       - redis-data:/data
     command: redis-server --appendonly yes --requirepass redispassword
     networks:
-      - chat-app
+      - chatters
 
+# production mode
   server:
     build:
       context: ./server
@@ -46,26 +47,23 @@ services:
       - ./server:/app
       - /app/node_modules
     networks:
-      - chat-app
+      - chatters
 
+# production mode
   client:
+    container_name: next-app
     build:
       context: ./client
+      args:
+        NEXT_PUBLIC_SERVER_VARIABLE: ${NEXT_PUBLIC_SERVER_VARIABLE}
     restart: always
     ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_SERVER_URL=http://localhost:8080
-    volumes:
-      - ./client:/app
-      - /app/node_modules
-    depends_on:
-      - server
+      - 3000:3000
     networks:
-      - chat-app
+      - chatters
 
 networks:
-  chat-app:
+  chatters:
     driver: bridge
 
 volumes:

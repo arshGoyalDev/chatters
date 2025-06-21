@@ -31,6 +31,18 @@ const MessageBar = () => {
     setFileMenu(false);
   }, [messages]);
 
+  useEffect(() => {
+    const typingTimeout = setTimeout(() => {
+      socket?.socket?.emit("event:chat:typing", {
+        chatId: chatData?._id,
+        userId: userInfo._id,
+        userTyping: message !== "",
+      })
+    }, 1000)
+
+    return () => clearTimeout(typingTimeout);
+  }, [message])
+
   const sendMessage = async () => {
     const uploadedFilePaths = await uploadFiles();
 
@@ -45,6 +57,12 @@ const MessageBar = () => {
         fileUrls: uploadedFilePaths.length !== 0 ? uploadedFilePaths : [],
         messageType: files ? "file" : "text",
       });
+      
+      socket?.socket?.emit("event:chat:typing", {
+        chatId: chatData?._id,
+        userId: userInfo._id,
+        userTyping: false,
+      })
     }
 
     setMessage("");

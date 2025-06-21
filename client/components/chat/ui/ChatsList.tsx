@@ -16,11 +16,11 @@ import Image from "next/image";
 
 const ChatsList = () => {
   const { chatsList } = useChatList();
-  const { setChatData, userInfo, chatData } = useAppStore();
+  const { setChatData, userInfo, chatData, usersTyping } = useAppStore();
 
   const [searchedChatList, setSearchedChatList] = useState<Chat[]>([]);
   const [tab, setTab] = useState<"all" | "group" | "personal">("all");
-
+  
   const openChat = (chat: Chat) => {
     setChatData(chat);
   };
@@ -28,6 +28,16 @@ const ChatsList = () => {
   useEffect(() => {
     setSearchedChatList(chatsList);
   }, [chatsList]);
+  
+  const checkForUserTyping = (chatId: string) => {
+    let userIsTyping = false;
+    
+    usersTyping.forEach((user) => {
+      if (user.chatId === chatId) userIsTyping = true;
+    })
+    
+    return userIsTyping
+  }
 
   return (
     <div className="px-4 pt-2 pb-5">
@@ -89,11 +99,22 @@ const ChatsList = () => {
                   )}
                 </div>
                 <h2 className="text-lg">
+                  {checkForUserTyping(chat._id) ? 
+                    (<div className="text-primary font-semibold">
+                      typing...
+                  </div>) : 
+                  (
+                    <>
                   {chat.chatType === "personal"
                     ? userInfo._id === chat.chatAdmin._id
                       ? `${chat.chatMembers[0].firstName} ${chat.chatMembers[0].lastName}`
                       : `${chat.chatAdmin.firstName} ${chat.chatAdmin.lastName}`
                     : chat.chatName}
+                      
+                    </>
+                  )
+                    
+              }
                 </h2>
               </div>
               <div className="text-sm text-zinc-300 font-medium">

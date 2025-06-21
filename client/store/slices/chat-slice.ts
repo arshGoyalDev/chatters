@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { Chat, Message } from "@/utils/types";
+import { Chat, Message, UserInfo } from "@/utils/types";
 import { StateCreator } from "zustand";
 
 interface ChatSlice {
@@ -13,6 +13,16 @@ interface ChatSlice {
   addMessage: (message: Message) => void;
 
   closeChat: () => void;
+
+  usersTyping: {
+    userData: UserInfo;
+    chatId: string;
+  }[];
+
+  setUsersTyping: (usersTyping: {
+    userData: UserInfo;
+    chatId: string;
+  }[]) => void;
 }
 
 const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
@@ -31,6 +41,9 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
   },
 
   closeChat: () => set({ chatData: null, chatType: null, messages: [] }),
+
+  usersTyping: [],
+  setUsersTyping: (usersTyping) => set({ usersTyping }),
 });
 
 export default createChatSlice;

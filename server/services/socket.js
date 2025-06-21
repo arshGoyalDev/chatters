@@ -269,8 +269,55 @@ const setupSocket = (io) => {
     }
   };
 
+  const handleTypingEvent = async ({userTyping, userId, chatId}) => {
+    const typingData = {
+      userTyping,
+      userId,
+      chatId
+    }
+
+    await pub.publish(`CHAT:${chatId}:${userId}`, JSON.stringify({
+      event: "typing",
+      typingData
+    }))
+  }
+
+  const broadcastTypingToOtherUsers = async (typingData) => {
+    const { userTyping, userId, chatId } = typingData;
+
+    const userData = await User.findById(userId);
+
+    const data = {
+      userTyping,
+      userData,
+      chatId,
+    }
+
+    const chat = await Chat.findById(chatId);
+
+    if (chat) {
+      if (chat.chatMembers) {
+        chat.chatMembers.forEach((member) => {
+          if (member.toString() !== userId) {
+            const memberSocketId = userSocketMap.get(member.toString());
+            if (memberSocketId) {
+              io.to(memberSocketId).emit("event:chat:showTyping", data);
+            }
+          }
+        });
+      }
+
+      if (userId !== chat.chatAdmin.toString()) {
+        const adminSocketId = userSocketMap.get(chat.chatAdmin.toString());
+        if (adminSocketId) {
+          io.to(adminSocketId).emit("event:chat:showTyping", data);
+        }
+      }
+    }
+  }
+
   sub.on("pmessage", async (pattern, channel, message) => {
-    const { messageId, event } = JSON.parse(message);
+    const { messageId, event, typingData} = JSON.parse(message);
     const chatId = channel.split(":")[1];
 
     switch (event) {
@@ -287,6 +334,10 @@ const setupSocket = (io) => {
 
       case "add-request":
         confirmAddRequest(messageId, chatId);
+        break;
+
+      case "typing":
+        broadcastTypingToOtherUsers(typingData);
         break;
 
       default:
@@ -317,6 +368,7 @@ const setupSocket = (io) => {
     socket.on("event:chat:leave", processLeaveRequest);
     socket.on("event:chat:delete", processDeleteRequest);
     socket.on("event:chat:add", processAddRequest);
+    socket.on("event:chat:typing", handleTypingEvent);
 
     socket.on("disconnect", () => disconnect(socket));
   });

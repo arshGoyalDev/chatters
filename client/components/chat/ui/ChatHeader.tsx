@@ -95,20 +95,26 @@ const ChatHeader = ({
                 : chatData?.chatName}
             </h2>
             <p className="sm:hidden">
-              {chatData?.chatType === "personal" &&
-                (chatData?.chatMembers[0].userOnline
-                  ? "Online"
-                  : chatData?.chatMembers[0].status.length > 15
+              {chatData?.chatType === "personal" && (
+                chatData.chatAdmin._id === userInfo._id ? (
+                  chatData.chatMembers[0].userOnline ? "Online" : chatData?.chatMembers[0].status.length > 15
                     ? chatData?.chatMembers[0].status.slice(0, 15) + "..."
-                    : chatData?.chatMembers[0].status)}
+                    : chatData?.chatMembers[0].status
+                ) : (chatData.chatAdmin.userOnline ? "Online" : chatData?.chatAdmin.status.length > 15
+                  ? chatData?.chatAdmin.status.slice(0, 15) + "..."
+                  : chatData?.chatAdmin.status)
+              )}
             </p>
             <p className="hidden sm:block">
-              {chatData?.chatType === "personal" &&
-                (chatData?.chatMembers[0].userOnline
-                  ? "Online"
-                  : chatData?.chatMembers[0].status.length > 25
+              {chatData?.chatType === "personal" && (
+                chatData.chatAdmin._id === userInfo._id ? (
+                  chatData.chatMembers[0].userOnline ? "Online" : chatData?.chatMembers[0].status.length > 25
                     ? chatData?.chatMembers[0].status.slice(0, 25) + "..."
-                    : chatData?.chatMembers[0].status)}
+                    : chatData?.chatMembers[0].status
+                ) : (chatData.chatAdmin.userOnline ? "Online" : chatData?.chatAdmin.status.length > 25
+                  ? chatData?.chatAdmin.status.slice(0, 25) + "..."
+                  : chatData?.chatAdmin.status)
+              )}
             </p>
 
           </div>

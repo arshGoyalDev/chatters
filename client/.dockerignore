@@ -54,3 +54,6 @@ package-lock.json
 # editor
 .vscode
 .zed
+
+# nextjs
+.next

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
     // Allow images from backend server
     remotePatterns: [
@@ -10,10 +11,11 @@ const nextConfig = {
         pathname: '/uploads/**',
       },
     ],
+
     // Nextjs Server can't access the backend on docker
-    // it work locally
+    // it works locally
     // will fix it later
-    unoptimized: true,
+    unoptimized: true, // remove this for local development
   },
 }
 

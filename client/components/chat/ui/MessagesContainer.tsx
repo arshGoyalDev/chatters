@@ -2,25 +2,46 @@
 
 import useAppStore from "@/store";
 
-import { Fragment, ReactNode, useEffect, useRef } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 
 import Message from "../message";
 
 import dayjs from "dayjs";
 
-import { Message as MessageType } from "@/utils/types";
+import { Message as MessageType, UserInfo } from "@/utils/types";
+import Image from "next/image";
+import { HOST } from "@/utils/constants";
 
 const MessagesContainer = ({
   chatInfoVisible,
 }: {
   chatInfoVisible: boolean;
 }) => {
-  const { messages, chatData } = useAppStore();
+  const { messages, chatData, usersTyping } = useAppStore();
+  const [ currentChatUsersTyping, setCurrentChatUsersTyping] = useState<
+    {
+      userData: UserInfo;
+      chatId: string
+      }[]
+    >([])
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
-  }, [messages]);
+  }, [messages, currentChatUsersTyping]);
+
+  useEffect(() => {
+    let usersForCurrentChat: {
+      userData: UserInfo;
+      chatId: string
+      }[] = [];
+
+    usersTyping.forEach((user) => {
+      if (user.chatId === chatData?._id) usersForCurrentChat.push(user);
+    });
+
+    setCurrentChatUsersTyping(usersForCurrentChat);
+  }, [usersTyping])
 
   const renderMessages: () => ReactNode = () => {
     let lastDate: string | null = null;
@@ -73,6 +94,134 @@ const MessagesContainer = ({
         } 2xl:px-0`}
       >
         {renderMessages()}
+
+        {currentChatUsersTyping.length !== 0 && (
+
+          <div className="flex gap-2 my-3">
+            {chatData?.chatType === "group" && (
+              <div className="flex">
+                {currentChatUsersTyping.length >= 2 ? (
+                  <>
+                    <div key={currentChatUsersTyping[0].userData._id} className="relative min-w-8 w-8 h-8 rounded-md border-2 border-zinc-800 overflow-hidden">
+                      {currentChatUsersTyping[0].userData.profilePic ? (
+                        <Image
+                        src={`${HOST}/${currentChatUsersTyping[0].userData.profilePic}`}
+                        fill
+                        sizes="100%"
+                        alt={`${currentChatUsersTyping[0].userData.firstName} ${currentChatUsersTyping[0].userData.lastName}`}
+                        priority />
+                      ) : (
+                        <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                          <span className="fill-zinc-700">
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                        </div>              
+                      )}
+                    </div>
+                    <div key={currentChatUsersTyping[1].userData._id} className="relative -ml-5 z-10 min-w-8 w-8 h-8 rounded-md border-2 border-zinc-800 overflow-hidden">
+                      {currentChatUsersTyping[1].userData.profilePic ? (
+                        <Image
+                        src={`${HOST}/${currentChatUsersTyping[1].userData.profilePic}`}
+                        fill
+                        sizes="100%"
+                        alt={`${currentChatUsersTyping[1].userData.firstName} ${currentChatUsersTyping[1].userData.lastName}`}
+                        priority />
+                      ) : (
+                        <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                          <span className="fill-zinc-700">
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                        </div>              
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <div key={currentChatUsersTyping[0].userData._id} className="relative min-w-8 w-8 h-8 rounded-md border-2 border-zinc-800 overflow-hidden">
+                    {currentChatUsersTyping[0].userData.profilePic ? (
+                      <Image
+                      src={`${HOST}/${currentChatUsersTyping[0].userData.profilePic}`}
+                      fill
+                      sizes="100%"
+                      alt={`${currentChatUsersTyping[0].userData.firstName} ${currentChatUsersTyping[0].userData.lastName}`}
+                      priority />
+                    ) : (
+                      <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                        <span className="fill-zinc-700">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                      </div>              
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="flex items-center gap-1 py-3 px-4 bg-primary bg-opacity-5 border-2 w-fit rounded-lg border-primary border-opacity-20 text-primary message-sender font-semibold">
+              <span className="w-[6px] h-[6px] rounded-full bg-primary animate-bounce"></span>
+              <span className="w-[6px] h-[6px] rounded-full bg-primary animate-bounce"
+                style={{
+                  animationDelay: "200ms",
+                }}></span>
+              <span className="w-[6px] h-[6px] rounded-full bg-primary animate-bounce"
+                style={{
+                  animationDelay: "400ms",
+                }}></span>
+            </div>
+          </div>
+        )}
       </div>
       <div ref={scrollRef} />
     </div>

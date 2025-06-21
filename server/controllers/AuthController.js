@@ -5,6 +5,11 @@ import { compare } from "bcrypt";
 import User from "../models/UserModel.js";
 
 import { renameSync, unlinkSync, existsSync } from "fs";
+import {
+  cacheData,
+  getCachedData,
+  removeCachedData,
+} from "../services/redis.js";
 
 const maxAge = 7 * 24 * 60 * 60 * 1000;
 
@@ -92,24 +97,21 @@ const login = async (request, response, next) => {
 
 const getUserInfo = async (request, response, next) => {
   try {
+    const cachedUserData = await getCachedData(`user:${request.userId}`);
+
+    if (cachedUserData) {
+      return response.status(200).json({ user: cachedUserData });
+    }
+
     const userData = await User.findById(request.userId);
 
     if (!userData) {
       return response.status(404).send("User with the given id not found");
     }
 
-    return response.status(200).json({
-      user: {
-        _id: userData.id,
-        email: userData.email,
-        userOnline: userData.userOnline,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        status: userData.status,
-        profilePic: userData.profilePic,
-        profileSetup: userData.profileSetup,
-      },
-    });
+    await cacheData(`user:${userData.id}`, userData, 3600);
+
+    return response.status(200).json({ user: userData });
   } catch (error) {
     return response.status(500).send("Internal Server Error");
   }
@@ -124,6 +126,8 @@ const updateProfile = async (request, response, next) => {
       return response.status(404).send("First Name or Last Name required");
     }
 
+    await removeCachedData(`user:${userId}`);
+
     const userData = await User.findByIdAndUpdate(
       userId,
       {
@@ -135,18 +139,9 @@ const updateProfile = async (request, response, next) => {
       { new: true, runValidators: true }
     );
 
-    return response.status(200).json({
-      user: {
-        _id: userData.id,
-        userOnline: userData.userOnline,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        status: userData.status,
-        profilePic: userData.profilePic,
-        profileSetup: userData.profileSetup,
-      },
-    });
+    await cacheData(`user:${userData.id}`, userData, 3600);
+
+    return response.status(200).json({ user: userData });
   } catch (error) {
     return response.status(500).send("Internal Server Error");
   }
@@ -160,6 +155,8 @@ const addProfilePic = async (request, response, next) => {
       return response.status(400).send("File is required");
     }
 
+    await removeCachedData(`user:${userId}`);
+
     const data = Date.now();
     let fileName = "uploads/profile/" + data + file.originalname;
 
@@ -170,18 +167,9 @@ const addProfilePic = async (request, response, next) => {
       { new: true, runValidators: true }
     );
 
-    return response.status(200).json({
-      user: {
-        _id: userData.id,
-        userOnline: userData.userOnline,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        status: userData.status,
-        profilePic: userData.profilePic,
-        profileSetup: userData.profileSetup,
-      },
-    });
+    await cacheData(`user:${userData.id}`, userData, 3600);
+
+    return response.status(200).json({ user: userData });
   } catch (error) {
     return response.status(500).send("Internal Server Error");
   }
@@ -191,22 +179,26 @@ const removeProfilePic = async (request, response, next) => {
   try {
     const { userId } = request;
 
-    const user = await User.findById(userId);
+    const userData = await User.findById(userId);
 
-    if (!user) {
+    await removeCachedData(`user:${userId}`);
+
+    if (!userData) {
       return response.status(404).send("User Not found");
     }
 
-    if (user.profilePic) {
-      if (existsSync(user.profilePic)) {
-        unlinkSync(user.profilePic);
+    if (userData.profilePic) {
+      if (existsSync(userData.profilePic)) {
+        unlinkSync(userData.profilePic);
       } else {
-        console.warn("File not found:", user.profilePic);
+        console.warn("File not found:", userData.profilePic);
       }
     }
 
-    user.profilePic = "";
-    await user.save();
+    userData.profilePic = "";
+    await userData.save();
+
+    await cacheData(`user:${userData.id}`, userData, 3600);
 
     return response.status(200).send("Profile Pic deleted successfully");
   } catch (error) {
@@ -216,7 +208,7 @@ const removeProfilePic = async (request, response, next) => {
 
 const logout = async (request, response, next) => {
   try {
-    response.cookie("jwt", "", {maxAge: 1, secure:true, sameSite:"None"});
+    response.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: "None" });
     response.status(200).send("Logged out successfully");
   } catch (error) {
     return response.status(500).send("Internal Server Error");

@@ -16,6 +16,16 @@ interface AppStore {
   addMessage: (message: Message) => void;
 
   closeChat: () => void;
+  
+  usersTyping: {
+    userData: UserInfo;
+    chatId: string;
+  }[];
+
+  setUsersTyping: (usersTyping: {
+    userData: UserInfo;
+    chatId: string;
+    }[]) => void;
 }
 
 const useAppStore = create<AppStore>((...a) => ({
