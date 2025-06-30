@@ -41,6 +41,8 @@ const MessagesContainer = ({
     });
 
     setCurrentChatUsersTyping(usersForCurrentChat);
+
+    console.log(usersTyping);
   }, [usersTyping])
 
   const renderMessages: () => ReactNode = () => {
@@ -111,7 +113,7 @@ const MessagesContainer = ({
                         alt={`${currentChatUsersTyping[0].userData.firstName} ${currentChatUsersTyping[0].userData.lastName}`}
                         priority />
                       ) : (
-                        <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                        <div className="grid place-content-center w-full h-full">
                           <span className="fill-zinc-700">
                             <svg
                               width="20"
@@ -133,10 +135,10 @@ const MessagesContainer = ({
                               />
                             </svg>
                           </span>
-                        </div>              
+                        </div>
                       )}
                     </div>
-                    <div key={currentChatUsersTyping[1].userData._id} className="relative -ml-5 z-10 min-w-8 w-8 h-8 rounded-md border-2 border-zinc-800 overflow-hidden">
+                    <div key={currentChatUsersTyping[1].userData._id} className="relative bg-zinc-950 -ml-4 z-10 min-w-8 w-8 h-8 rounded-md border-2 border-zinc-800 overflow-hidden">
                       {currentChatUsersTyping[1].userData.profilePic ? (
                         <Image
                         src={`${HOST}/${currentChatUsersTyping[1].userData.profilePic}`}
@@ -145,7 +147,7 @@ const MessagesContainer = ({
                         alt={`${currentChatUsersTyping[1].userData.firstName} ${currentChatUsersTyping[1].userData.lastName}`}
                         priority />
                       ) : (
-                        <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                        <div className="grid place-content-center w-full h-full">
                           <span className="fill-zinc-700">
                             <svg
                               width="20"
@@ -167,7 +169,7 @@ const MessagesContainer = ({
                               />
                             </svg>
                           </span>
-                        </div>              
+                        </div>
                       )}
                     </div>
                   </>
@@ -181,7 +183,7 @@ const MessagesContainer = ({
                       alt={`${currentChatUsersTyping[0].userData.firstName} ${currentChatUsersTyping[0].userData.lastName}`}
                       priority />
                     ) : (
-                      <div className="grid place-content-center w-8 h-8 border-2 border-zinc-800 rounded-md">
+                      <div className="grid place-content-center w-full h-full">
                         <span className="fill-zinc-700">
                           <svg
                             width="20"
@@ -203,7 +205,7 @@ const MessagesContainer = ({
                             />
                           </svg>
                         </span>
-                      </div>              
+                      </div>
                     )}
                   </div>
                 )}

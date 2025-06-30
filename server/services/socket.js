@@ -269,27 +269,32 @@ const setupSocket = (io) => {
     }
   };
 
-  const handleTypingEvent = async ({userTyping, userId, chatId}) => {
-    const typingData = {
-      userTyping,
-      userId,
-      chatId
-    }
 
+  // {
+  //   userInfo: {...},
+  //   chatId: 4330030840803,
+  // }
+
+
+
+  const processTypingEvent = async ({chatId, userId, isTyping}) => {
     await pub.publish(`CHAT:${chatId}:${userId}`, JSON.stringify({
       event: "typing",
-      typingData
+      typingData: {
+        userId,
+        isTyping,
+      }
     }))
   }
 
-  const broadcastTypingToOtherUsers = async (typingData) => {
-    const { userTyping, userId, chatId } = typingData;
+  const emitTypingEvent = async (userData, chatId) => {
+    const { isTyping, userId } = userData;
 
-    const userData = await User.findById(userId);
+    const userInfo = await User.findById(userId);
 
-    const data = {
-      userTyping,
-      userData,
+    const emitData = {
+      isTyping,
+      userInfo,
       chatId,
     }
 
@@ -301,7 +306,7 @@ const setupSocket = (io) => {
           if (member.toString() !== userId) {
             const memberSocketId = userSocketMap.get(member.toString());
             if (memberSocketId) {
-              io.to(memberSocketId).emit("event:chat:showTyping", data);
+              io.to(memberSocketId).emit("event:chat:typing", emitData);
             }
           }
         });
@@ -310,7 +315,7 @@ const setupSocket = (io) => {
       if (userId !== chat.chatAdmin.toString()) {
         const adminSocketId = userSocketMap.get(chat.chatAdmin.toString());
         if (adminSocketId) {
-          io.to(adminSocketId).emit("event:chat:showTyping", data);
+          io.to(adminSocketId).emit("event:chat:typing", emitData);
         }
       }
     }
@@ -337,7 +342,7 @@ const setupSocket = (io) => {
         break;
 
       case "typing":
-        broadcastTypingToOtherUsers(typingData);
+        emitTypingEvent(typingData, chatId);
         break;
 
       default:
@@ -368,7 +373,7 @@ const setupSocket = (io) => {
     socket.on("event:chat:leave", processLeaveRequest);
     socket.on("event:chat:delete", processDeleteRequest);
     socket.on("event:chat:add", processAddRequest);
-    socket.on("event:chat:typing", handleTypingEvent);
+    socket.on("event:chat:typing", processTypingEvent);
 
     socket.on("disconnect", () => disconnect(socket));
   });

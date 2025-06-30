@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import useAppStore from "@/store";
 
@@ -36,7 +36,7 @@ const MessageBar = () => {
       socket?.socket?.emit("event:chat:typing", {
         chatId: chatData?._id,
         userId: userInfo._id,
-        userTyping: message !== "",
+        isTyping: message !== "",
       })
     }, 1000)
 
@@ -57,7 +57,7 @@ const MessageBar = () => {
         fileUrls: uploadedFilePaths.length !== 0 ? uploadedFilePaths : [],
         messageType: files ? "file" : "text",
       });
-      
+
       socket?.socket?.emit("event:chat:typing", {
         chatId: chatData?._id,
         userId: userInfo._id,

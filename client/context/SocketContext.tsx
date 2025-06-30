@@ -104,7 +104,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
       }) => {
         const { chatId, message, chatMembers } = data;
         const { chatData } = useAppStore.getState();
-        
+
         getChats();
 
         if (chatId === chatData?._id) {
@@ -115,33 +115,33 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           });
         }
       };
-      
-      const handleUserTyping = ({ userTyping, userData, chatId }: { userTyping: boolean; userData: UserInfo; chatId: string}) => {
-        const { setUsersTyping, usersTyping } = useAppStore.getState();
-        
-        let newIndicators = usersTyping;
-        
-        if (userTyping) {
+
+      const handleTypingEvent = ({ isTyping, userInfo, chatId }: { isTyping: boolean; userInfo: UserInfo; chatId: string}) => {
+        const { usersTyping, setUsersTyping } = useAppStore.getState();
+
+        let newUsers = usersTyping;
+
+        if (isTyping) {
           let alreadyTyping = false;
-          newIndicators.forEach((indicator) => {
-            if (indicator.userData._id === userData._id && chatId == indicator.chatId) alreadyTyping = true;
+          newUsers.forEach((user) => {
+            if (user.userData._id === userInfo._id && chatId == user.chatId) alreadyTyping = true;
           })
-          
+
           if (!alreadyTyping) {
-            newIndicators = [{ userData, chatId }, ...newIndicators];
+            newUsers = [{ userData: userInfo, chatId }, ...newUsers];
           }
         } else {
-          newIndicators = newIndicators.filter((indicator) => indicator.userData._id !== userData._id && indicator.chatId !== chatId);
+          newUsers = newUsers.filter((indicator) => !(indicator.userData._id === userInfo._id && indicator.chatId === chatId));
         }
-        
-        setUsersTyping(newIndicators);
+
+        setUsersTyping(newUsers);
       };
 
       socket.current.on("event:chat:left", handleMemberLeaving);
       socket.current.on("event:chat:deleted", handleGroupChatDelete);
       socket.current.on("event:chat:receive", handleReceiveMessage);
       socket.current.on("event:chat:added", handleMemberAdded);
-      socket.current.on("event:chat:showTyping", handleUserTyping);      
+      socket.current.on("event:chat:typing", handleTypingEvent);
 
       // Cleanup function
       return () => {
@@ -150,7 +150,7 @@ const SocketProvider = ({ children }: { children: ReactElement }) => {
           socket.current.off("event:chat:left");
           socket.current.off("event:chat:deleted");
           socket.current.off("event:chat:added");
-          socket.current.off("event:chat:showTyping", handleUserTyping);      
+          socket.current.off("event:chat:typing", handleTypingEvent);
 
           socket.current.disconnect();
         }
