@@ -16,6 +16,11 @@ const messageSchema = new mongoose.Schema({
     enum: ["text", "file", "leaving", "create", "add"],
     required: true,
   },
+  replyMessage: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Messages",
+    required: false,
+  },
   content: {
     type: String,
     required: false,

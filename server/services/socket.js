@@ -32,13 +32,14 @@ const setupSocket = (io) => {
   };
 
   const receiveMessageFromClient = async (message) => {
-    const { recipient, content, messageType, fileUrls, sender } = message;
+    const { recipient, content, messageType, fileUrls, sender, replyMessage } = message;
 
     const createdMessage = await Message.create({
       sender,
       recipient,
       content: content,
       messageType,
+      replyMessage,
       timeStamp: new Date(),
       fileUrls: fileUrls ? fileUrls : null,
     });
@@ -60,8 +61,16 @@ const setupSocket = (io) => {
       .populate(
         "sender",
         "id email profilePic firstName lastName status userOnline"
-      )
+      ).populate("replyMessage").populate({
+        path: "replyMessage",
+        populate: {
+          path: 'sender',
+          model: 'Users',
+        }
+      })
       .exec();
+
+      console.log("Message Data:", messageData);
 
     const chat = await Chat.findById(chatId).populate("chatMembers");
 

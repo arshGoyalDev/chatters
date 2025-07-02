@@ -23,6 +23,9 @@ interface ChatSlice {
     userData: UserInfo;
     chatId: string;
   }[]) => void;
+
+  replyMessage: Message | null;
+  setReplyMessage: (replyMessage: Message | null) => void;
 }
 
 const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
@@ -40,10 +43,13 @@ const createChatSlice: StateCreator<ChatSlice> = (set, get) => ({
     });
   },
 
-  closeChat: () => set({ chatData: null, chatType: null, messages: [] }),
+  closeChat: () => set({ chatData: null, chatType: null, messages: [], replyMessage: null }),
 
   usersTyping: [],
   setUsersTyping: (usersTyping) => set({ usersTyping }),
+
+  replyMessage: null,
+  setReplyMessage: (replyMessage) => set({ replyMessage }),
 });
 
 export default createChatSlice;

@@ -25,6 +25,7 @@ const MessagesContainer = ({
       }[]
     >([])
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [scrollToMessageId, setScrollToMessageId] = useState<string | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
@@ -81,6 +82,8 @@ const MessagesContainer = ({
                   : showSender
                 : false
             }
+            scrollToMessageId={scrollToMessageId}
+            setScrollToMessageId={setScrollToMessageId}
           />
         </Fragment>
       );

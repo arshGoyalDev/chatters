@@ -11,18 +11,56 @@ import useAppStore from "@/store";
 import DisplayFiles from "./DisplayFiles";
 
 import Image from "next/image";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 const Message = ({
   message,
   showSender,
+  scrollToMessageId = null,
+  setScrollToMessageId,
 }: {
   message: Message;
   showSender: boolean;
+  scrollToMessageId: string | null;
+  setScrollToMessageId: Dispatch<SetStateAction<string | null>>;
 }) => {
-  const { userInfo, chatData } = useAppStore();
+  const { userInfo, chatData, setReplyMessage } = useAppStore();
+  const messageDiv = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (
+      scrollToMessageId &&
+      scrollToMessageId === message._id &&
+      messageDiv.current
+    ) {
+      messageDiv.current.scrollIntoView();
+    }
+  }, [scrollToMessageId]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setScrollToMessageId(null);
+    }, 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [scrollToMessageId]);
 
   return (
-    <>
+    <div
+      ref={messageDiv}
+      onDoubleClick={() => {
+        setReplyMessage(message);
+      }}
+      className="relative"
+    >
+      <div
+        className={`absolute top-1.5 -left-2 w-[102%] h-full transition-all duration-300 rounded-md ${
+          scrollToMessageId === message._id
+            ? "bg-zinc-900/30"
+            : "bg-transparent"
+        }`}
+      ></div>
       {(message.messageType === "file" || message.messageType === "text") && (
         <div
           className={`flex flex-col gap-2 ${
@@ -113,23 +151,75 @@ const Message = ({
 
               {message.content && (
                 <div
-                  className={`relative pr-16 w-fit leading-6 ${
+                  className={`${
                     userInfo._id !== message.sender._id
-                      ? "bg-primary bg-opacity-5 border-primary border-opacity-20 text-primary message-sender font-semibold"
-                      : "bg-zinc-900 bg-opacity-40 border-zinc-800 text-white message-receiver font-medium"
-                  } py-2 px-4 rounded-lg break-words border-2`}
+                      ? "bg-primary bg-opacity-5 border-primary border-opacity-10 text-primary message-sender font-semibold"
+                      : "bg-zinc-900 bg-opacity-40 border-zinc-900 text-white message-receiver font-medium"
+                  } py-2 rounded-lg break-words border-2`}
                 >
-                  <Markdown remarkPlugins={[remarkGfm]}>
-                    {message.content}
-                  </Markdown>
-                  <div
-                    className={`absolute bottom-2 right-2 text-xs font-semibold ${
-                      userInfo._id !== message.sender._id
-                        ? "text-primary/40"
-                        : "text-white/30"
-                    }`}
-                  >
-                    {dayjs(message.timeStamp).format("h:mm A  ")}
+                  {message.replyMessage && (
+                    <div
+                      onClick={() => {
+                        if (message.replyMessage) {
+                          setScrollToMessageId(message.replyMessage._id);
+                        }
+                      }}
+                      className={`flex gap-3 py-2 px-3 mx-2 mb-2 ${
+                        message.sender._id === userInfo._id
+                          ? "bg-zinc-950"
+                          : "bg-[#0c0e0c]"
+                      } rounded-md`}
+                    >
+                      {message.replyMessage.messageType === "file" &&
+                        message.replyMessage.fileUrls && (
+                          <div className="relative w-10 aspect-square rounded-md overflow-hidden">
+                            <Image
+                              src={`${HOST}/${message.replyMessage.fileUrls[0]}`}
+                              fill
+                              sizes="100%"
+                              alt={
+                                message.replyMessage.sender.firstName +
+                                message.replyMessage.sender.lastName
+                              }
+                              className="w-full h-full"
+                              priority
+                            />{" "}
+                          </div>
+                        )}
+                      <div>
+                        <div className="text-sm text-bold">
+                          {message.replyMessage.sender._id === userInfo._id ? (
+                            <span className="text-zinc-400">You</span>
+                          ) : (
+                            <span className="text-primary">
+                              {message.replyMessage.sender.firstName}{" "}
+                              {message.replyMessage.sender.lastName}
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-semibold text-zinc-600">
+                          {message.replyMessage.content !== "" &&
+                          message.replyMessage.content.length > 200
+                            ? `${message.replyMessage.content.slice(0, 200)}...`
+                            : message.replyMessage.content}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className={`relative pr-16 pl-4`}>
+                    <Markdown remarkPlugins={[remarkGfm]}>
+                      {message.content}
+                    </Markdown>
+                    <div
+                      className={`absolute bottom-0 right-2 text-xs font-semibold ${
+                        userInfo._id !== message.sender._id
+                          ? "text-primary/40"
+                          : "text-white/30"
+                      }`}
+                    >
+                      {dayjs(message.timeStamp).format("h:mm A  ")}
+                    </div>
                   </div>
                 </div>
               )}
@@ -146,7 +236,7 @@ const Message = ({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -156,7 +156,13 @@ const getChatMessages = async (request, response, next) => {
     const messages = await Message.find({
       $or: [{ _id: chat.messages }],
     })
-      .populate("sender")
+      .populate("sender").populate("replyMessage").populate({
+        path: 'replyMessage',
+        populate: {
+          path: 'sender',
+          model: 'Users',
+        }
+      })
       .sort({ timeStamp: 1 });
 
     return response.status(200).json({ messages });

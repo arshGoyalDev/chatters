@@ -3,6 +3,7 @@ interface Message {
   content: string;
   fileUrls: string[] | null;
   messageType: string;
+  replyMessage?: Message | null; // Reference to another message ID if this is a reply
   recipient: string;
   sender: UserInfo;
   timeStamp: string;

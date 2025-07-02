@@ -11,21 +11,26 @@ interface AppStore {
   setChatData: (chatData: Chat | null) => void;
 
   messages: [Message] | [];
-  setMessages: (messages: [Message] | []) => void
+  setMessages: (messages: [Message] | []) => void;
 
   addMessage: (message: Message) => void;
 
   closeChat: () => void;
-  
+
   usersTyping: {
     userData: UserInfo;
     chatId: string;
   }[];
 
-  setUsersTyping: (usersTyping: {
-    userData: UserInfo;
-    chatId: string;
-    }[]) => void;
+  setUsersTyping: (
+    usersTyping: {
+      userData: UserInfo;
+      chatId: string;
+    }[]
+  ) => void;
+
+  replyMessage: Message | null;
+  setReplyMessage: (replyMessage: Message | null) => void;
 }
 
 const useAppStore = create<AppStore>((...a) => ({
